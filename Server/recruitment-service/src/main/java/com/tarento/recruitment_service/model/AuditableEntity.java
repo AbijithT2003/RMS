@@ -7,6 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @MappedSuperclass
 @Data
@@ -24,10 +25,10 @@ public abstract class AuditableEntity {
 
     @CreatedBy
     @Column(name = "created_by", updatable = false)
-    private String createdBy; // typically the username or user ID
+    private UUID createdBy; // store creator id as UUID
 
     @LastModifiedBy
     @Column(name = "updated_by")
-    private String updatedBy; // typically the username or user ID
+    private UUID updatedBy; // store updater id as UUID
 }
 
