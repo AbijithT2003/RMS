@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @Repository
 public interface SkillRepository extends JpaRepository<Skill, UUID> {
-    Optional<Skill> findByName(String name);
+    Optional<Skill> findByNameIgnoreCase(String name);
     List<Skill> findByCategory(String category);
     
     @Query("SELECT s FROM Skill s WHERE LOWER(s.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")

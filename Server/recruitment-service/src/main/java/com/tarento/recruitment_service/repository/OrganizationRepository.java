@@ -11,6 +11,6 @@ import org.springframework.data.domain.Page;
 
 @Repository
 public interface OrganizationRepository extends JpaRepository<Organization, UUID> {
-    Optional<Organization> findByName(String name);
-    Page<Organization> findByIndustry(String industry, Pageable pageable);
+    Optional<Organization> findByNameIgnoreCase(String name);
+    Page<Organization> findByIndustryIgnoreCase(String industry, Pageable pageable);
 }
