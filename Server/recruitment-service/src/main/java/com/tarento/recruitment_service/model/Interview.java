@@ -8,13 +8,14 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;  
 
+
 @Entity
 @Table(name = "interviews")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Interview {
+public class Interview extends AuditableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -26,9 +27,6 @@ public class Interview {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "interviewer_id")
     private User interviewer;
-    
-    @Column(name = "interview_round")
-    private Integer interviewRound;
     
     @Enumerated(EnumType.STRING)
     @Column(name = "interview_type")
@@ -54,13 +52,4 @@ public class Interview {
     @Column(columnDefinition = "TEXT")
     private String feedback;
     
-    private Integer rating;
-    
-    @CreationTimestamp
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
-    
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
 }

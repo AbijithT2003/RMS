@@ -6,7 +6,6 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -17,7 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Job {
+public class Job extends AuditableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -25,10 +24,6 @@ public class Job {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organization_id")
     private Organization organization;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_by")
-    private User createdBy;
     
     @Column(nullable = false)
     private String title;
@@ -49,21 +44,12 @@ public class Job {
     @Enumerated(EnumType.STRING)
     @Column(name = "work_mode")
     private WorkMode workMode;
-    
-    @Column(name = "location_city")
-    private String locationCity;
-    
-    @Column(name = "location_state")
-    private String locationState;
-    
-    @Column(name = "location_country")
-    private String locationCountry;
-    
-    @Column(name = "salary_min")
-    private BigDecimal salaryMin;
-    
-    @Column(name = "salary_max")
-    private BigDecimal salaryMax;
+
+    @Embedded
+    private Location location;
+
+   @Embedded
+    private SalaryRange salary;
     
     @Column(name = "experience_required")
     private Integer experienceRequired;
@@ -77,11 +63,4 @@ public class Job {
     @Column(name = "positions_available")
     private Integer positionsAvailable;
     
-    @CreationTimestamp
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
-    
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
 }

@@ -27,8 +27,8 @@ public class JobSkill {
     @JoinColumn(name = "skill_id")
     private Skill skill;
     
-    @Column(name = "is_required")
-    private Boolean isRequired;
+    @Column(name = "is_required",nullable = false)
+    private Boolean isRequired=false;
     
     @Enumerated(EnumType.STRING)
     @Column(name = "proficiency_level")

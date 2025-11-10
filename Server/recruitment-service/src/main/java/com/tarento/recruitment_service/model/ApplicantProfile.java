@@ -13,7 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ApplicantProfile {
+public class ApplicantProfile extends AuditableEntity  {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -22,28 +22,27 @@ public class ApplicantProfile {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
     
+    private String headline; // Short professional tagline
+
     @Column(name = "resume_url")
     private String resumeUrl;
     
     @Column(name = "current_title")
     private String currentTitle;
     
-    @Column(name = "experience_years")
-    private Integer experienceYears;
+    @Column(name = "total_experience")
+    private Integer Totalexperience; // how should it be measured?
     
-    @Column(name = "location_city")
-    private String locationCity;
-    
-    @Column(name = "location_state")
-    private String locationState;
-    
-    @Column(name = "location_country")
-    private String locationCountry;
+    @Embedded
+    private Location location;
     
     @Column(columnDefinition = "TEXT")
     private String bio;
     
-    @CreationTimestamp
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
+    private boolean isPublicProfile; // Indicates if the profile is public
 }
+
+/*if (candidate.isPublicProfile()) {
+    // Return public fields only
+} add this in controller for setting prifile public/private
+ */

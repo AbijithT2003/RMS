@@ -6,10 +6,14 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "saved_jobs")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(
+  name = "saved_jobs",
+  uniqueConstraints = @UniqueConstraint(columnNames = {"applicant_id", "job_id"})
+)
+
 @Builder
 public class SavedJob {
     @Id
@@ -26,4 +30,7 @@ public class SavedJob {
     
     @Column(name = "saved_at")
     private LocalDateTime savedAt;
+
+
+
 }

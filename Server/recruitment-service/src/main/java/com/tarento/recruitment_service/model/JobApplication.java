@@ -4,7 +4,9 @@ import com.tarento.recruitment_service.model.enums.*;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
-import java.util.UUID;  
+import java.util.UUID;
+
+import org.hibernate.annotations.UpdateTimestamp;  
 
 @Entity
 @Table(name = "job_applications")
@@ -29,8 +31,8 @@ public class JobApplication {
     @JoinColumn(name = "organization_id")
     private Organization organization;
     
-    @Column(name = "source_platform")
-    private String sourcePlatform;
+    @Enumerated(EnumType.STRING)
+    private String Platform;
     
     @Column(name = "source_url")
     private String sourceUrl;
@@ -57,6 +59,7 @@ public class JobApplication {
     @Column(name = "applied_at")
     private LocalDateTime appliedAt;
     
+    @UpdateTimestamp
     @Column(name = "last_updated_at")
     private LocalDateTime lastUpdatedAt;
 }
