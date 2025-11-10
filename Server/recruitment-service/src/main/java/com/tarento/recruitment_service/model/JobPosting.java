@@ -23,7 +23,7 @@ public class JobPosting {
     private Job job;
     
     @Enumerated(EnumType.STRING)
-    private String platform;
+    private Platform platform;
     
     @Column(name = "external_job_id")
     private String externalJobId;

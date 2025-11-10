@@ -1,6 +1,7 @@
 package com.tarento.recruitment_service.repository;
 
 import com.tarento.recruitment_service.model.ApplicantSkill;
+import com.tarento.recruitment_service.model.Interview;
 import com.tarento.recruitment_service.model.enums.ProficiencyLevel;    
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;       
@@ -21,4 +22,8 @@ public interface ApplicantSkillRepository extends JpaRepository<ApplicantSkill, 
     List<ApplicantSkill> findByApplicantAndProficiencyLevels(
         @Param("applicantId") UUID applicantId,
         @Param("levels") List<ProficiencyLevel> levels);
+
+        @Query("SELECT i FROM Interview i WHERE i.application.id = :applicationId ORDER BY i.scheduledDate DESC")
+    List<Interview> findLatestInterviewsByApplication(@Param("applicationId") UUID applicationId);
+
 }
