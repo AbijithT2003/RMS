@@ -3,9 +3,6 @@ package com.tarento.recruitment_service.model;
 import com.tarento.recruitment_service.model.enums.*;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 
