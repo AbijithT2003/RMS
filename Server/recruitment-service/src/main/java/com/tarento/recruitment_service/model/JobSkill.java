@@ -2,6 +2,7 @@ package com.tarento.recruitment_service.model;
 
 import com.tarento.recruitment_service.model.enums.*;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
@@ -19,6 +20,7 @@ public class JobSkill {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "job_id")
     private Job job;

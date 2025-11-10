@@ -10,23 +10,28 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.lang.NonNull;
 import java.util.List;
 import java.util.UUID;
 
 @Repository
 public interface JobRepository extends JpaRepository<Job, UUID> {
-    Page<Job> findByStatus(JobStatus status, Pageable pageable);
-    Page<Job> findByOrganizationId(UUID organizationId, Pageable pageable);
+    @NonNull
+    Page<Job> findByStatus(@NonNull JobStatus status, @NonNull Pageable pageable);
     
+    @NonNull
+    Page<Job> findByOrganizationId(@NonNull UUID organizationId, @NonNull Pageable pageable);
+    
+    @NonNull
     @Query("SELECT j FROM Job j WHERE j.status = :status " +
            "AND (:jobType IS NULL OR j.jobType = :jobType) " +
            "AND (:workMode IS NULL OR j.workMode = :workMode) " +
            "AND (:locationCity IS NULL OR j.locationCity = :locationCity)")
-    Page<Job> searchJobs(@Param("status") JobStatus status,
+    Page<Job> searchJobs(@NonNull @Param("status") JobStatus status,
                          @Param("jobType") JobType jobType,
                          @Param("workMode") WorkMode workMode,
                          @Param("locationCity") String locationCity,
-                         Pageable pageable);
+                         @NonNull Pageable pageable);
     
        List<Job> findByCreatedBy(UUID userId);
     

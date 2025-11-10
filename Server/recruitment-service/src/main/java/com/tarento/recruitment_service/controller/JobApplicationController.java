@@ -15,12 +15,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/applications")
 @RequiredArgsConstructor
+@Validated
 @Tag(name = "Job Applications", description = "Job application management APIs")
 public class JobApplicationController {
     private final JobApplicationService jobApplicationService;

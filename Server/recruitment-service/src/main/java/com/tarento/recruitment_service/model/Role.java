@@ -1,6 +1,7 @@
 package com.tarento.recruitment_service.model;
  
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import java.util.Set;
 import java.util.UUID;
@@ -17,6 +18,7 @@ public class Role extends AuditableEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     
+    @NotNull
     @Column(nullable = false, unique = true)
     private String name;
     

@@ -1,6 +1,6 @@
 package com.tarento.recruitment_service.model.enums;
 
-public enum PlatformType {
+public enum Platform {
     LINKEDIN,
     INDEED,
     GLASSDOOR,

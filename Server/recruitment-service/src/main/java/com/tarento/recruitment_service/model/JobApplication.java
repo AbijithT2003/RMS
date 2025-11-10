@@ -2,6 +2,7 @@ package com.tarento.recruitment_service.model;
 
 import com.tarento.recruitment_service.model.enums.*;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -19,10 +20,12 @@ public class JobApplication {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "job_id")
     private Job job;
     
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "applicant_id")
     private ApplicantProfile applicant;
@@ -32,7 +35,7 @@ public class JobApplication {
     private Organization organization;
     
     @Enumerated(EnumType.STRING)
-    private String Platform;
+    private Platform Platform;
     
     @Column(name = "source_url")
     private String sourceUrl;
