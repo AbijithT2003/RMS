@@ -37,4 +37,11 @@ public class AuthenticationController {
         AuthResponse response = authenticationService.login(request);
         return ResponseEntity.ok(ApiResponse.success("Login successful", response));
     }
+
+    @PostMapping("/logout")
+    @Operation(summary = "Logout user", description = "Logs out the user by invalidating the client-side JWT")
+    public ResponseEntity<ApiResponse<Void>> logout() {
+        return ResponseEntity.ok(ApiResponse.success("User logged out successfully", null));
+    }
+
 }

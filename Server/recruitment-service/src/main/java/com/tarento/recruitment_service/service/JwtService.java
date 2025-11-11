@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,12 +49,20 @@ public class JwtService {
     }
     
     /**
-     * Get signing key
+     * Generate a Key Programmatically
      */
     private SecretKey getSigningKey() {
-        byte[] keyBytes = jwtConfig.getSecret().getBytes();
-        return Keys.hmacShaKeyFor(keyBytes);
+    String secret = jwtConfig.getSecret();
+
+    if (secret == null || secret.length() < 32) {
+        // Generate a secure key automatically
+        return Keys.secretKeyFor(SignatureAlgorithm.HS512);
     }
+
+    byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
+    return Keys.hmacShaKeyFor(keyBytes);
+}
+
     
     /**
      * Extract username from JWT token
