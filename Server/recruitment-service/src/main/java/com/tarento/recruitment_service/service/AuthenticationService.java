@@ -1,0 +1,113 @@
+package com.tarento.recruitment_service.service;
+
+import com.tarento.recruitment_service.dto.RequestDto.LoginRequest;
+import com.tarento.recruitment_service.dto.RequestDto.RegisterRequest;
+import com.tarento.recruitment_service.dto.ResponseDto.AuthResponse;
+import com.tarento.recruitment_service.exception.BusinessException;
+import com.tarento.recruitment_service.exception.DuplicateResourceException;
+import com.tarento.recruitment_service.exception.ResourceNotFoundException;
+import com.tarento.recruitment_service.model.User;
+import com.tarento.recruitment_service.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+
+@Service
+@RequiredArgsConstructor
+@Transactional
+@Slf4j
+public class AuthenticationService {
+    
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+    
+    /**
+     * Register a new user
+     */
+    public AuthResponse register(RegisterRequest request) {
+        log.info("Registering new user with email: {}", request.getEmail());
+        
+        // Check if email already exists
+        if (userRepository.existsByEmail(request.getEmail())) {
+            log.warn("Registration failed: Email already exists {}", request.getEmail());
+            throw new DuplicateResourceException("Email already registered");
+        }
+        
+        try {
+            // Create new user
+            User user = User.builder()
+                    .email(request.getEmail())
+                    .fullName(request.getFullName())
+                    .phone(request.getPhone())
+                    .passwordHash(passwordEncoder.encode(request.getPassword()))
+                    .isActive(true)
+                    .build();
+            
+            User savedUser = userRepository.save(user);
+            log.info("User registered successfully: {}", savedUser.getId());
+            
+            // Generate JWT token
+            String jwtToken = jwtService.generateToken(savedUser.getEmail());
+            long expiresIn = jwtService.getExpirationTime();
+            
+            return AuthResponse.of(jwtToken, savedUser.getEmail(), savedUser.getFullName(), expiresIn);
+        } catch (Exception e) {
+            log.error("Error during user registration", e);
+            throw new BusinessException("Failed to register user: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Login user with email and password
+     */
+    public AuthResponse login(LoginRequest request) {
+        log.info("Login attempt for email: {}", request.getEmail());
+        
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> {
+                    log.warn("Login failed: User not found with email {}", request.getEmail());
+                    return new ResourceNotFoundException("User not found with email: " + request.getEmail());
+                });
+        
+        // Verify password
+        if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
+            log.warn("Login failed: Invalid password for user {}", request.getEmail());
+            throw new BusinessException("Invalid email or password");
+        }
+        
+        // Check if user is active
+        if (!user.isActive()) {
+            log.warn("Login failed: User account is inactive {}", request.getEmail());
+            throw new BusinessException("User account is inactive");
+        }
+        
+        try {
+            // Update last login time
+            user.setLastLogin(LocalDateTime.now());
+            userRepository.save(user);
+            
+            // Generate JWT token
+            String jwtToken = jwtService.generateToken(user.getEmail());
+            long expiresIn = jwtService.getExpirationTime();
+            
+            log.info("User logged in successfully: {}", user.getEmail());
+            return AuthResponse.of(jwtToken, user.getEmail(), user.getFullName(), expiresIn);
+        } catch (Exception e) {
+            log.error("Error during login", e);
+            throw new BusinessException("Login failed: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Get user by email
+     */
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
+    }
+}

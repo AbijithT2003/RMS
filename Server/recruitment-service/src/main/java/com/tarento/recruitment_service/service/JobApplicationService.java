@@ -26,7 +26,6 @@ public class JobApplicationService {
     private final JobApplicationRepository jobApplicationRepository;
     private final JobRepository jobRepository;
     private final ApplicantProfileRepository applicantProfileRepository;
-    private final OrganizationRepository organizationRepository;
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     
@@ -50,7 +49,7 @@ public class JobApplicationService {
                 .job(job)
                 .applicant(applicant)
                 .organization(job.getOrganization())
-                .Platform(Platform.valueOf(request.getPlatform().toUpperCase()))
+                .platform(Platform.valueOf(request.getPlatform().toUpperCase()))
                 .sourceUrl(request.getSourceUrl())
                 .status(ApplicationStatus.SUBMITTED)
                 .resumeVersionUrl(request.getResumeVersionUrl())

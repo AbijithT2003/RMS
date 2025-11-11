@@ -20,8 +20,8 @@ public class CreateJobApplicationRequest {
     private UUID applicantId;
     
     @NotNull(message = "Platform is required")
-    @Pattern(regexp = "WEBSITE|MOBILE_APP|EXTERNAL|INTERNAL|OTHER", 
-            message = "Invalid platform value. Must be one of: WEBSITE, MOBILE_APP, EXTERNAL, INTERNAL, OTHER")
+    @Pattern(regexp = "LINKEDIN|INDEED|GLASSDOOR|COMPANY_SITE|OTHER", 
+            message = "Invalid platform value. Must be one of: LINKEDIN, INDEED, GLASSDOOR, COMPANY_SITE, OTHER")
     private String platform;
     
     @URL(message = "Source URL must be a valid URL")

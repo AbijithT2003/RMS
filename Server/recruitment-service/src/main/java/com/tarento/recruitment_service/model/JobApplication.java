@@ -35,7 +35,8 @@ public class JobApplication {
     private Organization organization;
     
     @Enumerated(EnumType.STRING)
-    private Platform Platform;
+    @Column(name = "source_platform")
+    private Platform platform;
     
     @Column(name = "source_url")
     private String sourceUrl;

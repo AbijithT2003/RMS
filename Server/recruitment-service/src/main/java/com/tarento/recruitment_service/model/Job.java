@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -57,11 +59,20 @@ public class Job extends AuditableEntity {
     @Column(name = "work_mode", nullable = false)
     private WorkMode workMode;
 
-    @Embedded
-    private Location location;
+    @Column(name = "city")
+    private String locationCity;
 
-   @Embedded
-    private SalaryRange salary;
+    @Column(name = "state")
+    private String locationState;
+
+    @Column(name = "country")
+    private String locationCountry;
+
+    @Column(name = "salary_min", precision = 38, scale = 2)
+    private BigDecimal salaryMin;
+
+    @Column(name = "salary_max", precision = 38, scale = 2)
+    private BigDecimal salaryMax;
     
     @Column(name = "experience_required")
     private Integer experienceRequired;

@@ -18,7 +18,7 @@ public class UserResponse {
     private String fullName;
     private String phone;
     private String profileImageUrl;
-    private boolean status;
+    private boolean isActive;
     private LocalDateTime lastLogin;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

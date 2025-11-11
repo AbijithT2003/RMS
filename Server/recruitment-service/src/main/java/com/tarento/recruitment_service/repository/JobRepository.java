@@ -33,7 +33,8 @@ public interface JobRepository extends JpaRepository<Job, UUID> {
                          @Param("locationCity") String locationCity,
                          @NonNull Pageable pageable);
     
-       List<Job> findByCreatedBy(UUID userId);
+       @Query("SELECT j FROM Job j WHERE j.createdBy = :userId")
+       List<Job> findByCreatedBy(@Param("userId") UUID userId);
     
     @Query("SELECT j FROM Job j WHERE j.status = :status " +
            "AND (LOWER(j.title) LIKE LOWER(CONCAT('%', :keyword, '%')) " +

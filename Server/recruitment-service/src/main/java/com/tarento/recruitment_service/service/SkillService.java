@@ -4,7 +4,6 @@ import com.tarento.recruitment_service.model.*;
 import com.tarento.recruitment_service.repository.*;
 import com.tarento.recruitment_service.dto.RequestDto.*;
 import com.tarento.recruitment_service.dto.ResponseDto.*;
-import com.tarento.recruitment_service.config.*;
 
 import java.util.List;
 import java.util.UUID;

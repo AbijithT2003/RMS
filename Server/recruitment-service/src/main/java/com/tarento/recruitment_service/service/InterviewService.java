@@ -33,6 +33,7 @@ public class InterviewService {
         Interview interview = Interview.builder()
                 .application(application)
                 .interviewer(interviewer)
+                .interviewRound(request.getInterviewRound())
                 .interviewType(request.getInterviewType())
                 .scheduledDate(request.getScheduledDate())
                 .durationMinutes(request.getDurationMinutes())

@@ -11,6 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode(callSuper = true)
 public class ApplicantProfile extends AuditableEntity  {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -28,11 +29,17 @@ public class ApplicantProfile extends AuditableEntity  {
     @Column(name = "current_title")
     private String currentTitle;
     
-    @Column(name = "total_experience")
-    private Integer Totalexperience; // how should it be measured?
+    @Column(name = "experience_years")  // changed from total_experience
+private Integer experienceYears; // how should it be measured?
     
-    @Embedded
-    private Location location;
+    @Column(name = "city")
+    private String locationCity;
+
+    @Column(name = "state")
+    private String locationState;
+
+    @Column(name = "country")
+    private String locationCountry;
     
     @Column(columnDefinition = "TEXT")
     private String bio;

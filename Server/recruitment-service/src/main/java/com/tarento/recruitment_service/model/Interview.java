@@ -13,6 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode(callSuper = true)
 public class Interview extends AuditableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -40,6 +41,10 @@ public class Interview extends AuditableEntity {
     private String meetingLink;
     
     private String location;
+    @Column(name = "interview_round")
+    private Integer interviewRound;
+
+    private Integer rating;
     
     @Enumerated(EnumType.STRING)
     private InterviewStatus status;

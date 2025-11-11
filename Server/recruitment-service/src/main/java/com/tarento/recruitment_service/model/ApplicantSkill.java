@@ -12,6 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode(callSuper = true)
 public class ApplicantSkill extends AuditableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

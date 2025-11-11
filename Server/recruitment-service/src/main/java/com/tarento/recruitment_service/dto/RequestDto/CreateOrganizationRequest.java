@@ -18,5 +18,5 @@ public class CreateOrganizationRequest {
     private String description;
     
     @NotNull(message = "Status is required")
-    private boolean status;
+    private boolean isActive;
 }

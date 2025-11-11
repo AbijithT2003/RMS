@@ -29,6 +29,7 @@ public class JobSkill {
     @JoinColumn(name = "skill_id")
     private Skill skill;
     
+    @Builder.Default
     @Column(name = "is_required",nullable = false)
     private Boolean isRequired=false;
     
