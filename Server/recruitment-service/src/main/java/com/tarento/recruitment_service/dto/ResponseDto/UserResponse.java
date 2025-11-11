@@ -13,7 +13,7 @@ import java.time.LocalDateTime;;
 @Builder
 public class UserResponse {
     private UUID id;
-    private UUID organizationId;
+
     private String email;
     private String fullName;
     private String phone;

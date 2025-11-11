@@ -48,7 +48,6 @@ public class JobApplicationService {
         JobApplication application = JobApplication.builder()
                 .job(job)
                 .applicant(applicant)
-                .organization(job.getOrganization())
                 .platform(Platform.valueOf(request.getPlatform().toUpperCase()))
                 .sourceUrl(request.getSourceUrl())
                 .status(ApplicationStatus.SUBMITTED)
@@ -145,9 +144,6 @@ public class JobApplicationService {
         }
         if (application.getApplicant() != null && application.getApplicant().getUser() != null) {
             response.setApplicantName(application.getApplicant().getUser().getFullName());
-        }
-        if (application.getOrganization() != null) {
-            response.setOrganizationName(application.getOrganization().getName());
         }
         if (application.getAssignedTo() != null) {
             response.setAssignedToName(application.getAssignedTo().getFullName());

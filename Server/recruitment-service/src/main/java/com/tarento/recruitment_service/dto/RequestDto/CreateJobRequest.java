@@ -19,9 +19,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @SalaryRange(message = "Maximum salary must be greater than minimum salary")
 public class CreateJobRequest {
-    @NotNull(message = "Organization ID is required")
-    private UUID organizationId;
-    
+
+    private UUID createdById;
+
     @NotBlank(message = "Job title is required")
     @Size(min = 3, max = 100, message = "Job title must be between 3 and 100 characters")
     @Pattern(regexp = "^[\\p{L}\\p{N}\\s\\p{Punct}]*$", message = "Job title contains invalid characters")

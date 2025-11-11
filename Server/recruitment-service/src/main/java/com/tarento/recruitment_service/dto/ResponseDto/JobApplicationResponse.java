@@ -16,8 +16,7 @@ public class JobApplicationResponse {
     private String jobTitle;
     private UUID applicantId;
     private String applicantName;
-    private UUID organizationId;
-    private String organizationName;
+
     private String sourcePlatform;
     private String sourceUrl;
     private ApplicationStatus status;

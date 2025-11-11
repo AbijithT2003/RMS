@@ -16,7 +16,6 @@ public interface JobApplicationRepository extends JpaRepository<JobApplication, 
     Page<JobApplication> findByJobId(UUID jobId, Pageable pageable);
     Page<JobApplication> findByApplicantId(UUID applicantId, Pageable pageable);
     Page<JobApplication> findByStatus(ApplicationStatus status, Pageable pageable);
-    Page<JobApplication> findByOrganizationId(UUID organizationId, Pageable pageable);
     List<JobApplication> findByAssignedToId(UUID userId);
     
     @Query("SELECT ja FROM JobApplication ja WHERE ja.job.id = :jobId AND ja.status = :status")

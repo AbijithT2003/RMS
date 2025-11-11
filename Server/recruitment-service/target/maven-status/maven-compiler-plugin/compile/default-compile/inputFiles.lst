@@ -3,6 +3,7 @@
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/config/AuditorAwareImpl.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/config/CorsConfig.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/config/JpaAuditingConfig.java
+/home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/config/JwtAuthenticationFilter.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/config/JwtConfig.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/config/ModelMapperConfig.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/config/PageResponse.java
@@ -12,7 +13,6 @@
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/controller/InterviewController.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/controller/JobApplicationController.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/controller/JobController.java
-/home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/controller/OrganizationController.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/controller/SkillController.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/controller/UserController.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/dto/RequestDto/AddApplicantSkillRequest.java
@@ -21,7 +21,6 @@
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/dto/RequestDto/CreateInterviewRequest.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/dto/RequestDto/CreateJobApplicationRequest.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/dto/RequestDto/CreateJobRequest.java
-/home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/dto/RequestDto/CreateOrganizationRequest.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/dto/RequestDto/CreateSkillRequest.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/dto/RequestDto/CreateUserRequest.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/dto/RequestDto/LoginRequest.java
@@ -50,7 +49,6 @@
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/model/JobPosting.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/model/JobSkill.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/model/Location.java
-/home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/model/Organization.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/model/Role.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/model/SalaryRange.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/model/SavedJob.java
@@ -73,7 +71,6 @@
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/repository/JobPostingRepository.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/repository/JobRepository.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/repository/JobSkillRepository.java
-/home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/repository/OrganizationRepository.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/repository/RoleRepository.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/repository/SavedJobRepository.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/repository/SkillRepository.java
@@ -83,7 +80,7 @@
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/service/JobApplicationService.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/service/JobService.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/service/JwtService.java
-/home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/service/OrganizationService.java
+/home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/service/RoleService.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/service/SkillService.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/service/UserService.java
 /home/abijitht/RMS/Server/recruitment-service/src/main/java/com/tarento/recruitment_service/validation/SalaryRange.java

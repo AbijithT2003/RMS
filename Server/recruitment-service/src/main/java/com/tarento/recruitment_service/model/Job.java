@@ -24,10 +24,7 @@ public class Job extends AuditableEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     
-    @NotNull(message = "Organization is required")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "organization_id", nullable = false)
-    private Organization organization;
+
     
     @NotBlank(message = "Job title is required")
     @Size(min = 3, max = 100, message = "Job title must be between 3 and 100 characters")

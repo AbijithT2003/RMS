@@ -15,8 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class JobResponse {
     private UUID id;
-    private UUID organizationId;
-    private String organizationName;
+
     private UUID createdById;
     private String createdByName;
     private String title;

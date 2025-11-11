@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +26,7 @@ public class AuthenticationService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final RoleService roleService;
     
     /**
      * Register a new user
@@ -39,22 +41,32 @@ public class AuthenticationService {
         }
         
         try {
-            // Create new user
-            User user = User.builder()
-                    .email(request.getEmail())
-                    .fullName(request.getFullName())
-                    .phone(request.getPhone())
-                    //add role assignment here
-                    
-                    .passwordHash(passwordEncoder.encode(request.getPassword()))
-                    .isActive(true)
-                    .build();
+        // Pick role from request, or default if missing
+        String roleCode = (request.getRole() != null && !request.getRole().isBlank())
+                ? request.getRole().toUpperCase()
+                : "CANDIDATE";
+
+        var role = roleService.getRoleByCode(roleCode);
+        if (role == null) {
+            log.warn("Invalid role code: {}", roleCode);
+            throw new BusinessException("Invalid role: " + roleCode);
+        }
+
+        // Create and save user
+        User user = User.builder()
+                .email(request.getEmail())
+                .fullName(request.getFullName())
+                .phone(request.getPhone())
+                .roles(Set.of(role))
+                .passwordHash(passwordEncoder.encode(request.getPassword()))
+                .isActive(true)
+                .build();
             
             User savedUser = userRepository.save(user);
             log.info("User registered successfully: {}", savedUser.getId());
             
-            // Generate JWT token
-            String jwtToken = jwtService.generateToken(savedUser.getEmail());
+            // Generate JWT token with roles
+            String jwtToken = jwtService.generateToken(savedUser);
             long expiresIn = jwtService.getExpirationTime();
             
             return AuthResponse.of(jwtToken, savedUser.getEmail(), savedUser.getFullName(), expiresIn);
@@ -93,8 +105,8 @@ public class AuthenticationService {
             user.setLastLogin(LocalDateTime.now());
             userRepository.save(user);
             
-            // Generate JWT token
-            String jwtToken = jwtService.generateToken(user.getEmail());
+            // Generate JWT token with roles
+            String jwtToken = jwtService.generateToken(user);
             long expiresIn = jwtService.getExpirationTime();
             
             log.info("User logged in successfully: {}", user.getEmail());

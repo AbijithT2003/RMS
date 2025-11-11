@@ -20,9 +20,6 @@ public interface JobRepository extends JpaRepository<Job, UUID> {
     Page<Job> findByStatus(@NonNull JobStatus status, @NonNull Pageable pageable);
     
     @NonNull
-    Page<Job> findByOrganizationId(@NonNull UUID organizationId, @NonNull Pageable pageable);
-    
-    @NonNull
     @Query("SELECT j FROM Job j WHERE j.status = :status " +
            "AND (:jobType IS NULL OR j.jobType = :jobType) " +
            "AND (:workMode IS NULL OR j.workMode = :workMode) " +

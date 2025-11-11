@@ -30,9 +30,7 @@ public class JobApplication {
     @JoinColumn(name = "applicant_id")
     private ApplicantProfile applicant;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "organization_id")
-    private Organization organization;
+
     
     @Enumerated(EnumType.STRING)
     @Column(name = "source_platform")

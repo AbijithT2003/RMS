@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 import java.util.UUID;
 
 
@@ -42,14 +41,6 @@ public class UserController {
     @Operation(summary = "Get user by email", description = "Retrieves a user by their email address")
     public ResponseEntity<ApiResponse<UserResponse>> getUserByEmail(@PathVariable String email) {
         UserResponse response = userService.getUserByEmail(email);
-        return ResponseEntity.ok(ApiResponse.success(response));
-    }
-    
-    @GetMapping("/organization/{organizationId}")
-    @Operation(summary = "Get users by organization", description = "Retrieves all users belonging to an organization")
-    public ResponseEntity<ApiResponse<List<UserResponse>>> getUsersByOrganization(
-            @PathVariable UUID organizationId) {
-        List<UserResponse> response = userService.getUsersByOrganization(organizationId);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 }

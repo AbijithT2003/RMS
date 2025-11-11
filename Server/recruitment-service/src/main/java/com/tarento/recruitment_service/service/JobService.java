@@ -20,19 +20,14 @@ import java.util.UUID;
 @Transactional
 public class JobService {
     private final JobRepository jobRepository;
-    private final OrganizationRepository organizationRepository;
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     
     public JobResponse createJob(UUID createdById, CreateJobRequest request) {
-        Organization organization = organizationRepository.findById(request.getOrganizationId())
-                .orElseThrow(() -> new RuntimeException("Organization not found"));
-        
     User createdBy = userRepository.findById(createdById)
         .orElseThrow(() -> new RuntimeException("User not found"));
         
         Job job = modelMapper.map(request, Job.class);
-    job.setOrganization(organization);
     // store creator id as UUID (AuditableEntity.createdBy is now UUID)
     job.setCreatedBy(createdBy.getId());
         
@@ -78,9 +73,6 @@ public class JobService {
     
     private JobResponse mapToJobResponse(Job job) {
         JobResponse response = modelMapper.map(job, JobResponse.class);
-        if (job.getOrganization() != null) {
-            response.setOrganizationName(job.getOrganization().getName());
-        }
         if (job.getCreatedBy() != null) {
             // createdBy is a UUID; resolve the user to retrieve the full name
             try {

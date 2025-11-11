@@ -9,7 +9,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class CreateUserRequest {
-    private UUID organizationId;
+
     
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid email format")
@@ -24,6 +24,9 @@ public class CreateUserRequest {
     
     @Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be 10 digits")
     private String phone;
+
+    @NotBlank(message = "Role is required")
+    private String role;
     
     private String profileImageUrl;
     

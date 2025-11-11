@@ -5,7 +5,8 @@ import com.tarento.recruitment_service.dto.RequestDto.*;
 import com.tarento.recruitment_service.dto.ResponseDto.*;
 import com.tarento.recruitment_service.service.*;   
 import com.tarento.recruitment_service.config.*; 
-import com.tarento.recruitment_service.model.enums.*;   
+import com.tarento.recruitment_service.model.enums.*;
+import com.tarento.recruitment_service.model.User;   
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
@@ -26,16 +28,39 @@ import java.util.UUID;
 @Tag(name = "Jobs", description = "Job posting management APIs")
 public class JobController {
     private final JobService jobService;
+    private final JwtService jwtService;
+    private final UserService userService;
     
     @PostMapping
-    @Operation(summary = "Create a new job posting", description = "Creates a new job posting")
-    public ResponseEntity<ApiResponse<JobResponse>> createJob(
-            @Parameter(description = "ID of the user creating the job") @RequestParam UUID createdById,
-            @Valid @RequestBody CreateJobRequest request) {
-        JobResponse response = jobService.createJob(createdById, request);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success("Job created successfully", response));
+@PreAuthorize("hasRole('RECRUITER') or hasRole('ADMIN')")
+@Operation(summary = "Create a new job posting", description = "Allows an Admin or Recruiter to create a new job posting")
+public ResponseEntity<ApiResponse<JobResponse>> createJob(
+        @RequestBody CreateJobRequest request,
+        @RequestHeader("Authorization") String authHeader
+) {
+    try {
+        String token = authHeader.replace("Bearer ", "").trim();
+        String email = jwtService.extractUsername(token);
+        UserResponse userResponse = userService.getUserByEmail(email);
+
+        JobResponse jobResponse = jobService.createJob(userResponse.getId(), request);
+
+        return ResponseEntity.ok(
+                ApiResponse.<JobResponse>builder()
+                        .success(true)
+                        .message("Job created successfully")
+                        .data(jobResponse)
+                        .build()
+        );
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.<JobResponse>builder()
+                        .success(false)
+                        .message("Failed to create job: " + e.getMessage())
+                        .build());
     }
+}
+
     
     @GetMapping("/{id}")
     @Operation(summary = "Get job by ID", description = "Retrieves a job posting by its unique identifier")
@@ -76,6 +101,7 @@ public class JobController {
     }
     
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('RECRUITER') or hasRole('ADMIN')")
     @Operation(summary = "Update job", description = "Updates an existing job posting")
     public ResponseEntity<ApiResponse<JobResponse>> updateJob(
             @PathVariable UUID id,
@@ -85,6 +111,7 @@ public class JobController {
     }
     
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Delete job", description = "Deletes a job posting")
     public ResponseEntity<ApiResponse<Void>> deleteJob(@PathVariable UUID id) {
         jobService.deleteJob(id);

@@ -23,7 +23,6 @@ com/tarento/recruitment_service/model/SavedJob$SavedJobBuilder.class
 com/tarento/recruitment_service/dto/RequestDto/LoginRequest.class
 com/tarento/recruitment_service/model/Job.class
 com/tarento/recruitment_service/model/enums/InterviewStatus.class
-com/tarento/recruitment_service/repository/OrganizationRepository.class
 com/tarento/recruitment_service/model/enums/JobType.class
 com/tarento/recruitment_service/model/Skill.class
 com/tarento/recruitment_service/model/Location.class
@@ -37,10 +36,8 @@ com/tarento/recruitment_service/dto/RequestDto/CreateJobApplicationRequest.class
 com/tarento/recruitment_service/model/Skill$SkillBuilder.class
 com/tarento/recruitment_service/model/enums/PostingStatus.class
 com/tarento/recruitment_service/repository/JobPostingRepository.class
-com/tarento/recruitment_service/dto/RequestDto/CreateOrganizationRequest$CreateOrganizationRequestBuilder.class
 com/tarento/recruitment_service/dto/ResponseDto/InterviewResponse$InterviewResponseBuilder.class
 com/tarento/recruitment_service/validation/SalaryRange.class
-com/tarento/recruitment_service/controller/OrganizationController.class
 com/tarento/recruitment_service/controller/JobController.class
 com/tarento/recruitment_service/repository/ApplicantProfileRepository.class
 com/tarento/recruitment_service/model/AuditableEntity.class
@@ -59,20 +56,17 @@ com/tarento/recruitment_service/service/InterviewService.class
 com/tarento/recruitment_service/dto/RequestDto/CreateUserRequest.class
 com/tarento/recruitment_service/dto/RequestDto/UpdateInterviewRequest$UpdateInterviewRequestBuilder.class
 com/tarento/recruitment_service/model/Role.class
-com/tarento/recruitment_service/service/OrganizationService.class
 com/tarento/recruitment_service/dto/ResponseDto/ApplicantProfileResponse$ApplicantProfileResponseBuilder.class
 com/tarento/recruitment_service/dto/RequestDto/CreateJobRequest.class
 com/tarento/recruitment_service/controller/SkillController.class
 com/tarento/recruitment_service/dto/ResponseDto/JobResponse$JobResponseBuilder.class
 com/tarento/recruitment_service/repository/SkillRepository.class
 com/tarento/recruitment_service/repository/JobSkillRepository.class
-com/tarento/recruitment_service/dto/RequestDto/CreateOrganizationRequest.class
 com/tarento/recruitment_service/model/Interview$InterviewBuilder.class
 com/tarento/recruitment_service/dto/RequestDto/AddJobSkillRequest$AddJobSkillRequestBuilder.class
 com/tarento/recruitment_service/dto/RequestDto/CreateInterviewRequest$CreateInterviewRequestBuilder.class
 com/tarento/recruitment_service/service/JobService.class
 com/tarento/recruitment_service/repository/SavedJobRepository.class
-com/tarento/recruitment_service/model/Organization.class
 com/tarento/recruitment_service/dto/RequestDto/CreateSkillRequest.class
 com/tarento/recruitment_service/dto/ResponseDto/ApplicantProfileResponse.class
 com/tarento/recruitment_service/dto/ResponseDto/AuthResponse.class
@@ -95,7 +89,6 @@ com/tarento/recruitment_service/config/ApiResponse.class
 com/tarento/recruitment_service/config/ApiResponse$ApiResponseBuilder.class
 com/tarento/recruitment_service/service/AuthenticationService.class
 com/tarento/recruitment_service/dto/ResponseDto/JobSkillResponse.class
-com/tarento/recruitment_service/model/Organization$OrganizationBuilder.class
 com/tarento/recruitment_service/exception/BusinessException.class
 com/tarento/recruitment_service/dto/ResponseDto/OrganizationResponse.class
 com/tarento/recruitment_service/model/SalaryRange.class

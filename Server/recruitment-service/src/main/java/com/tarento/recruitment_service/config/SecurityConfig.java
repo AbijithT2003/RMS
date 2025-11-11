@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,6 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @RequiredArgsConstructor
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter; //injected automatically
@@ -35,6 +37,10 @@ public class SecurityConfig {
                     "/swagger-ui.html",
                     "/api/v1/auth/**"
                 ).permitAll()
+                .requestMatchers("/api/jobs/**").hasAnyRole("RECRUITER", "ADMIN")
+                .requestMatchers("/api/applications/**").hasAnyRole("CANDIDATE", "RECRUITER", "ADMIN")
+                .requestMatchers("/api/interviews/**").hasAnyRole("RECRUITER", "ADMIN")
+
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class); // ✅ filter injected correctly

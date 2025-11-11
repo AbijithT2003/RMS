@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
-    private final OrganizationRepository organizationRepository;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
     
@@ -37,12 +36,6 @@ public class UserService {
                 .isActive(request.isActive())
                 .build();
         
-        if (request.getOrganizationId() != null) {
-            Organization organization = organizationRepository.findById(request.getOrganizationId())
-                    .orElseThrow(() -> new RuntimeException("Organization not found"));
-            user.setOrganization(organization);
-        }
-        
         User saved = userRepository.save(user);
         return modelMapper.map(saved, UserResponse.class);
     }
@@ -57,13 +50,6 @@ public class UserService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
         return modelMapper.map(user, UserResponse.class);
-    }
-    
-    public List<UserResponse> getUsersByOrganization(UUID organizationId) {
-        List<User> users = userRepository.findByOrganizationId(organizationId);
-        return users.stream()
-                .map(user -> modelMapper.map(user, UserResponse.class))
-                .collect(Collectors.toList());
     }
     
     public void updateLastLogin(UUID userId) {
