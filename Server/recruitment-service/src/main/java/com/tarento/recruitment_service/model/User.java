@@ -53,7 +53,7 @@ public class User {
     private LocalDateTime updatedAt;
 
 
-    // ✅ Correct Many-to-Many mapping to roles
+    //Many-to-Many mapping to roles
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "user_roles",

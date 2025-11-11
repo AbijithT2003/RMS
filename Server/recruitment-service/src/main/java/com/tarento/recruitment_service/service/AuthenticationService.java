@@ -44,6 +44,8 @@ public class AuthenticationService {
                     .email(request.getEmail())
                     .fullName(request.getFullName())
                     .phone(request.getPhone())
+                    //add role assignment here
+                    
                     .passwordHash(passwordEncoder.encode(request.getPassword()))
                     .isActive(true)
                     .build();
