@@ -7,7 +7,9 @@ import com.tarento.recruitment_service.exception.BusinessException;
 import com.tarento.recruitment_service.exception.DuplicateResourceException;
 import com.tarento.recruitment_service.exception.ResourceNotFoundException;
 import com.tarento.recruitment_service.model.User;
+import com.tarento.recruitment_service.model.ApplicantProfile;
 import com.tarento.recruitment_service.repository.UserRepository;
+import com.tarento.recruitment_service.repository.ApplicantProfileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +29,7 @@ import java.util.Set;
 public class AuthenticationService {
     
     private final UserRepository userRepository;
+    private final ApplicantProfileRepository applicantProfileRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final RoleService roleService;
@@ -65,11 +71,35 @@ public class AuthenticationService {
             User savedUser = userRepository.save(user);
             log.info("User registered successfully: {}", savedUser.getId());
             
+            // Get user roles
+            List<String> roles = savedUser.getRoles().stream()
+                    .map(r -> r.getCode())
+                    .collect(Collectors.toList());
+            
+            // Create profiles based on role
+            UUID applicantId = null;
+            UUID recruiterId = null;
+            
+            if (roles.contains("CANDIDATE")) {
+                ApplicantProfile applicantProfile = ApplicantProfile.builder()
+                        .user(savedUser)
+                        .isPublicProfile(true)
+                        .build();
+                ApplicantProfile savedProfile = applicantProfileRepository.save(applicantProfile);
+                applicantId = savedProfile.getId();
+            }
+            
+            if (roles.contains("RECRUITER") || roles.contains("ADMIN")) {
+                recruiterId = savedUser.getId();
+            }
+            
             // Generate JWT token with roles
             String jwtToken = jwtService.generateToken(savedUser);
             long expiresIn = jwtService.getExpirationTime();
             
-            return AuthResponse.of(jwtToken, savedUser.getEmail(), savedUser.getFullName(), expiresIn);
+            return AuthResponse.of(jwtToken, savedUser.getId(), savedUser.getEmail(), 
+                                 savedUser.getFullName(), applicantId, recruiterId, 
+                                 roles, expiresIn);
         } catch (Exception e) {
             log.error("Error during user registration", e);
             throw new BusinessException("Failed to register user: " + e.getMessage());
@@ -105,12 +135,33 @@ public class AuthenticationService {
             user.setLastLogin(LocalDateTime.now());
             userRepository.save(user);
             
+            // Get user roles
+            List<String> roles = user.getRoles().stream()
+                    .map(role -> role.getCode())
+                    .collect(Collectors.toList());
+            
             // Generate JWT token with roles
             String jwtToken = jwtService.generateToken(user);
             long expiresIn = jwtService.getExpirationTime();
             
+            // Get profile IDs based on role
+            UUID applicantId = null;
+            UUID recruiterId = null;
+            
+            if (roles.contains("CANDIDATE")) {
+                applicantId = applicantProfileRepository.findByUserId(user.getId())
+                        .map(ApplicantProfile::getId)
+                        .orElse(null);
+            }
+            
+            if (roles.contains("RECRUITER") || roles.contains("ADMIN")) {
+                recruiterId = user.getId();
+            }
+            
             log.info("User logged in successfully: {}", user.getEmail());
-            return AuthResponse.of(jwtToken, user.getEmail(), user.getFullName(), expiresIn);
+            return AuthResponse.of(jwtToken, user.getId(), user.getEmail(), 
+                                 user.getFullName(), applicantId, recruiterId, 
+                                 roles, expiresIn);
         } catch (Exception e) {
             log.error("Error during login", e);
             throw new BusinessException("Login failed: " + e.getMessage());

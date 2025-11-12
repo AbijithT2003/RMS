@@ -96,6 +96,13 @@ public class SkillService {
                 .collect(Collectors.toList());
     }
     
+    public List<SkillResponse> getAllSkills() {
+        List<Skill> skills = skillRepository.findAll();
+        return skills.stream()
+                .map(skill -> modelMapper.map(skill, SkillResponse.class))
+                .collect(Collectors.toList());
+    }
+    
     private ApplicantSkillResponse mapToApplicantSkillResponse(ApplicantSkill applicantSkill) {
         ApplicantSkillResponse response = modelMapper.map(applicantSkill, ApplicantSkillResponse.class);
         if (applicantSkill.getSkill() != null) {

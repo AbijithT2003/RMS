@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 import java.util.UUID;
 
 
@@ -41,6 +43,13 @@ public class UserController {
     @Operation(summary = "Get user by email", description = "Retrieves a user by their email address")
     public ResponseEntity<ApiResponse<UserResponse>> getUserByEmail(@PathVariable String email) {
         UserResponse response = userService.getUserByEmail(email);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+    
+    @GetMapping
+    @Operation(summary = "Get all users", description = "Retrieves all users in the system")
+    public ResponseEntity<ApiResponse<List<UserResponse>>> getAllUsers() {
+        List<UserResponse> response = userService.getAllUsers();
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 }

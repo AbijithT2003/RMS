@@ -82,4 +82,11 @@ public class SkillController {
         List<JobSkillResponse> response = skillService.getJobSkills(jobId);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
+    
+    @GetMapping
+    @Operation(summary = "Get all skills", description = "Retrieves all skills in the system")
+    public ResponseEntity<ApiResponse<List<SkillResponse>>> getAllSkills() {
+        List<SkillResponse> response = skillService.getAllSkills();
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
 }

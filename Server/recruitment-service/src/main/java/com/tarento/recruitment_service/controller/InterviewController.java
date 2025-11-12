@@ -56,4 +56,11 @@ public class InterviewController {
         List<InterviewResponse> response = interviewService.getInterviewsByInterviewer(interviewerId);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
+    
+    @GetMapping
+    @Operation(summary = "Get all interviews", description = "Retrieves all interviews in the system")
+    public ResponseEntity<ApiResponse<List<InterviewResponse>>> getAllInterviews() {
+        List<InterviewResponse> response = interviewService.getAllInterviews();
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
 }

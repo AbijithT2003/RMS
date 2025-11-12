@@ -55,6 +55,12 @@ public class JobService {
         return PageResponse.of(responsePage);
     }
     
+    public PageResponse<JobResponse> getAllJobs(Pageable pageable) {
+        Page<Job> jobs = jobRepository.findAll(pageable);
+        Page<JobResponse> responsePage = jobs.map(this::mapToJobResponse);
+        return PageResponse.of(responsePage);
+    }
+    
     public JobResponse updateJob(UUID id, CreateJobRequest request) {
         Job job = jobRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Job not found with id: " + id));

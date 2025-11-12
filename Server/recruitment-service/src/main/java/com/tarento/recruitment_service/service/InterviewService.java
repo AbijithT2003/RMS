@@ -84,6 +84,13 @@ public class InterviewService {
                 .collect(Collectors.toList());
     }
     
+    public List<InterviewResponse> getAllInterviews() {
+        List<Interview> interviews = interviewRepository.findAll();
+        return interviews.stream()
+                .map(this::mapToInterviewResponse)
+                .collect(Collectors.toList());
+    }
+    
     private InterviewResponse mapToInterviewResponse(Interview interview) {
         InterviewResponse response = modelMapper.map(interview, InterviewResponse.class);
         if (interview.getInterviewer() != null) {
