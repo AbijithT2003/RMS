@@ -17,16 +17,16 @@ import java.util.List;
 public class GlobalExceptionHandler {
     
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ApiResponse<Void>> handleRuntimeException(
+    public ResponseEntity<Apiresponse<Void>> handleRuntimeException(
             RuntimeException ex, WebRequest request) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.error(ex.getMessage()));
+                .body(Apiresponse.error(ex.getMessage()));
     }
     
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ApiResponse<Void>> handleValidationExceptions(
+    public ResponseEntity<Apiresponse<Void>> handleValidationExceptions(
             MethodArgumentNotValidException ex) {
         List<String> errors = new ArrayList<>();
         
@@ -38,22 +38,22 @@ public class GlobalExceptionHandler {
         
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.error("Validation failed", errors));
+                .body(Apiresponse.error("Validation failed", errors));
     }
     
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ApiResponse<Void>> handleIllegalArgumentException(
+    public ResponseEntity<Apiresponse<Void>> handleIllegalArgumentException(
             IllegalArgumentException ex, WebRequest request) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.error(ex.getMessage()));
+                .body(Apiresponse.error(ex.getMessage()));
     }
     
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<Void>> handleGlobalException(
+    public ResponseEntity<Apiresponse<Void>> handleGlobalException(
             Exception ex, WebRequest request) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.error("An unexpected error occurred: " + ex.getMessage()));
+                .body(Apiresponse.error("An unexpected error occurred: " + ex.getMessage()));
     }
 }

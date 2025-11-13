@@ -10,6 +10,11 @@ import com.tarento.recruitment_service.model.User;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +39,20 @@ public class JobController {
     @PostMapping
 @PreAuthorize("hasRole('RECRUITER') or hasRole('ADMIN')")
 @Operation(summary = "Create a new job posting", description = "Allows an Admin or Recruiter to create a new job posting")
-public ResponseEntity<ApiResponse<JobResponse>> createJob(
-        @RequestBody CreateJobRequest request,
+@ApiResponses(value = {
+    @ApiResponse(responseCode = "200", description = "Job created successfully",
+        content = @Content(schema = @Schema(implementation = JobResponse.class))),
+    @ApiResponse(responseCode = "400", description = "Invalid input data",
+        content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+    @ApiResponse(responseCode = "401", description = "Unauthorized",
+        content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+    @ApiResponse(responseCode = "403", description = "Forbidden - insufficient permissions",
+        content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+})
+public ResponseEntity<Apiresponse<JobResponse>> createJob(
+        @RequestBody(description = "Job creation details", required = true,
+            content = @Content(schema = @Schema(implementation = CreateJobRequest.class)))
+        @org.springframework.web.bind.annotation.RequestBody CreateJobRequest request,
         @RequestHeader("Authorization") String authHeader
 ) {
     try {
@@ -46,7 +63,7 @@ public ResponseEntity<ApiResponse<JobResponse>> createJob(
         JobResponse jobResponse = jobService.createJob(userResponse.getId(), request);
 
         return ResponseEntity.ok(
-                ApiResponse.<JobResponse>builder()
+                Apiresponse.<JobResponse>builder()
                         .success(true)
                         .message("Job created successfully")
                         .data(jobResponse)
@@ -54,7 +71,7 @@ public ResponseEntity<ApiResponse<JobResponse>> createJob(
         );
     } catch (Exception e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.<JobResponse>builder()
+                .body(Apiresponse.<JobResponse>builder()
                         .success(false)
                         .message("Failed to create job: " + e.getMessage())
                         .build());
@@ -64,14 +81,26 @@ public ResponseEntity<ApiResponse<JobResponse>> createJob(
     
     @GetMapping("/{id}")
     @Operation(summary = "Get job by ID", description = "Retrieves a job posting by its unique identifier")
-    public ResponseEntity<ApiResponse<JobResponse>> getJob(@PathVariable UUID id) {
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Job found",
+            content = @Content(schema = @Schema(implementation = JobResponse.class))),
+        @ApiResponse(responseCode = "404", description = "Job not found",
+            content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
+    public ResponseEntity<Apiresponse<JobResponse>> getJob(@PathVariable UUID id) {
         JobResponse response = jobService.getJobById(id);
-        return ResponseEntity.ok(ApiResponse.success(response));
+        return ResponseEntity.ok(Apiresponse.success(response));
     }
     
     @GetMapping("/search")
     @Operation(summary = "Search jobs", description = "Search jobs with filters")
-    public ResponseEntity<ApiResponse<PageResponse<JobResponse>>> searchJobs(
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Jobs found",
+            content = @Content(schema = @Schema(implementation = PageResponse.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid search parameters",
+            content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
+    public ResponseEntity<Apiresponse<PageResponse<JobResponse>>> searchJobs(
             @Parameter(description = "Job status") @RequestParam(required = false) JobStatus status,
             @Parameter(description = "Job type") @RequestParam(required = false) JobType jobType,
             @Parameter(description = "Work mode") @RequestParam(required = false) WorkMode workMode,
@@ -83,12 +112,18 @@ public ResponseEntity<ApiResponse<JobResponse>> createJob(
         PageResponse<JobResponse> response = jobService.searchJobs(
                 status != null ? status : JobStatus.ACTIVE,
                 jobType, workMode, locationCity, pageable);
-        return ResponseEntity.ok(ApiResponse.success(response));
+        return ResponseEntity.ok(Apiresponse.success(response));
     }
     
     @GetMapping("/search/keyword")
     @Operation(summary = "Search jobs by keyword", description = "Search jobs by keyword in title or description")
-    public ResponseEntity<ApiResponse<PageResponse<JobResponse>>> searchByKeyword(
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Jobs found",
+            content = @Content(schema = @Schema(implementation = PageResponse.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid keyword",
+            content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
+    public ResponseEntity<Apiresponse<PageResponse<JobResponse>>> searchByKeyword(
             @Parameter(description = "Search keyword") @RequestParam String keyword,
             @Parameter(description = "Job status") @RequestParam(required = false) JobStatus status,
             @RequestParam(defaultValue = "0") int page,
@@ -97,34 +132,57 @@ public ResponseEntity<ApiResponse<JobResponse>> createJob(
         Pageable pageable = PageRequest.of(page, size);
         PageResponse<JobResponse> response = jobService.searchByKeyword(
                 keyword, status != null ? status : JobStatus.ACTIVE, pageable);
-        return ResponseEntity.ok(ApiResponse.success(response));
+        return ResponseEntity.ok(Apiresponse.success(response));
     }
     
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('RECRUITER') or hasRole('ADMIN')")
     @Operation(summary = "Update job", description = "Updates an existing job posting")
-    public ResponseEntity<ApiResponse<JobResponse>> updateJob(
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Job updated successfully",
+            content = @Content(schema = @Schema(implementation = JobResponse.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid input data",
+            content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+        @ApiResponse(responseCode = "404", description = "Job not found",
+            content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+        @ApiResponse(responseCode = "403", description = "Forbidden",
+            content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
+    public ResponseEntity<Apiresponse<JobResponse>> updateJob(
             @PathVariable UUID id,
-            @Valid @RequestBody CreateJobRequest request) {
+            @RequestBody(description = "Job update details", required = true,
+                content = @Content(schema = @Schema(implementation = CreateJobRequest.class)))
+            @Valid @org.springframework.web.bind.annotation.RequestBody CreateJobRequest request) {
         JobResponse response = jobService.updateJob(id, request);
-        return ResponseEntity.ok(ApiResponse.success("Job updated successfully", response));
+        return ResponseEntity.ok(Apiresponse.success("Job updated successfully", response));
     }
     
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Delete job", description = "Deletes a job posting")
-    public ResponseEntity<ApiResponse<Void>> deleteJob(@PathVariable UUID id) {
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Job deleted successfully"),
+        @ApiResponse(responseCode = "404", description = "Job not found",
+            content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+        @ApiResponse(responseCode = "403", description = "Forbidden",
+            content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
+    public ResponseEntity<Apiresponse<Void>> deleteJob(@PathVariable UUID id) {
         jobService.deleteJob(id);
-        return ResponseEntity.ok(ApiResponse.success("Job deleted successfully", null));
+        return ResponseEntity.ok(Apiresponse.success("Job deleted successfully", null));
     }
     
     @GetMapping
     @Operation(summary = "Get all jobs", description = "Retrieves all job postings with pagination")
-    public ResponseEntity<ApiResponse<PageResponse<JobResponse>>> getAllJobs(
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Jobs retrieved successfully",
+            content = @Content(schema = @Schema(implementation = PageResponse.class)))
+    })
+    public ResponseEntity<Apiresponse<PageResponse<JobResponse>>> getAllJobs(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         PageResponse<JobResponse> response = jobService.getAllJobs(pageable);
-        return ResponseEntity.ok(ApiResponse.success(response));
+        return ResponseEntity.ok(Apiresponse.success(response));
     }
 }
