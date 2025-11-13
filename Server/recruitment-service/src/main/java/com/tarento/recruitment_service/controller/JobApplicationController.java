@@ -86,4 +86,14 @@ public class JobApplicationController {
         JobApplicationResponse response = jobApplicationService.assignRecruiter(id, recruiterId);
         return ResponseEntity.ok(ApiResponse.success("Recruiter assigned successfully", response));
     }
+    
+    @GetMapping
+    @Operation(summary = "Get all applications", description = "Retrieves all job applications with pagination")
+    public ResponseEntity<ApiResponse<PageResponse<JobApplicationResponse>>> getAllApplications(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        PageResponse<JobApplicationResponse> response = jobApplicationService.getAllApplications(pageable);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
 }

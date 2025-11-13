@@ -58,4 +58,11 @@ public class UserService {
         user.setLastLogin(LocalDateTime.now());
         userRepository.save(user);
     }
+
+    public List<UserResponse> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(user -> modelMapper.map(user, UserResponse.class))
+                .collect(Collectors.toList());
+    }
 }

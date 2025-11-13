@@ -32,6 +32,13 @@ public class SkillService {
         Skill saved = skillRepository.save(skill);
         return modelMapper.map(saved, SkillResponse.class);
     }
+
+    public List<SkillResponse> getAllSkills() {
+        List<Skill> skills = skillRepository.findAll();
+        return skills.stream()
+                .map(skill -> modelMapper.map(skill, SkillResponse.class))
+                .collect(Collectors.toList());
+    }
     
     public SkillResponse getSkillById(UUID id) {
         Skill skill = skillRepository.findById(id)

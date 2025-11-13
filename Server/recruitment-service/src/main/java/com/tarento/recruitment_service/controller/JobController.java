@@ -117,4 +117,17 @@ public ResponseEntity<ApiResponse<JobResponse>> createJob(
         jobService.deleteJob(id);
         return ResponseEntity.ok(ApiResponse.success("Job deleted successfully", null));
     }
+    
+    @GetMapping
+    @Operation(summary = "Get all jobs", description = "Retrieves all job postings with pagination")
+    public ResponseEntity<ApiResponse<PageResponse<JobResponse>>> getAllJobs(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        PageResponse<JobResponse> response = jobService.getAllJobs(pageable);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    
 }
+            

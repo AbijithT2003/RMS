@@ -34,6 +34,12 @@ public class JobService {
         Job saved = jobRepository.save(job);
         return mapToJobResponse(saved);
     }
+
+    public PageResponse<JobResponse> getAllJobs(Pageable pageable) {
+        Page<Job> jobs = jobRepository.findAll(pageable);
+        Page<JobResponse> responsePage = jobs.map(this::mapToJobResponse);
+        return PageResponse.of(responsePage);
+    }
     
     public JobResponse getJobById(UUID id) {
         Job job = jobRepository.findById(id)

@@ -132,7 +132,15 @@ public class JobApplicationService {
         
         JobApplication updated = jobApplicationRepository.save(application);
         return mapToApplicationResponse(updated);
-    }    @NonNull
+    }
+    public PageResponse<JobApplicationResponse> getAllApplications(@NonNull Pageable pageable) {
+        Objects.requireNonNull(pageable, "Pageable must not be null");
+        Page<JobApplication> applications = jobApplicationRepository.findAll(pageable);
+        Page<JobApplicationResponse> responsePage = applications.map(this::mapToApplicationResponse);
+        return PageResponse.of(responsePage);
+    }  
+    
+    @NonNull
     private JobApplicationResponse mapToApplicationResponse(@NonNull JobApplication application) {
         Objects.requireNonNull(application, "Application must not be null");
         
