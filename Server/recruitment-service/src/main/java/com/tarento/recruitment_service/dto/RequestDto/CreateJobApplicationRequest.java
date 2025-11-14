@@ -19,20 +19,15 @@ public class CreateJobApplicationRequest {
     @NotNull(message = "Applicant ID is required")
     private UUID applicantId;
     
-    @NotNull(message = "Platform is required")
+    @NotBlank(message = "Platform is required")
     @Pattern(regexp = "LINKEDIN|INDEED|GLASSDOOR|COMPANY_SITE|OTHER", 
             message = "Invalid platform value. Must be one of: LINKEDIN, INDEED, GLASSDOOR, COMPANY_SITE, OTHER")
     private String platform;
     
-    @URL(message = "Source URL must be a valid URL")
     private String sourceUrl;
     
-    @NotNull(message = "Resume URL is required")
-    @URL(message = "Resume URL must be a valid URL")
     private String resumeVersionUrl;
     
     @Size(max = 5000, message = "Cover letter must not exceed 5000 characters")
-    @Pattern(regexp = "^[\\p{L}\\p{N}\\s\\p{Punct}]*$", 
-            message = "Cover letter contains invalid characters")
     private String coverLetter;
 }

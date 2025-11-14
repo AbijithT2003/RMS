@@ -8,6 +8,10 @@ import com.tarento.recruitment_service.model.enums.*;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.web.bind.annotation.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +30,7 @@ import java.util.UUID;
 @Tag(name = "Job Applications", description = "Job application management APIs")
 public class JobApplicationController {
     private final JobApplicationService jobApplicationService;
+    private final AuthorizationService authorizationService;
     
     @PostMapping
     @Operation(summary = "Submit job application", description = "Submit a new job application")
@@ -38,6 +43,7 @@ public class JobApplicationController {
     
     @GetMapping("/{id}")
     @Operation(summary = "Get application by ID", description = "Retrieves an application by its unique identifier")
+    
     public ResponseEntity<ApiResponse<JobApplicationResponse>> getApplication(@PathVariable UUID id) {
         JobApplicationResponse response = jobApplicationService.getApplicationById(id);
         return ResponseEntity.ok(ApiResponse.success(response));

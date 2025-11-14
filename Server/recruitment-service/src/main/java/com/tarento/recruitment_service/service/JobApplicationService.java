@@ -7,6 +7,7 @@ import com.tarento.recruitment_service.model.enums.*;
 import com.tarento.recruitment_service.repository.*;
 import com.tarento.recruitment_service.config.*;
 import com.tarento.recruitment_service.exception.*;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import java.util.Objects;
@@ -17,6 +18,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.Map;
+import java.util.Arrays;
+import com.tarento.recruitment_service.model.enums.JobStatus;
+import com.tarento.recruitment_service.model.enums.ApplicationStatus;
+import java.util.List;
 
 
 @Service
@@ -40,6 +46,9 @@ public class JobApplicationService {
         ApplicantProfile applicant = applicantProfileRepository.findById(request.getApplicantId())
                 .orElseThrow(() -> new ResourceNotFoundException("Applicant profile not found with id: " + request.getApplicantId()));
         
+        // Business logic validations
+        validateJobApplication(job, request);
+        
         if (jobApplicationRepository.existsByJobIdAndApplicantId(request.getJobId(), 
                 request.getApplicantId())) {
             throw new DuplicateResourceException("Application already exists for job id: " + request.getJobId());
@@ -59,6 +68,27 @@ public class JobApplicationService {
         
         JobApplication saved = jobApplicationRepository.save(application);
         return mapToApplicationResponse(saved);
+    }
+    
+    private void validateJobApplication(Job job, CreateJobApplicationRequest request) {
+        // Check if job is still accepting applications
+        if (job.getApplicationDeadline() != null && 
+            job.getApplicationDeadline().isBefore(LocalDateTime.now())) {
+            throw new BusinessException("Application deadline has passed");
+        }
+        
+        // Check if job is active
+        if (job.getStatus() != JobStatus.ACTIVE) {
+            throw new BusinessException("Job is not accepting applications. Current status: " + job.getStatus());
+        }
+        
+        // Check if positions are still available
+        if (job.getPositionsAvailable() != null && job.getPositionsAvailable() > 0) {
+            long currentApplications = jobApplicationRepository.countApplicationsByJobId(job.getId());
+            if (currentApplications >= job.getPositionsAvailable()) {
+                throw new BusinessException("No positions available for this job");
+            }
+        }
     }
     
     @NonNull
@@ -109,11 +139,35 @@ public class JobApplicationService {
         JobApplication application = jobApplicationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Application not found with id: " + id));
         
-        application.setStatus(status);
-        application.setLastUpdatedAt(LocalDateTime.now());
+        // Validate status transition
+        validateStatusTransition(application.getStatus(), status);
         
-        JobApplication updated = jobApplicationRepository.save(application);
-        return mapToApplicationResponse(updated);
+        try {
+            application.setStatus(status);
+            application.setLastUpdatedAt(LocalDateTime.now());
+            
+            JobApplication updated = jobApplicationRepository.save(application);
+            return mapToApplicationResponse(updated);
+        } catch (org.springframework.orm.ObjectOptimisticLockingFailureException e) {
+            throw new BusinessException("Application was modified by another user. Please refresh and try again.");
+        }
+    }
+    
+    private void validateStatusTransition(ApplicationStatus currentStatus, ApplicationStatus newStatus) {
+        // Define valid status transitions
+        Map<ApplicationStatus, List<ApplicationStatus>> validTransitions = Map.of(
+            ApplicationStatus.SUBMITTED, Arrays.asList(ApplicationStatus.UNDER_REVIEW, ApplicationStatus.REJECTED),
+            ApplicationStatus.UNDER_REVIEW, Arrays.asList(ApplicationStatus.SHORTLISTED, ApplicationStatus.REJECTED),
+            ApplicationStatus.SHORTLISTED, Arrays.asList(ApplicationStatus.INTERVIEW_SCHEDULED, ApplicationStatus.REJECTED),
+            ApplicationStatus.INTERVIEW_SCHEDULED, Arrays.asList(ApplicationStatus.INTERVIEWED, ApplicationStatus.REJECTED),
+            ApplicationStatus.INTERVIEWED, Arrays.asList(ApplicationStatus.OFFERED, ApplicationStatus.REJECTED),
+            ApplicationStatus.OFFERED, Arrays.asList(ApplicationStatus.ACCEPTED, ApplicationStatus.REJECTED)
+        );
+        
+        List<ApplicationStatus> allowedStatuses = validTransitions.get(currentStatus);
+        if (allowedStatuses == null || !allowedStatuses.contains(newStatus)) {
+            throw new BusinessException("Invalid status transition from " + currentStatus + " to " + newStatus);
+        }
     }
     
     @NonNull

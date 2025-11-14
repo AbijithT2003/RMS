@@ -9,6 +9,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import jakarta.persistence.Version;
 
 // Job.java
 @Entity
@@ -24,7 +25,8 @@ public class Job extends AuditableEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     
-
+    @Version
+    private Long version;
     
     @NotBlank(message = "Job title is required")
     @Size(min = 3, max = 100, message = "Job title must be between 3 and 100 characters")

@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -25,40 +26,40 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/jobs")
 @RequiredArgsConstructor
+@Validated
 @Tag(name = "Jobs", description = "Job posting management APIs")
 public class JobController {
     private final JobService jobService;
     private final JwtService jwtService;
     private final UserService userService;
     
+
+    @GetMapping
+    @Operation(summary = "Get all jobs", description = "Retrieves all job postings with pagination")
+    public ResponseEntity<ApiResponse<PageResponse<JobResponse>>> getAllJobs(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        PageResponse<JobResponse> response = jobService.getAllJobs(pageable);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    
     @PostMapping
 @PreAuthorize("hasRole('RECRUITER') or hasRole('ADMIN')")
 @Operation(summary = "Create a new job posting", description = "Allows an Admin or Recruiter to create a new job posting")
 public ResponseEntity<ApiResponse<JobResponse>> createJob(
-        @RequestBody CreateJobRequest request,
+        @Valid @RequestBody CreateJobRequest request,
         @RequestHeader("Authorization") String authHeader
 ) {
-    try {
-        String token = authHeader.replace("Bearer ", "").trim();
-        String email = jwtService.extractUsername(token);
-        UserResponse userResponse = userService.getUserByEmail(email);
+    String token = authHeader.replace("Bearer ", "").trim();
+    String email = jwtService.extractUsername(token);
+    UserResponse userResponse = userService.getUserByEmail(email);
 
-        JobResponse jobResponse = jobService.createJob(userResponse.getId(), request);
+    JobResponse jobResponse = jobService.createJob(userResponse.getId(), request);
 
-        return ResponseEntity.ok(
-                ApiResponse.<JobResponse>builder()
-                        .success(true)
-                        .message("Job created successfully")
-                        .data(jobResponse)
-                        .build()
-        );
-    } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.<JobResponse>builder()
-                        .success(false)
-                        .message("Failed to create job: " + e.getMessage())
-                        .build());
-    }
+    return ResponseEntity.status(HttpStatus.CREATED)
+            .body(ApiResponse.success("Job created successfully", jobResponse));
 }
 
     
@@ -118,15 +119,7 @@ public ResponseEntity<ApiResponse<JobResponse>> createJob(
         return ResponseEntity.ok(ApiResponse.success("Job deleted successfully", null));
     }
     
-    @GetMapping
-    @Operation(summary = "Get all jobs", description = "Retrieves all job postings with pagination")
-    public ResponseEntity<ApiResponse<PageResponse<JobResponse>>> getAllJobs(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        PageResponse<JobResponse> response = jobService.getAllJobs(pageable);
-        return ResponseEntity.ok(ApiResponse.success(response));
-    }
+    
 
     
 }

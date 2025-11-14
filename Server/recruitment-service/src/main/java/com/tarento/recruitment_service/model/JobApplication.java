@@ -7,7 +7,8 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import org.hibernate.annotations.UpdateTimestamp;  
+import org.hibernate.annotations.UpdateTimestamp;
+import jakarta.persistence.Version;  
 
 @Entity
 @Table(name = "job_applications")
@@ -19,6 +20,9 @@ public class JobApplication {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+    
+    @Version
+    private Long version;
     
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)

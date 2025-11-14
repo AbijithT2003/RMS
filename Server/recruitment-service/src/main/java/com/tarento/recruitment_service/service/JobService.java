@@ -13,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.util.UUID;
+import com.tarento.recruitment_service.exception.BusinessException;
 
 
 @Service
@@ -65,9 +66,13 @@ public class JobService {
         Job job = jobRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Job not found with id: " + id));
         
-        modelMapper.map(request, job);
-        Job updated = jobRepository.save(job);
-        return mapToJobResponse(updated);
+        try {
+            modelMapper.map(request, job);
+            Job updated = jobRepository.save(job);
+            return mapToJobResponse(updated);
+        } catch (org.springframework.orm.ObjectOptimisticLockingFailureException e) {
+            throw new BusinessException("Job was modified by another user. Please refresh and try again.");
+        }
     }
     
     public void deleteJob(UUID id) {

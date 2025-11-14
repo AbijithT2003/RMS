@@ -2,6 +2,7 @@ package com.tarento.recruitment_service.service;
 
 import com.tarento.recruitment_service.model.*;
 import com.tarento.recruitment_service.model.enums.*;
+import com.tarento.recruitment_service.exception.BusinessException;
 import com.tarento.recruitment_service.repository.*;
 import com.tarento.recruitment_service.dto.RequestDto.*;
 import com.tarento.recruitment_service.dto.ResponseDto.*;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;    
 import org.modelmapper.ModelMapper;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -29,6 +31,9 @@ public class InterviewService {
         
         User interviewer = userRepository.findById(request.getInterviewerId())
                 .orElseThrow(() -> new RuntimeException("Interviewer not found"));
+        
+        // Business logic validations
+        validateInterviewScheduling(request, application);
         
         Interview interview = Interview.builder()
                 .application(application)
@@ -50,6 +55,40 @@ public class InterviewService {
         jobApplicationRepository.save(application);
         
         return mapToInterviewResponse(saved);
+    }
+    
+    private void validateInterviewScheduling(CreateInterviewRequest request, JobApplication application) {
+        // Check if scheduled date is in the future
+        if (request.getScheduledDate().isBefore(LocalDateTime.now())) {
+            throw new BusinessException("Cannot schedule interview in the past");
+        }
+        
+        // Check if application is in valid status for interview
+        if (!Arrays.asList(ApplicationStatus.SHORTLISTED, ApplicationStatus.UNDER_REVIEW)
+                .contains(application.getStatus())) {
+            throw new BusinessException("Application must be shortlisted or under review to schedule interview");
+        }
+        
+        // Check if interviewer is available (no overlapping interviews)
+        LocalDateTime startTime = request.getScheduledDate();
+        LocalDateTime endTime = startTime.plusMinutes(request.getDurationMinutes());
+        
+        List<Interview> conflictingInterviews = interviewRepository
+            .findInterviewsByInterviewerAndDateRange(
+                request.getInterviewerId(),
+                startTime.minusMinutes(15), // 15-minute buffer
+                endTime.plusMinutes(15)
+            );
+        
+        if (!conflictingInterviews.isEmpty()) {
+            throw new BusinessException("Interviewer not available at this time. Conflicting interview exists.");
+        }
+        
+        // Check if it's a reasonable time (business hours)
+        int hour = request.getScheduledDate().getHour();
+        if (hour < 9 || hour > 17) {
+            throw new BusinessException("Interviews can only be scheduled between 9 AM and 5 PM");
+        }
     }
     
     public InterviewResponse updateInterview(UUID id, UpdateInterviewRequest request) {
