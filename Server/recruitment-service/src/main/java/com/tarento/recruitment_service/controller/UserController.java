@@ -32,17 +32,14 @@ public class UserController {
                 .body(ApiResponse.success("User created successfully", response));
     }
     
-    @GetMapping("/{id}")
-    @Operation(summary = "Get user by ID", description = "Retrieves a user by their unique identifier")
-    public ResponseEntity<ApiResponse<UserResponse>> getUser(@PathVariable UUID id) {
-        UserResponse response = userService.getUserById(id);
-        return ResponseEntity.ok(ApiResponse.success(response));
-    }
-    
-    @GetMapping("/email/{email}")
-    @Operation(summary = "Get user by email", description = "Retrieves a user by their email address")
-    public ResponseEntity<ApiResponse<UserResponse>> getUserByEmail(@PathVariable String email) {
-        UserResponse response = userService.getUserByEmail(email);
+    @GetMapping("/{value}")
+    @Operation(
+            summary = "Get user by ID or Email",
+            description = "Retrieves a user by UUID or Email. Automatically detects the type."
+    )
+    public ResponseEntity<ApiResponse<UserResponse>> getUser(@PathVariable String value) {
+
+        UserResponse response = userService.getUserByValue(value);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
     

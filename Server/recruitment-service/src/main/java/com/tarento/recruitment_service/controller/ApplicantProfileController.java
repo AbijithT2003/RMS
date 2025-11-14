@@ -23,9 +23,7 @@ import java.util.UUID;
 public class ApplicantProfileController {
     private final ApplicantProfileService applicantProfileService;
     
-    @GetMapping("/{id}")
-    @Operation(summary = "Get applicant by ID", description = "Retrieves an applicant profile by ID")
-   
+  
     public ResponseEntity<ApiResponse<ApplicantProfileResponse>> getApplicant(@PathVariable UUID id) {
         ApplicantProfileResponse response = applicantProfileService.getApplicantById(id);
         return ResponseEntity.ok(ApiResponse.success(response));

@@ -1,85 +1,139 @@
 package com.tarento.recruitment_service.controller;
 
-
 import com.tarento.recruitment_service.dto.RequestDto.*;
-import com.tarento.recruitment_service.dto.ResponseDto.*;       
-import com.tarento.recruitment_service.service.*;   
-import com.tarento.recruitment_service.config.*;
+import com.tarento.recruitment_service.dto.ResponseDto.*;
+import com.tarento.recruitment_service.service.SkillService;
+import com.tarento.recruitment_service.config.ApiResponse;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
+
 import java.util.List;
 import java.util.UUID;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/skills")
 @RequiredArgsConstructor
-@Tag(name = "Skills", description = "Skill management APIs")
+@Tag(name = "Skill Management", description = "APIs for managing skills")
 public class SkillController {
+
     private final SkillService skillService;
-    
+
+    // --------------------------------------------------------
+    // Create Skill
+    // --------------------------------------------------------
     @PostMapping
-    @Operation(summary = "Create skill", description = "Creates a new skill")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Create a new skill")
     public ResponseEntity<ApiResponse<SkillResponse>> createSkill(
-            @Valid @RequestBody CreateSkillRequest request) {
+            @RequestBody CreateSkillRequest request) {
+
         SkillResponse response = skillService.createSkill(request);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success("Skill created successfully", response));
+        return ResponseEntity.ok(ApiResponse.success("Skill created successfully", response));
     }
-    
-    @GetMapping("/{id}")
-    @Operation(summary = "Get skill by ID", description = "Retrieves a skill by its unique identifier")
-    public ResponseEntity<ApiResponse<SkillResponse>> getSkill(@PathVariable UUID id) {
-        SkillResponse response = skillService.getSkillById(id);
-        return ResponseEntity.ok(ApiResponse.success(response));
+
+    // --------------------------------------------------------
+    // Update Skill
+    // --------------------------------------------------------
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Update existing skill")
+    public ResponseEntity<ApiResponse<SkillResponse>> updateSkill(
+            @PathVariable UUID id,
+            @RequestBody UpdateSkillRequest request) {
+
+        SkillResponse response = skillService.updateSkill(id, request);
+        return ResponseEntity.ok(ApiResponse.success("Skill updated successfully", response));
     }
-    
+
+    // --------------------------------------------------------
+    // Delete Skill
+    // --------------------------------------------------------
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Delete skill by ID")
+    public ResponseEntity<ApiResponse<DeleteSkillResponse>> deleteSkill(@PathVariable UUID id) {
+
+        DeleteSkillResponse response = skillService.deleteSkill(id);
+        return ResponseEntity.ok(ApiResponse.success(response.getMessage(), response));
+    }
+
+    // --------------------------------------------------------
+    // Get All Skills
+    // --------------------------------------------------------
+    @GetMapping
+    @Operation(summary = "Get all skills")
+    public ResponseEntity<ApiResponse<List<SkillResponse>>> getAllSkills() {
+
+        List<SkillResponse> list = skillService.getAllSkills();
+        return ResponseEntity.ok(ApiResponse.success(list));
+    }
+
+    // --------------------------------------------------------
+    // Search Skill
+    // --------------------------------------------------------
     @GetMapping("/search")
-    @Operation(summary = "Search skills", description = "Search skills by keyword")
+    @Operation(summary = "Search skills by keyword")
     public ResponseEntity<ApiResponse<List<SkillResponse>>> searchSkills(
-            @Parameter(description = "Search keyword") @RequestParam String keyword) {
-        List<SkillResponse> response = skillService.searchSkills(keyword);
-        return ResponseEntity.ok(ApiResponse.success(response));
+            @RequestParam String keyword) {
+
+        List<SkillResponse> results = skillService.searchSkills(keyword);
+        return ResponseEntity.ok(ApiResponse.success(results));
     }
-    
+
+    // --------------------------------------------------------
+    // Add Skill to Applicant
+    // --------------------------------------------------------
     @PostMapping("/applicant")
-    @Operation(summary = "Add skill to applicant", description = "Adds a skill to an applicant's profile")
+    @PreAuthorize("hasRole('APPLICANT') or hasRole('ADMIN')")
+    @Operation(summary = "Add a skill to an applicant profile")
     public ResponseEntity<ApiResponse<ApplicantSkillResponse>> addSkillToApplicant(
-            @Valid @RequestBody AddApplicantSkillRequest request) {
+            @RequestBody AddApplicantSkillRequest request) {
+
         ApplicantSkillResponse response = skillService.addSkillToApplicant(request);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success("Skill added to applicant", response));
+        return ResponseEntity.ok(ApiResponse.success("Skill added to applicant", response));
     }
-    
-    @PostMapping("/job")
-    @Operation(summary = "Add skill to job", description = "Adds a skill requirement to a job")
-    public ResponseEntity<ApiResponse<JobSkillResponse>> addSkillToJob(
-            @Valid @RequestBody AddJobSkillRequest request) {
-        JobSkillResponse response = skillService.addSkillToJob(request);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success("Skill added to job", response));
-    }
-    
+
+    // --------------------------------------------------------
+    // Get Applicant's Skills
+    // --------------------------------------------------------
     @GetMapping("/applicant/{applicantId}")
-    @Operation(summary = "Get applicant skills", description = "Retrieves all skills for an applicant")
+    @Operation(summary = "Get all skills of a specific applicant")
     public ResponseEntity<ApiResponse<List<ApplicantSkillResponse>>> getApplicantSkills(
             @PathVariable UUID applicantId) {
-        List<ApplicantSkillResponse> response = skillService.getApplicantSkills(applicantId);
-        return ResponseEntity.ok(ApiResponse.success(response));
+
+        List<ApplicantSkillResponse> list = skillService.getApplicantSkills(applicantId);
+        return ResponseEntity.ok(ApiResponse.success(list));
     }
-    
+
+    // --------------------------------------------------------
+    // Add Skill to Job
+    // --------------------------------------------------------
+    @PostMapping("/job")
+    @PreAuthorize("hasRole('RECRUITER') or hasRole('ADMIN')")
+    @Operation(summary = "Add a skill to a job posting")
+    public ResponseEntity<ApiResponse<JobSkillResponse>> addSkillToJob(
+            @RequestBody AddJobSkillRequest request) {
+
+        JobSkillResponse response = skillService.addSkillToJob(request);
+        return ResponseEntity.ok(ApiResponse.success("Skill added to job", response));
+    }
+
+    // --------------------------------------------------------
+    // Get Job's Skills
+    // --------------------------------------------------------
     @GetMapping("/job/{jobId}")
-    @Operation(summary = "Get job skills", description = "Retrieves all skill requirements for a job")
+    @Operation(summary = "Get all skills linked to a job")
     public ResponseEntity<ApiResponse<List<JobSkillResponse>>> getJobSkills(
             @PathVariable UUID jobId) {
-        List<JobSkillResponse> response = skillService.getJobSkills(jobId);
-        return ResponseEntity.ok(ApiResponse.success(response));
+
+        List<JobSkillResponse> list = skillService.getJobSkills(jobId);
+        return ResponseEntity.ok(ApiResponse.success(list));
     }
 }

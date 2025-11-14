@@ -1,20 +1,16 @@
 package com.tarento.recruitment_service.exception;
 
-import com.tarento.recruitment_service.config.*;
-
+import com.tarento.recruitment_service.config.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
-import com.tarento.recruitment_service.exception.UnauthorizedException;
-import com.tarento.recruitment_service.exception.ForbiddenException;
-import com.tarento.recruitment_service.exception.ValidationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -31,17 +27,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ApiResponse<Void>> handleAuthenticationException(
             AuthenticationException ex) {
-        return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
-                .body(ApiResponse.error("Authentication failed. Please login."));
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ApiResponse.error("Authentication required. Please login."));
     }
     
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ApiResponse<Void>> handleAccessDeniedException(
             AccessDeniedException ex) {
-        return ResponseEntity
-                .status(HttpStatus.FORBIDDEN)
-                .body(ApiResponse.error("Access denied. Insufficient permissions."));
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(ApiResponse.error("You do not have permission to perform this action."));
     }
     
     @ExceptionHandler(UnauthorizedException.class)
@@ -106,18 +100,15 @@ public class GlobalExceptionHandler {
     // ============================================
     
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse<Void>> handleValidationExceptions(
+    public ResponseEntity<ApiResponse<List<String>>> handleValidationExceptions(
             MethodArgumentNotValidException ex) {
         List<String> errors = new ArrayList<>();
         
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.add(fieldName + ": " + errorMessage);
-        });
+        for (var error : ex.getBindingResult().getFieldErrors()) {
+            errors.add(error.getField() + ": " + error.getDefaultMessage());
+        }
         
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+        return ResponseEntity.badRequest()
                 .body(ApiResponse.error("Validation failed", errors));
     }
     
@@ -134,10 +125,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<ApiResponse<Void>> handleMissingParameterException(
             MissingServletRequestParameterException ex) {
-        String message = String.format("Missing required parameter: '%s'", ex.getParameterName());
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.error(message));
+        return ResponseEntity.badRequest()
+                .body(ApiResponse.error("Missing required parameter: " + ex.getParameterName()));
     }
     
     @ExceptionHandler(IllegalArgumentException.class)
@@ -155,11 +144,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ApiResponse<Void>> handleMethodNotSupportedException(
             HttpRequestMethodNotSupportedException ex) {
-        String message = String.format("HTTP method '%s' not supported for this endpoint. Supported methods: %s", 
-                ex.getMethod(), String.join(", ", ex.getSupportedMethods()));
-        return ResponseEntity
-                .status(HttpStatus.METHOD_NOT_ALLOWED)
-                .body(ApiResponse.error(message));
+        String supported = String.join(", ", ex.getSupportedMethods());
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
+                .body(ApiResponse.error("HTTP method '" + ex.getMethod() + 
+                        "' not allowed. Supported: " + supported));
     }
     
     @ExceptionHandler(org.springframework.orm.ObjectOptimisticLockingFailureException.class)
@@ -173,16 +161,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
     public ResponseEntity<ApiResponse<Void>> handleDataIntegrityViolation(
             org.springframework.dao.DataIntegrityViolationException ex) {
-        String message = "Data constraint violation";
+        String message = "Data constraint violation.";
         
-        if (ex.getMessage().contains("unique")) {
-            message = "Duplicate entry detected";
-        } else if (ex.getMessage().contains("foreign key")) {
-            message = "Referenced record not found";
+        if (ex.getMessage().toLowerCase().contains("unique")) {
+            message = "Duplicate entry detected.";
+        } else if (ex.getMessage().toLowerCase().contains("foreign key")) {
+            message = "Related record not found.";
         }
         
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
+        return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(ApiResponse.error(message));
     }
     
@@ -192,13 +179,35 @@ public class GlobalExceptionHandler {
     
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleGlobalException(
-            Exception ex, WebRequest request) {
-        // Log the full exception for debugging
+            Exception ex) {
         System.err.println("Unexpected error: " + ex.getMessage());
         ex.printStackTrace();
         
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.error("An unexpected error occurred. Please try again later."));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.error("Something went wrong. Please try again later."));
     }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ApiResponse<Void>> handleJsonParseError(HttpMessageNotReadableException ex) {
+        String message = ex.getMostSpecificCause().getMessage();
+        
+        // Handle specific enum conversion errors
+        if (message.contains("Cannot coerce empty String") && message.contains("JobType")) {
+            message = "JobType cannot be empty. Valid values: FULL_TIME, PART_TIME, CONTRACT, INTERNSHIP, TEMPORARY";
+        } else if (message.contains("Cannot coerce empty String") && message.contains("WorkMode")) {
+            message = "WorkMode cannot be empty. Valid values: REMOTE, HYBRID, ONSITE";
+        } else if (message.contains("Cannot coerce empty String") && message.contains("JobStatus")) {
+            message = "JobStatus cannot be empty. Valid values: DRAFT, ACTIVE, PAUSED, CLOSED, CANCELLED";
+        } else if (message.contains("not one of the values accepted")) {
+            message = "Invalid enum value. Please use one of the allowed values.";
+        } else if (message.contains("Cannot deserialize value")) {
+            message = "Invalid field format in request body.";
+        } else if (message.contains("Cannot coerce empty String")) {
+            message = "Empty string provided for required enum field.";
+        }
+        
+        return ResponseEntity.badRequest()
+                .body(ApiResponse.error(message));
+    }
+
 }

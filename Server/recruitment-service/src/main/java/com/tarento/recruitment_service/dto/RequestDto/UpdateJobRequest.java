@@ -8,18 +8,13 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.NoArgsConstructor; 
-
-
-
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CreateJobRequest {
-
-    private UUID createdById;
+public class UpdateJobRequest {
 
     @NotBlank(message = "Job title is required")
     @Size(min = 3, max = 100, message = "Job title must be between 3 and 100 characters")
@@ -39,12 +34,11 @@ public class CreateJobRequest {
     @Size(max = 2000, message = "Requirements must not exceed 2000 characters")
     private String requirements;
     
-    @NotNull(message = "job type is required and must be one of: FULL_TIME, PART_TIME, CONTRACT, INTERN, TEMPORARY")
+    @NotNull(message = "Job type is required")
     private JobType jobType;
     
-    @NotNull(message = "Work mode is required and must be one of: REMOTE, HYBRID, ONSITE")
+    @NotNull(message = "Work mode is required")
     private WorkMode workMode;
-
     
     @Size(max = 100, message = "City name must not exceed 100 characters")
     private String locationCity;

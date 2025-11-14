@@ -49,7 +49,7 @@ public class JobApplicationController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
     
-    @GetMapping("/job/{jobId}")
+    @GetMapping("/job/")
     @Operation(summary = "Get applications by job", description = "Retrieves all applications for a specific job")
     public ResponseEntity<ApiResponse<PageResponse<JobApplicationResponse>>> getApplicationsByJob(
             @PathVariable UUID jobId,
@@ -62,7 +62,7 @@ public class JobApplicationController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
     
-    @GetMapping("/applicant/{applicantId}")
+    @GetMapping("/applicant/")
     @Operation(summary = "Get applications by applicant", description = "Retrieves all applications by an applicant")
     public ResponseEntity<ApiResponse<PageResponse<JobApplicationResponse>>> getApplicationsByApplicant(
             @PathVariable UUID applicantId,

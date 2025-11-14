@@ -13,7 +13,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.util.UUID;
+import java.time.LocalDateTime;
 import com.tarento.recruitment_service.exception.BusinessException;
+import com.tarento.recruitment_service.exception.ResourceNotFoundException;
 
 
 @Service
@@ -25,15 +27,50 @@ public class JobService {
     private final ModelMapper modelMapper;
     
     public JobResponse createJob(UUID createdById, CreateJobRequest request) {
-    User createdBy = userRepository.findById(createdById)
-        .orElseThrow(() -> new RuntimeException("User not found"));
+        User createdBy = userRepository.findById(createdById)
+            .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + createdById));
         
+        // Validate business rules
+        validateJobCreation(request);
+        if (request.getApplicationDeadline() != null &&
+            request.getApplicationDeadline().isBefore(LocalDateTime.now())) {
+            throw new BusinessException("Application deadline cannot be in the past");
+        }
         Job job = modelMapper.map(request, Job.class);
-    // store creator id as UUID (AuditableEntity.createdBy is now UUID)
-    job.setCreatedBy(createdBy.getId());
+        job.setCreatedBy(createdBy.getId());
         
         Job saved = jobRepository.save(job);
         return mapToJobResponse(saved);
+    }
+    
+    private void validateJobCreation(CreateJobRequest request) {
+        // Salary validation
+        if (request.getSalaryMin() != null && request.getSalaryMax() != null) {
+            if (request.getSalaryMin().compareTo(request.getSalaryMax()) > 0) {
+                throw new BusinessException("Minimum salary cannot be greater than maximum salary");
+            }
+        }
+        
+        // Application deadline validation
+        if (request.getApplicationDeadline() != null && 
+            request.getApplicationDeadline().isBefore(LocalDateTime.now())) {
+            throw new BusinessException("Application deadline cannot be in the past");
+        }
+        
+        // Experience validation
+        if (request.getExperienceRequired() != null && request.getExperienceRequired() < 0) {
+            throw new BusinessException("Experience required cannot be negative");
+        }
+        
+        // Positions validation
+        if (request.getPositionsAvailable() != null && request.getPositionsAvailable() <= 0) {
+            throw new BusinessException("Positions available must be greater than 0");
+        }
+        
+        // Status validation for creation
+        if (request.getStatus() == JobStatus.CLOSED || request.getStatus() == JobStatus.CANCELLED) {
+            throw new BusinessException("Cannot create job with CLOSED or CANCELLED status");
+        }
     }
 
     public PageResponse<JobResponse> getAllJobs(Pageable pageable) {
@@ -44,7 +81,7 @@ public class JobService {
     
     public JobResponse getJobById(UUID id) {
         Job job = jobRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Job not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Job not found with id: " + id));
         return mapToJobResponse(job);
     }
     
@@ -62,9 +99,10 @@ public class JobService {
         return PageResponse.of(responsePage);
     }
     
-    public JobResponse updateJob(UUID id, CreateJobRequest request) {
+    public JobResponse updateJob(UUID id, UpdateJobRequest request) {
+        // Validate path variable matches request body ID
         Job job = jobRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Job not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Job not found with id: " + id));
         
         try {
             modelMapper.map(request, job);
@@ -75,13 +113,18 @@ public class JobService {
         }
     }
     
-    public void deleteJob(UUID id) {
-        if (!jobRepository.existsById(id)) {
-            throw new RuntimeException("Job not found with id: " + id);
-        }
-        jobRepository.deleteById(id);
-    }
-    
+    public DeletedJobResponse deleteJob(UUID id) {
+    Job job = jobRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Job not found with id: " + id));
+
+    DeletedJobResponse deletedInfo =
+            new DeletedJobResponse(job.getId(), job.getTitle());
+
+    jobRepository.delete(job);
+
+    return deletedInfo;
+}
+
     private JobResponse mapToJobResponse(Job job) {
         JobResponse response = modelMapper.map(job, JobResponse.class);
         if (job.getCreatedBy() != null) {
