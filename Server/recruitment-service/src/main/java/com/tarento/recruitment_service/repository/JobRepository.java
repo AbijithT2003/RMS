@@ -24,7 +24,7 @@ public interface JobRepository extends JpaRepository<Job, UUID> {
            "AND (:jobType IS NULL OR j.jobType = :jobType) " +
            "AND (:workMode IS NULL OR j.workMode = :workMode) " +
            "AND (:locationCity IS NULL OR j.locationCity = :locationCity)")
-    Page<Job> searchJobs(@NonNull @Param("status") JobStatus status,
+    Page<Job> searchJobs(@Param("status") JobStatus status,
                          @Param("jobType") JobType jobType,
                          @Param("workMode") WorkMode workMode,
                          @Param("locationCity") String locationCity,
@@ -39,4 +39,17 @@ public interface JobRepository extends JpaRepository<Job, UUID> {
     Page<Job> searchByKeyword(@Param("keyword") String keyword,
                               @Param("status") JobStatus status,
                               Pageable pageable);
+    
+    @Query("SELECT j FROM Job j WHERE j.status = :status " +
+           "AND (LOWER(j.title) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+           "OR LOWER(j.description) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
+           "AND (:jobType IS NULL OR j.jobType = :jobType) " +
+           "AND (:workMode IS NULL OR j.workMode = :workMode) " +
+           "AND (:locationCity IS NULL OR j.locationCity = :locationCity)")
+    Page<Job> searchByKeywordAndFilters(@Param("keyword") String keyword,
+                                        @Param("status") JobStatus status,
+                                        @Param("jobType") JobType jobType,
+                                        @Param("workMode") WorkMode workMode,
+                                        @Param("locationCity") String locationCity,
+                                        Pageable pageable);
 }

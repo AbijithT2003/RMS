@@ -85,10 +85,17 @@ public class JobService {
         return mapToJobResponse(job);
     }
     
-    public PageResponse<JobResponse> searchJobs(JobStatus status, JobType jobType, 
+    public PageResponse<JobResponse> searchJobs(JobStatus status, String keyword, JobType jobType, 
                                                  WorkMode workMode, String locationCity, 
                                                  Pageable pageable) {
-        Page<Job> jobs = jobRepository.searchJobs(status, jobType, workMode, locationCity, pageable);
+        Page<Job> jobs;
+        
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            jobs = jobRepository.searchByKeywordAndFilters(keyword.trim(), status, jobType, workMode, locationCity, pageable);
+        } else {
+            jobs = jobRepository.searchJobs(status, jobType, workMode, locationCity, pageable);
+        }
+        
         Page<JobResponse> responsePage = jobs.map(this::mapToJobResponse);
         return PageResponse.of(responsePage);
     }

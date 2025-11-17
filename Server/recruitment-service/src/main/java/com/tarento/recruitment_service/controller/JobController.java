@@ -69,18 +69,20 @@ public class JobController {
     @GetMapping("/search")
     @Operation(summary = "Search jobs", description = "Search jobs with filters")
     public ResponseEntity<ApiResponse<PageResponse<JobResponse>>> searchJobs(
-            @Parameter(description = "Job status") @RequestParam(required = false) JobStatus status,
-            @Parameter(description = "Search keyword") @RequestParam String keyword,
+            @Parameter(description = "Job status (default: ACTIVE)") @RequestParam(required = false) JobStatus status,
+            @Parameter(description = "Search keyword") @RequestParam(required = false) String keyword,
             @Parameter(description = "Job type") @RequestParam(required = false) JobType jobType,
             @Parameter(description = "Work mode") @RequestParam(required = false) WorkMode workMode,
             @Parameter(description = "Location city") @RequestParam(required = false) String locationCity,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         
+        // Default to ACTIVE status if not provided
+        JobStatus searchStatus = status != null ? status : JobStatus.ACTIVE;
+        
         Pageable pageable = PageRequest.of(page, size);
         PageResponse<JobResponse> response = jobService.searchJobs(
-                status != null ? status : JobStatus.ACTIVE,
-                jobType, workMode, locationCity, pageable);
+                searchStatus, keyword, jobType, workMode, locationCity, pageable);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
     
