@@ -8,22 +8,22 @@ import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
 
-@Configuration
-public class CorsConfig {
+// @Configuration
+// public class CorsConfig {
 
-    @Bean
-    public CorsFilter corsFilter() {
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.setAllowedOrigins(Arrays.asList(
-            "http://localhost:3000",   // React frontend
-            "http://localhost:4200"    // Angular frontend
-        ));
-        config.addAllowedHeader("*");
-        config.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","PATCH","OPTIONS"));
+//     @Bean
+//     public CorsFilter corsFilter() {
+//         CorsConfiguration config = new CorsConfiguration();
+//         config.setAllowCredentials(true);
+//         config.setAllowedOrigins(Arrays.asList(
+//             "http://localhost:3000",   // React frontend
+//             "http://localhost:4200"    // Angular frontend
+//         ));
+//         config.addAllowedHeader("*");
+//         config.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","PATCH","OPTIONS"));
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);  // apply to all endpoints
-        return new CorsFilter(source);
-    }
-}
+//         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//         source.registerCorsConfiguration("/**", config);  // apply to all endpoints
+//         return new CorsFilter(source);
+//     }
+// }
