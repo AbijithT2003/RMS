@@ -13,8 +13,6 @@
   padding: 0.5rem 0;
 }
 
-
-
 .auth-back-btn {
   display: flex;
   align-items: center;
@@ -64,6 +62,47 @@
   border: 1px solid rgba(0, 0, 0, 0.05);
   box-sizing: border-box;
   max-width: 100%;
+}
+
+/* Mode-specific visual emphasis */
+.auth-page.mode-login .auth-form-container {
+  box-shadow: 0 10px 36px rgba(37, 38, 87, 0.18);
+  border-left: 6px solid var(--accent-primary);
+}
+
+.auth-page.mode-login .auth-showcase {
+  opacity: 0.9;
+  filter: grayscale(10%);
+  transform: translateY(0);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.auth-page.mode-register .auth-showcase {
+  box-shadow: 0 18px 60px rgba(37, 38, 87, 0.18);
+  border-left: 6px solid var(--accent-hover);
+  transform: translateY(-4px);
+}
+
+.auth-page.mode-register .auth-form-container {
+  opacity: 0.95;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+/* Make submit button more vibrant on register to draw attention */
+.auth-page.mode-register .auth-submit {
+  background: linear-gradient(
+    90deg,
+    var(--accent-primary),
+    var(--accent-hover)
+  );
+  box-shadow: 0 10px 30px rgba(37, 38, 87, 0.18);
+}
+
+/* Slightly mute submit for login so users focus on entering credentials */
+.auth-page.mode-login .auth-submit {
+  background: var(--accent-primary);
+  box-shadow: 0 6px 18px rgba(37, 38, 87, 0.12);
 }
 
 .auth-title {
@@ -162,6 +201,41 @@
   opacity: 0.6;
 }
 
+.password-input-container {
+  position: relative;
+}
+
+.password-input-container .form-input {
+  padding-right: 3rem;
+  width: 100%;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  width: 2rem;
+  height: 2rem;
+  font-size: 1rem;
+}
+
+.password-toggle:hover {
+  color: var(--accent-primary);
+  background: rgba(0, 0, 0, 0.05);
+}
+
 .auth-submit {
   padding: 1rem 2rem;
   background: var(--accent-primary);
@@ -237,8 +311,7 @@
   display: grid;
 
   grid-template-columns: 1fr;
-  gap: .6rem;
-  
+  gap: 0.6rem;
 }
 
 @media (min-width: 640px) {
@@ -249,7 +322,7 @@
 
 .showcase-card {
   display: flex;
-  align-items:stretch;
+  align-items: stretch;
   gap: 1rem;
   padding: 1rem;
   background: rgba(255, 255, 255, 0.7);
@@ -259,7 +332,6 @@
   backdrop-filter: blur(10px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   position: relative; /* ensure internal positioning is relative */
-
 }
 
 .showcase-card:hover {

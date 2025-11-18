@@ -3,14 +3,11 @@
 */
 
 /* Use global root variables (from src/styles.css) where possible.
-   Map local names to the app-wide variables so styles remain consistent. */
-.landing {
-  --bg: var(--bg-primary);
-  --card: var(--card-bg);
-  --muted: var(--text-secondary);
-  --accent: var(--accent-primary);
-  --accent-2: var(--accent-hover);
-  --glass-border: rgba(0, 0, 0, 0.1);
+   Reference the global variables directly and add local fallbacks when needed. */
+
+:root {
+  /* fallback for local token used by landing styles */
+  --glass-border-fallback: rgba(0, 0, 0, 0.1);
   --radius: 12px;
   --max-width: 1100px;
   --gap: 24px;
@@ -18,15 +15,10 @@
 }
 /* note: global body font/background are defined in the app-level styles.css */
 
-/* Container */
-.landing {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 48px 20px;
-  gap: 32px;
+/* Hero Section */
+.hero {
+  padding: 80px 0 60px;
+  text-align: center;
 }
 
 /* Top navigation */
@@ -50,7 +42,11 @@
   width: 44px;
   height: 44px;
   border-radius: 10px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  background: linear-gradient(
+    135deg,
+    var(--accent-primary),
+    var(--accent-hover)
+  );
   display: flex;
   align-items: center;
   justify-content: center;
@@ -67,7 +63,7 @@
   align-items: center;
 }
 .nav-link {
-  color: var(--muted);
+  color: var(--text-secondary);
   text-decoration: none;
   font-size: 0.95rem;
   padding: 8px 10px;
@@ -80,7 +76,11 @@
 }
 
 .cta-small {
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  background: linear-gradient(
+    90deg,
+    var(--accent-primary),
+    var(--accent-hover)
+  );
   color: var(--bg-secondary);
   padding: 8px 12px;
   border-radius: 10px;
@@ -94,36 +94,24 @@
   box-shadow: 0 12px 30px rgba(79, 70, 229, 0.22);
 }
 
-/* Hero */
-.hero {
-  width: 100%;
-  max-width: var(--max-width);
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap);
-  align-items: center;
-  justify-content: center;
-  margin: 8px auto 40px;
-  text-align: center;
+.hero h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, var(--text-primary), var(--accent-primary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
 }
-.hero-card {
-  background: var(--card);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius);
-  padding: 36px;
-  box-shadow: 0 10px 30px rgba(2, 6, 23, 0.06);
-}
-.hero-left h1 {
-  margin: 0 0 12px 0;
-  font-size: 2.25rem;
-  line-height: 1.05;
-  letter-spacing: -0.6px;
-}
-.hero-left p {
-  margin: 0 0 20px 0;
-  color: var(--muted);
-  font-size: 1rem;
-  max-width: 720px;
+
+.hero p {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* CTA group */
@@ -137,7 +125,11 @@
   align-items: center;
   gap: 10px;
   padding: 12px 18px;
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  background: linear-gradient(
+    90deg,
+    var(--accent-primary),
+    var(--accent-hover)
+  );
   color: var(--bg-secondary);
   border-radius: 12px;
   font-weight: 600;
@@ -148,8 +140,8 @@
 }
 .cta-btn.secondary {
   background: transparent;
-  border: 1px solid var(--glass-border);
-  color: var(--muted);
+  border: 1px solid var(--glass-border-fallback);
+  color: var(--text-secondary);
   font-weight: 600;
 }
 .cta-btn:hover {
@@ -169,7 +161,7 @@
     rgba(255, 255, 255, 0.015),
     rgba(255, 255, 255, 0.01)
   );
-  border: 1px solid var(--glass-border);
+  border: 1px solid var(--glass-border-fallback);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -186,8 +178,8 @@
   margin: 8px auto 40px;
 }
 .feature {
-  background: var(--card);
-  border: 1px solid var(--glass-border);
+  background: var(--card-bg);
+  border: 1px solid var(--glass-border-fallback);
   border-radius: 12px;
   padding: 18px;
   display: flex;
@@ -203,7 +195,11 @@
   width: 48px;
   height: 48px;
   border-radius: 10px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  background: linear-gradient(
+    135deg,
+    var(--accent-primary),
+    var(--accent-hover)
+  );
   display: flex;
   align-items: center;
   justify-content: center;
@@ -216,22 +212,51 @@
 }
 .feature p {
   margin: 0;
-  color: var(--muted);
+  color: var(--text-secondary);
   font-size: 0.95rem;
+}
+
+/* Features Section */
+.features-section {
+  padding: 80px 0;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+.features-section h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 3rem;
+  color: var(--text-primary);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
 }
 
 /* Testimonials Carousel Section */
 .testimonials-carousel-section {
-  width: 100%;
-  max-width: var(--max-width);
-  margin: 0 auto 48px;
+  padding: 80px 0;
 }
 
 .testimonials-carousel-section h2 {
-  margin: 0 0 32px 0;
-  font-size: 1.75rem;
+  font-size: 2.5rem;
+  font-weight: 700;
   text-align: center;
-  font-weight: 600;
+  margin-bottom: 3rem;
+  color: var(--text-primary);
 }
 
 /* CTA Buttons Container */
@@ -255,15 +280,15 @@
   width: 100%;
   max-width: var(--max-width);
   margin: 0 auto 48px;
-  color: var(--muted);
+  color: var(--text-secondary);
   font-size: 0.95rem;
   text-align: center;
 }
 .landing-footer {
   width: 100%;
-  border-top: 1px solid var(--glass-border);
+  border-top: 1px solid var(--glass-border-fallback);
   padding: 18px 0;
-  color: var(--muted);
+  color: var(--text-secondary);
   text-align: center;
   font-size: 0.9rem;
 }
@@ -292,25 +317,27 @@
     padding: 28px 14px;
   }
 }
-@media (max-width: 560px) {
-  .features {
-    grid-template-columns: 1fr;
+@media (max-width: 768px) {
+  .hero {
+    padding: 60px 0 40px;
   }
-  .hero-left h1 {
-    font-size: 1.6rem;
+  
+  .hero h1 {
+    font-size: 2.5rem;
   }
-  .hero-card {
-    padding: 20px;
+  
+  .hero p {
+    font-size: 1.1rem;
   }
-  .preview {
-    min-height: 160px;
+  
+  .features-section,
+  .testimonials-carousel-section {
+    padding: 60px 0;
   }
-  .brand .title {
-    display: none;
-  }
-  .cta-group {
-    flex-direction: column;
-    align-items: flex-start;
+  
+  .features-section h2,
+  .testimonials-carousel-section h2 {
+    font-size: 2rem;
   }
 }
 

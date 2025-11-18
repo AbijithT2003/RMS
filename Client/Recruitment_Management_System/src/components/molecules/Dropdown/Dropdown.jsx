@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import "./Dropdown.module.css";
+import "./Dropdown.css";
 
 const Dropdown = ({ trigger, children, className = "" }) => {
   const [isOpen, setIsOpen] = useState(false);

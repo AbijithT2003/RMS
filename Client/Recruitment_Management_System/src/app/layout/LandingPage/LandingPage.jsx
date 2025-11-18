@@ -4,8 +4,45 @@ import "./LandingPage.css";
 import Header from "../../../components/organisms/Header/Header";
 import TestimonialCarousel from "../../../components/organisms/TestimonialCarousel/TestimonialCarousel";
 import Button from "../../../components/atoms/Button/Button";
+import Card from "../../../components/ui/Card/Card";
+import FeatureCard from "../../../components/ui/Card/FeatureCard";
 
 const LandingPage = () => {
+  const features = [
+    {
+      image: "/assets/images/jobposting.jpg",
+      title: "Job Posting",
+      description:
+        "Create and manage job postings with ease. Reach the right candidates with targeted job descriptions and requirements.",
+      actionText: "Learn More",
+      actionHref: "/features/job-posting",
+    },
+    {
+      image: "/assets/images/candidatemangement.jpg",
+      title: "Candidate Management",
+      description:
+        "Organize and track candidates throughout the hiring process with comprehensive candidate profiles and status tracking.",
+      actionText: "Explore Features",
+      actionHref: "/features/candidates",
+    },
+    {
+      image: "/assets/images/interviewscheduling.jpg",
+      title: "Interview Scheduling",
+      description:
+        "Schedule, conduct, and manage interviews seamlessly with our integrated calendar and video conferencing tools.",
+      actionText: "Schedule Now",
+      actionHref: "/features/interviews",
+    },
+    {
+      image: "/assets/images/analytics.jpg",
+      title: "Analytics",
+      description:
+        "Track recruitment metrics and gain insights to optimize your hiring process with detailed reports and dashboards.",
+      actionText: "View Analytics",
+      actionHref: "/features/analytics",
+    },
+  ];
+
   const testimonials = [
     {
       image: "/assets/images/christian-buehner-DItYlc26zVI-unsplash.jpg",
@@ -84,6 +121,25 @@ const LandingPage = () => {
         <div className="container">
           <h2>What Our Users Say</h2>
           <TestimonialCarousel testimonials={testimonials} />
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="features-section">
+        <div className="container">
+          <h2>Our Key Features</h2>
+          <div className="features-grid">
+            {features.map((feature, index) => (
+              <FeatureCard
+                key={index}
+                image={feature.image}
+                title={feature.title}
+                description={feature.description}
+                actionText={feature.actionText}
+                actionHref={feature.actionHref}
+              />
+            ))}
+          </div>
         </div>
       </section>
     </div>

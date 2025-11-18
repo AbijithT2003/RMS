@@ -21,10 +21,13 @@
 }
 
 body {
-  font-family: "Inter", "Elms Sans ";
-  background: var(--bg-primary);
+  font-family: "Inter", "Elms Sans";
   color: var(--text-primary);
   line-height: 1.6;
+  background: linear-gradient(180deg, var(--bg-primary) 0%, #eef4ff 100%);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
 }
 
 .elms-sans {
@@ -36,4 +39,42 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 24px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Decorative background elements */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  pointer-events: none;
+  z-index: -1;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.3;
+}
+
+body::before {
+  width: 400px;
+  height: 400px;
+  left: -200px;
+  top: -200px;
+  background: radial-gradient(
+    circle,
+    rgba(37, 38, 87, 0.15) 0%,
+    transparent 70%
+  );
+}
+
+body::after {
+  width: 300px;
+  height: 300px;
+  right: -150px;
+  bottom: -150px;
+  background: radial-gradient(
+    circle,
+    rgba(0, 192, 80, 0.1) 0%,
+    transparent 70%
+  );
 }
