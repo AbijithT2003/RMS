@@ -234,6 +234,22 @@
   font-weight: 600;
 }
 
+/* CTA Buttons Container */
+.cta-buttons {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+@media (max-width: 560px) {
+  .cta-buttons {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
 /* About / footer */
 .landing-about {
   width: 100%;
