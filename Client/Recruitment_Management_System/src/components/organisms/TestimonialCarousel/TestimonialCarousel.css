@@ -1,0 +1,142 @@
+/* TestimonialCarousel.css
+   Carousel styles for testimonial cards
+*/
+
+.carousel-container {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.carousel-track {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  width: 100%;
+}
+
+.carousel-items {
+  display: flex;
+  gap: 24px;
+  transition: transform 300ms ease-out;
+  width: 100%;
+}
+
+.carousel-item {
+  flex: 0 0 calc((100% - 48px) / 3);
+  min-width: 0;
+}
+
+/* Navigation Buttons */
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  /* transform: translateY(-50%); */
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(79, 70, 229, 0.3);
+  border-radius: 10px;
+  background: rgba(79, 70, 229, 0.05);
+  color: #4f46e5;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 200ms ease;
+  padding: 0;
+  z-index: 2;
+}
+
+.carousel-btn.prev {
+  left: -60px;
+}
+
+.carousel-btn.next {
+  right: -60px;
+}
+
+.carousel-btn:hover {
+  background: rgba(79, 70, 229, 0.15);
+  border-color: rgba(79, 70, 229, 0.5);
+  transform: scale(1.05);
+}
+
+.carousel-btn:active {
+  transform: scale(0.95);
+}
+
+.carousel-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Dots Indicator */
+.carousel-dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 16px;
+  width: 100%;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(79, 70, 229, 0.2);
+  cursor: pointer;
+  transition: all 200ms ease;
+  padding: 0;
+}
+
+.dot:hover {
+  background: rgba(79, 70, 229, 0.4);
+}
+
+.dot.active {
+  background: var(--accent-primary, #4f46e5);
+  width: 28px;
+  border-radius: 6px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .carousel-item {
+    flex: 0 0 calc((100% - 24px) / 2);
+  }
+  
+  .carousel-btn.prev {
+    left: -50px;
+  }
+  
+  .carousel-btn.next {
+    right: -50px;
+  }
+}
+
+@media (max-width: 768px) {
+  .carousel-item {
+    flex: 0 0 100%;
+  }
+
+  .carousel-btn {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .carousel-btn.prev {
+    left: -45px;
+  }
+  
+  .carousel-btn.next {
+    right: -45px;
+  }
+
+  .carousel-items {
+    gap: 16px;
+  }
+}
