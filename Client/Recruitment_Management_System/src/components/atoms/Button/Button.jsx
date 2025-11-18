@@ -1,5 +1,5 @@
 import React from "react";
-import "./Button.module.scss";
+import styles from "./Button.module.css";
 
 const Button = ({ 
   children, 
@@ -12,7 +12,7 @@ const Button = ({
 }) => {
   return (
     <button
-      className={`btn btn--${variant} btn--${size} ${className}`}
+      className={`${styles.btn} ${styles[`btn--${variant}`]} ${styles[`btn--${size}`]} ${className}`}
       onClick={onClick}
       disabled={disabled}
       {...props}
