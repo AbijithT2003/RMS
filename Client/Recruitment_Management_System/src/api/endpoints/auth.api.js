@@ -4,10 +4,8 @@ export const authAPI = {
   login: async (credentials) => {
     const res = await apiClient.post("/auth/login", credentials);
 
-    // Your backend response is either:
-    // { success, message, data: AuthResponse }
-    // or directly AuthResponse
-    const p = res.data?.data || res.data;
+    // Handle both response structures
+    const p = res.data?.data || res.data;  //wrapped in data or direct
 
     return {
       accessToken: p.accessToken,

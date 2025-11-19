@@ -3,35 +3,8 @@ import Button from "../../atoms/Button/Button";
 import Dropdown from "../../molecules/Dropdown/Dropdown";
 import "./Header.css";
 
-const Header = ({ onLogin, onRegister }) => {
-  const navigationItems = [
-    {
-      label: "Features",
-      items: [
-        { label: "Job Posting", href: "/features/job-posting" },
-        { label: "Candidate Management", href: "/features/candidates" },
-        { label: "Interview Scheduling", href: "/features/interviews" },
-        { label: "Analytics", href: "/features/analytics" }
-      ]
-    },
-    {
-      label: "Solutions",
-      items: [
-        { label: "For Recruiters", href: "/solutions/recruiters" },
-        { label: "For HR Teams", href: "/solutions/hr" },
-        { label: "For Enterprises", href: "/solutions/enterprise" }
-      ]
-    },
-    {
-      label: "Departments",
-      items: [
-        { label: "Engineering", href: "/departments/engineering" },
-        { label: "Sales", href: "/departments/sales" },
-        { label: "Marketing", href: "/departments/marketing" },
-        { label: "Operations", href: "/departments/operations" }
-      ]
-    }
-  ];
+const Header = ({ onLogin, onRegister ,navigationItems=[],showAuthButtons=true } )=> {
+  
 
   return (
     <header className="header">
@@ -54,10 +27,8 @@ const Header = ({ onLogin, onRegister }) => {
                 ))}
               </Dropdown>
             ))}
-            <a href="/pricing" className="header__link">Pricing</a>
-            <a href="/jobs" className="header__link">Job Postings</a>
           </nav>
-          
+          {showAuthButtons &&(
           <div className="header__auth">
             <Button variant="secondary" size="small" onClick={onLogin}>
               Login
@@ -66,6 +37,7 @@ const Header = ({ onLogin, onRegister }) => {
               Register
             </Button>
           </div>
+          )}
         </div>
       </div>
     </header>

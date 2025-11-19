@@ -1,16 +1,21 @@
 .header {
   background: var(--bg-secondary);
   border-bottom: 1px solid rgba(0,0,0,0.1);
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 100;
+  left: 0;
+  right: 0;
+  height: 80px;
+  z-index: 1000;
 }
 
 .header__content {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 0;
+  padding: 0 24px;
+  height: 100%;
+  max-width: none;
 }
 
 .header__logo h2 {

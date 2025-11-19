@@ -6,7 +6,7 @@ import { useAuth } from "../../api/context/AuthContext";
 const AuthPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login, register } = useAuth();
+  const { login, register } = useAuth(); //to get login and register functions
 
   // Detect auth mode from query params
   const [isLogin, setIsLogin] = useState(() => {
@@ -45,16 +45,21 @@ const AuthPage = () => {
         password: formData.password,
         ...(isLogin
           ? {}
-          : { fullName: formData.fullName, role: formData.role }),
+          : { fullName: formData.fullName, role: formData.role }), //only include fullName and role if registering
       };
 
       const { user } = isLogin ? await login(payload) : await register(payload);
 
+      // Redirect based on role
       navigate(
-        user.role === "RECRUITER"
-          ? "/recruiter-dashboard"
-          : "/applicant-dashboard"
+        user.role==="ADMIN"?"/admin-dashboard"
+        :user.role==="RECRUITER"
+        ?"/recruiter-dashboard":
+        user.role==="CANDIDATE"
+        ?"/applicant-dashboard"
+        :"/"
       );
+
     } catch (err) {
       console.error(err);
       alert(err.message);

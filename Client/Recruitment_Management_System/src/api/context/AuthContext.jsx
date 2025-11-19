@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
     accessToken: null,
     user: null,
     isLoading: true,
-  });
+  }); 
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -38,9 +38,10 @@ export const AuthProvider = ({ children }) => {
   // LOGIN
   const login = async (credentials) => {
     try {
-      // Your backend: returns { accessToken, user }
+      // Your backend: returns { accessToken, user } calling api directly
       const { accessToken, user } = await authAPI.login(credentials);
 
+      //validation
       if (!accessToken || !user) {
         throw new Error("Invalid response from server");
       }
@@ -49,9 +50,11 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("user", JSON.stringify(user));
 
-      // Update context
+      // Update context ie react state is refreshed
       setAuth({ accessToken, user, isLoading: false });
 
+
+      
       return { accessToken, user };
     } catch (error) {
       console.error("Login error:", error);
@@ -64,7 +67,7 @@ export const AuthProvider = ({ children }) => {
   // REGISTER
   const register = async (userData) => {
     try {
-      // Your backend gives { accessToken, user }
+      // Your backend gives { accessToken, user } more like calling the api directly
       const { accessToken, user } = await authAPI.register(userData);
 
       if (!accessToken || !user) {

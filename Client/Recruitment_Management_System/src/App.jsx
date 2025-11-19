@@ -14,6 +14,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/auth/*" element={<AuthPage />} />
+          <Route path="/admin-dashboard" element={<RecruiterDashboard />} />
           <Route path="/applicant-dashboard" element={<ApplicantDashboard />} />
           <Route path="/recruiter-dashboard" element={<RecruiterDashboard />} />
         </Routes>
