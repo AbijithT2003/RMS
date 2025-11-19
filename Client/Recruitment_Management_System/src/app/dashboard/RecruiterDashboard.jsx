@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/atoms/Button/Button';
 import Header from '../../components/organisms/Header/Header';
@@ -7,25 +7,19 @@ import DashboardGrid from '../../components/organisms/DashboardGrid/DashboardGri
 import './Dashboard.css';
 
 const RecruiterDashboard = () => {
-  // const [user] = useState(() => {
-  //   const userData = localStorage.getItem('user');
-  //   return userData ? JSON.parse(userData) : null;
-  // });
-  // const navigate = useNavigate();
+  const [user] = useState(() => {
+    const userData = localStorage.getItem('user');
+    return userData ? JSON.parse(userData) : null;
+  });
+  const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (!user) {
-  //     navigate('/auth');
-  //   }
-  // }, [user, navigate]);
+  useEffect(() => {
+    if (!user) {
+      navigate('/auth');
+    }
+  }, [user, navigate]);
 
-  // const handleLogout = () => {
-  //   localStorage.removeItem('token');
-  //   localStorage.removeItem('user');
-  //   navigate('/');
-  // };
-
-  // if (!user) return <div>Loading...</div>;
+  if (!user) return <div>Loading...</div>;
 
   const dashboardCards = [
     {
@@ -84,14 +78,6 @@ const RecruiterDashboard = () => {
       ],
     },
   ];
-
-  // const handleNavigation = (item) => {
-  //   if (item.label === 'Logout') {
-  //     localStorage.removeItem('token');
-  //     localStorage.removeItem('user');
-  //     navigate('/');
-  //   }
-  // };
 
   return (
     <div className="dashboard">

@@ -6,7 +6,7 @@ import "./styles.css";
 
 function TestApp() {
   return (
-    <RecruiterDashboard/>
+    <ApplicantDashboard/>
     );
 }   
 
