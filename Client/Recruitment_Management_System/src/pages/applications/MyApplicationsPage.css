@@ -1,0 +1,122 @@
+/* MyApplicationsPage.css */
+.applications-list {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  margin-top: 20px;
+}
+
+.application-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.application-card h3 {
+  color: #2c3e50;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.application-card p {
+  margin: 6px 0;
+  font-size: 14px;
+}
+
+.application-card p strong {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.status {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+/* Status color coding */
+.status.submitted { background-color: #f39c12; }
+.status.pending { background-color: #f39c12; }
+.status.under_review { background-color: #3498db; }
+.status.shortlisted { background-color: #2ecc71; }
+.status.interview_scheduled { background-color: #9b59b6; }
+.status.interviewed { background-color: #16a085; }
+.status.selected { background-color: #27ae60; }
+.status.rejected { background-color: #e74c3c; }
+.status.withdrawn { background-color: #95a5a6; }
+
+.application-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+}
+
+.application-card h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.application-card p {
+  font-size: 14px;
+  color: #555;
+  margin: 4px 0;
+}
+
+.application-card .status {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+/* Highlight status based on type */
+.status.pending {
+  background-color: #f39c12;
+}
+
+.status.under_review {
+  background-color: #3498db;
+}
+
+.status.shortlisted {
+  background-color: #2ecc71;
+}
+
+.status.interview_scheduled {
+  background-color: #9b59b6;
+}
+
+.status.interviewed {
+  background-color: #16a085;
+}
+
+.status.selected {
+  background-color: #27ae60;
+}
+
+.status.rejected {
+  background-color: #e74c3c;
+}
+
+.status.withdrawn {
+  background-color: #95a5a6;
+}
+
+/* Optional: highlight important fields */
+.application-card p strong {
+  color: #2c3e50;
+  font-weight: 600;
+}
+.application-card p em {
+  font-style: italic;
+  color: #7f8c8d;
+}

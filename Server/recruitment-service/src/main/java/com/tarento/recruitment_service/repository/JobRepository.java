@@ -18,7 +18,7 @@ import java.util.UUID;
 public interface JobRepository extends JpaRepository<Job, UUID> {
     @NonNull
     Page<Job> findByStatus(@NonNull JobStatus status, @NonNull Pageable pageable);
-    
+    Page<Job> findByCreatedBy(UUID createdById, Pageable pageable);
     @NonNull
     @Query("SELECT j FROM Job j WHERE j.status = :status " +
            "AND (:jobType IS NULL OR j.jobType = :jobType) " +

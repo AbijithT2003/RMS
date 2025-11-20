@@ -35,3 +35,4 @@ export { default as AuthPage } from './auth/AuthPage';
 
 // Other Pages
 export { default as NotFoundPage } from './NotFoundPage';
+

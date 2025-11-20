@@ -127,10 +127,6 @@ const RecruiterDashboard = () => {
                   </div>
                 </div>
               </div>
-              {/* <div className="upcoming-interviews">
-                <h2>Upcoming Interviews</h2>
-                <UpcomingInterviewsList />
-              </div> */}
             </div>
           </div>
         );

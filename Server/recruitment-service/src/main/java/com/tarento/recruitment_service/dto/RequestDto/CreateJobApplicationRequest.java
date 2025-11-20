@@ -24,9 +24,9 @@ public class CreateJobApplicationRequest {
     @NotNull(message = "Applicant ID is required")
     private UUID applicantId;
     
-    @NotBlank(message = "Platform is required")
-    @Pattern(regexp = "LINKEDIN|INDEED|GLASSDOOR|COMPANY_SITE|OTHER", 
-            message = "Invalid platform value. Must be one of: LINKEDIN, INDEED, GLASSDOOR, COMPANY_SITE, OTHER")
+    // @NotBlank(message = "Platform is required")
+    // @Pattern(regexp = "LINKEDIN|INDEED|GLASSDOOR|COMPANY_SITE|OTHER", 
+            // message = "Invalid platform value. Must be one of: LINKEDIN, INDEED, GLASSDOOR, COMPANY_SITE, OTHER")
     @Enumerated(EnumType.STRING)
 private Platform platform;
     

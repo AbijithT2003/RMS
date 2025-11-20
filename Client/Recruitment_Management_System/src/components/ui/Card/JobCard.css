@@ -133,6 +133,22 @@
   min-width: fit-content;
 }
 
+.closed-job {
+  opacity: 0.6;
+  pointer-events: none; /* Optional: makes card less interactive */
+}
+
+.job-closed-badge {
+  background-color: #e74c3c;
+  color: white;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+
 @media (max-width: 768px) {
   .job-card {
     padding: 20px;

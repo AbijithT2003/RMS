@@ -54,6 +54,24 @@ public class JobController {
         return ResponseEntity.ok(ApiResponse.success(job));
     }
 
+    @GetMapping("/my")
+    @PreAuthorize("hasRole('RECRUITER') or hasRole('ADMIN')")
+    @Operation(summary = "Get jobs created by the logged-in recruiter")
+    public ResponseEntity<ApiResponse<PageResponse<JobResponse>>> getJobsByRecruiter(
+            @RequestHeader("Authorization") String authHeader,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        String token = authHeader.replace("Bearer ", "").trim();
+        String email = jwtService.extractUsername(token);
+        UserResponse userResponse = userService.getUserByValue(email);
+
+        Pageable pageable = PageRequest.of(page, size);
+        PageResponse<JobResponse> jobs = jobService.getJobsByRecruiter(userResponse.getId(), pageable);
+
+        return ResponseEntity.ok(ApiResponse.success(jobs));
+    }
+
     @PostMapping
     @PreAuthorize("hasRole('RECRUITER') or hasRole('ADMIN')")
     @Operation(summary = "Create a new job posting", description = "Allows an Admin or Recruiter to create a new job posting")

@@ -49,7 +49,7 @@ public class JobApplicationController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
     
-    @GetMapping("/job/")
+    @GetMapping("/job/{jobId}")
     @Operation(summary = "Get applications by job", description = "Retrieves all applications for a specific job")
     public ResponseEntity<ApiResponse<PageResponse<JobApplicationResponse>>> getApplicationsByJob(
             @PathVariable UUID jobId,

@@ -151,9 +151,7 @@ export const ApplicationValidation = {
       errors.push('Cover letter must not exceed 2000 characters');
     }
     
-    if (data.resumeUrl && !isValidUrl(data.resumeUrl)) {
-      errors.push('Resume URL must be a valid URL');
-    }
+    
     
     return errors;
   },
@@ -166,15 +164,6 @@ export const ApplicationValidation = {
   }
 };
 
-// Helper function for URL validation
-function isValidUrl(string) {
-  try {
-    new URL(string);
-    return true;
-  } catch (_) {
-    return false;
-  }
-}
 
 // Status flow helpers
 export const ApplicationStatusFlow = {

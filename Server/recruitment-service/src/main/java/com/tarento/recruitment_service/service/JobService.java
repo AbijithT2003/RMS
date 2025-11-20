@@ -132,6 +132,12 @@ public class JobService {
     return deletedInfo;
 }
 
+    public PageResponse<JobResponse> getJobsByRecruiter(UUID recruiterId, Pageable pageable) {
+            Page<Job> jobs = jobRepository.findByCreatedBy(recruiterId, pageable);
+            Page<JobResponse> responsePage = jobs.map(this::mapToJobResponse);
+            return PageResponse.of(responsePage);
+        }
+
     private JobResponse mapToJobResponse(Job job) {
         JobResponse response = modelMapper.map(job, JobResponse.class);
         if (job.getCreatedBy() != null) {

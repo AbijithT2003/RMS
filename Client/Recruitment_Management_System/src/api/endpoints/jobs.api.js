@@ -2,7 +2,7 @@ import { apiClient } from "../client";
 
 export const jobsApi = {
   // Public - accessible to all roles
-  getallJobs: async (page = 0, size = 10) => {
+  getAllJobs: async (page = 0, size = 10) => {
     const res = await apiClient.get("/jobs", { params: { page, size } });
     // Normalize to return an array of jobs when backend returns a paginated PageResponse
     // PageResponse is expected to be in res.data.data and may contain `content`.
@@ -14,6 +14,14 @@ export const jobsApi = {
     const res = await apiClient.get(`/jobs/${id}`);
     return res.data?.data || res.data; // Returns JobResponse
   },
+
+  // Recruiter/Admin only
+  getJobsByRecruiter: async () => {
+    const res = await apiClient.get("/jobs/my"); // assuming backend route /jobs/my returns jobs created by current user
+    const maybeData = res.data?.data || res.data;
+    return maybeData?.content || maybeData;
+  },
+
 
   searchJobs: async (searchParams) => {
     // searchParams: { status?, keyword?, jobType?, workMode?, locationCity?, page?, size? }

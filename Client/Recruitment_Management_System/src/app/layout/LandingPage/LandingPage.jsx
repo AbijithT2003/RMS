@@ -154,9 +154,9 @@ const LandingPage = () => {
               <i className="fas fa-rocket"></i>
               Get Started
             </Button>
-            <Button variant="secondary" size="large">
-              <i className="fas fa-info-circle"></i>
-              Learn More
+            <Button variant="secondary" size="large" onClick={handleLogin}>
+              <i className="fas fa-sign-in-alt"></i>
+              login
             </Button>
           </div>
         </div>
