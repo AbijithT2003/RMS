@@ -38,23 +38,38 @@ export const AuthProvider = ({ children }) => {
   // LOGIN
   const login = async (credentials) => {
     try {
-      // Your backend: returns { accessToken, user } calling api directly
-      const { accessToken, user } = await authAPI.login(credentials);
+      const response = await authAPI.login(credentials);
+      const { accessToken } = response;
 
-      //validation
-      if (!accessToken || !user) {
+      if (!accessToken) {
         throw new Error("Invalid response from server");
+      }
+
+      // Decode JWT token to extract user info and roles
+      let user = {};
+      try {
+        const payload = JSON.parse(atob(accessToken.split('.')[1]));
+        user = {
+          email: response.email || payload.sub,
+          fullName: response.fullName,
+          role: payload.roles?.[0] || 'CANDIDATE',
+          roles: payload.roles || [],
+          userId: response.userId,
+          applicantId: response.applicantId,
+          recruiterId: response.recruiterId,
+        };
+      } catch (error) {
+        console.error('Error decoding JWT:', error);
+        throw new Error('Invalid token received');
       }
 
       // Save to localStorage
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("user", JSON.stringify(user));
 
-      // Update context ie react state is refreshed
+      // Update context
       setAuth({ accessToken, user, isLoading: false });
 
-
-      
       return { accessToken, user };
     } catch (error) {
       console.error("Login error:", error);
@@ -67,11 +82,29 @@ export const AuthProvider = ({ children }) => {
   // REGISTER
   const register = async (userData) => {
     try {
-      // Your backend gives { accessToken, user } more like calling the api directly
-      const { accessToken, user } = await authAPI.register(userData);
+      const response = await authAPI.register(userData);
+      const { accessToken } = response;
 
-      if (!accessToken || !user) {
+      if (!accessToken) {
         throw new Error("Invalid response from server");
+      }
+
+      // Decode JWT token to extract user info and roles
+      let user = {};
+      try {
+        const payload = JSON.parse(atob(accessToken.split('.')[1]));
+        user = {
+          email: response.email || payload.sub,
+          fullName: response.fullName,
+          role: payload.roles?.[0] || userData.role || 'CANDIDATE',
+          roles: payload.roles || [],
+          userId: response.userId,
+          applicantId: response.applicantId,
+          recruiterId: response.recruiterId,
+        };
+      } catch (error) {
+        console.error('Error decoding JWT:', error);
+        throw new Error('Invalid token received');
       }
 
       // Save

@@ -40,13 +40,15 @@ public class SecurityConfig {
                     "/v3/api-docs/**",
                     "/swagger-ui/**",
                     "/swagger-ui.html",
-                    "/api/v1/auth/**"
+                    "/api/auth/**",
+                    "/api/auth/login",
+                    "/api/auth/register"
                 ).permitAll()
                 .requestMatchers("GET", "/api/jobs/**").permitAll()
                 .requestMatchers("POST", "/api/jobs/**").hasAnyRole("RECRUITER", "ADMIN")
                 .requestMatchers("PUT", "/api/jobs/**").hasAnyRole("RECRUITER", "ADMIN")
                 .requestMatchers("DELETE", "/api/jobs/**").hasAnyRole("ADMIN")
-                .requestMatchers("/api/applications/**").hasAnyRole("CANDIDATE", "RECRUITER", "ADMIN")
+                .requestMatchers("/api/applications/**").hasAnyRole("APPLICANT", "RECRUITER", "ADMIN")
                 .requestMatchers("/api/interviews/**").hasAnyRole("RECRUITER", "ADMIN")
                 .requestMatchers("/api/skills/**").permitAll()
                 .requestMatchers("/api/applicants/**").hasAnyRole("RECRUITER", "ADMIN")
@@ -70,6 +72,7 @@ public class SecurityConfig {
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L);
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

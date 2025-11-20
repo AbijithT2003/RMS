@@ -1,9 +1,41 @@
-import { apiClient } from '../client';
+import { apiClient } from "../client";
 
 export const jobsApi = {
-  getJobs: () => apiClient.get('/api/jobs'),
-  searchJobs: (params) => apiClient.get('/api/jobs/search', { params }),
-  createJob: (jobData) => apiClient.post('/api/jobs', jobData),
-  updateJob: (id, jobData) => apiClient.put(`/api/jobs/${id}`, jobData),
-  deleteJob: (id) => apiClient.delete(`/api/jobs/${id}`)
+  // Public - accessible to all roles
+  getallJobs: async (page = 0, size = 10) => {
+    const res = await apiClient.get("/jobs", { params: { page, size } });
+    // Normalize to return an array of jobs when backend returns a paginated PageResponse
+    // PageResponse is expected to be in res.data.data and may contain `content`.
+    const maybeData = res.data?.data || res.data;
+    return maybeData?.content || maybeData; // Returns Array<JobResponse> or fallback object
+  },
+
+  getJob: async (id) => {
+    const res = await apiClient.get(`/jobs/${id}`);
+    return res.data?.data || res.data; // Returns JobResponse
+  },
+
+  searchJobs: async (searchParams) => {
+    // searchParams: { status?, keyword?, jobType?, workMode?, locationCity?, page?, size? }
+    const res = await apiClient.get("/jobs/search", { params: searchParams });
+    return res.data?.data || res.data; // Returns PageResponse<JobResponse>
+  },
+
+  // Recruiter/Admin only
+  createJob: async (createJobRequest) => {
+    // CreateJobRequest: { title, department?, sector?, description, requirements?, jobType, workMode, locationCity?, locationState?, locationCountry?, salaryMin?, salaryMax?, experienceRequired?, status, applicationDeadline?, positionsAvailable? }
+    const res = await apiClient.post("/jobs", createJobRequest);
+    return res.data?.data || res.data; // Returns JobResponse
+  },
+
+  updateJob: async (id, updateJobRequest) => {
+    // UpdateJobRequest: similar to CreateJobRequest
+    const res = await apiClient.put(`/jobs/${id}`, updateJobRequest);
+    return res.data?.data || res.data; // Returns JobResponse
+  },
+
+  deleteJob: async (id) => {
+    const res = await apiClient.delete(`/jobs/${id}`);
+    return res.data?.data || res.data; // Returns DeletedJobResponse
+  },
 };

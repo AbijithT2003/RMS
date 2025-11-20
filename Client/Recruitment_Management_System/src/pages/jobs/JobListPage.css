@@ -1,0 +1,72 @@
+.job-list-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.search-section {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 32px;
+  align-items: center;
+  background: var(--card-bg);
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.search-bar {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-bar i {
+  position: absolute;
+  left: 16px;
+  color: var(--accent-primary);
+  z-index: 1;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 14px 16px 14px 48px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: var(--input-bg);
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(37, 38, 87, 0.1);
+}
+
+.jobs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .job-list-container {
+    padding: 0 16px;
+  }
+  
+  .search-section {
+    flex-direction: column;
+    padding: 20px;
+  }
+  
+  .search-section button {
+    width: 100%;
+  }
+  
+  .jobs-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}

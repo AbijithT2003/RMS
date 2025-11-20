@@ -1,77 +1,79 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { applicationsApi } from '../../api/endpoints/applications.api';
-import Header from '../../components/organisms/Header/Header';
+import { useApi } from '../../hooks/useApi';
+import PageLayout from '../../components/common/PageLayout';
+import ApplicationCard from '../../components/ui/Card/ApplicationCard';
 import Button from '../../components/atoms/Button/Button';
+import './ManageApplicationsPage.css';
 
 const ManageApplicationsPage = () => {
-  const [applications, setApplications] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchApplications();
-  }, []);
-
-  const fetchApplications = async () => {
-    try {
-      const response = await applicationsApi.getApplications();
-      setApplications(response.data);
-    } catch (error) {
-      console.error('Error fetching applications:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { data: applications, loading, error, refetch } = useApi(() => applicationsApi.getApplications());
+  const [selectedJob, setSelectedJob] = useState('all');
 
   const updateStatus = async (id, status) => {
     try {
       await applicationsApi.updateApplicationStatus(id, status);
-      fetchApplications();
+      refetch();
     } catch (error) {
       console.error('Error updating status:', error);
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  const handleViewDetails = (applicationId) => {
+    console.log('View application details:', applicationId);
+  };
+
+  // Group applications by job
+  const groupedApplications = applications?.reduce((acc, app) => {
+    const jobTitle = app.jobTitle || 'Unknown Job';
+    if (!acc[jobTitle]) acc[jobTitle] = [];
+    acc[jobTitle].push(app);
+    return acc;
+  }, {}) || {};
+
+  const filteredApplications = selectedJob === 'all' 
+    ? applications 
+    : groupedApplications[selectedJob] || [];
 
   return (
-    <div>
-      <Header />
-      <div className="container">
-        <h1>Manage Applications</h1>
-        
-        <div className="applications-table">
-          <table>
-            <thead>
-              <tr>
-                <th>Applicant</th>
-                <th>Job</th>
-                <th>Applied Date</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {applications.map(application => (
-                <tr key={application.id}>
-                  <td>{application.applicantName}</td>
-                  <td>{application.jobTitle}</td>
-                  <td>{new Date(application.appliedDate).toLocaleDateString()}</td>
-                  <td>{application.status}</td>
-                  <td>
-                    <Button onClick={() => updateStatus(application.id, 'REVIEWED')}>
-                      Review
-                    </Button>
-                    <Button onClick={() => updateStatus(application.id, 'REJECTED')}>
-                      Reject
-                    </Button>
-                  </td>
-                </tr>
+    <PageLayout 
+      title="Manage Applications" 
+      loading={loading} 
+      error={error} 
+      onRetry={refetch}
+      hideHeader={true}
+    >
+      <div className="manage-applications-container">
+        <div className="applications-header">
+          <h1>Job Applications</h1>
+          <div className="job-filter">
+            <label>Filter by Job:</label>
+            <select 
+              value={selectedJob} 
+              onChange={(e) => setSelectedJob(e.target.value)}
+            >
+              <option value="all">All Jobs</option>
+              {Object.keys(groupedApplications).map(jobTitle => (
+                <option key={jobTitle} value={jobTitle}>
+                  {jobTitle} ({groupedApplications[jobTitle].length})
+                </option>
               ))}
-            </tbody>
-          </table>
+            </select>
+          </div>
+        </div>
+
+        <div className="applications-grid">
+          {filteredApplications?.map(application => (
+            <ApplicationCard
+              key={application.id}
+              application={application}
+              onUpdateStatus={updateStatus}
+              onViewDetails={handleViewDetails}
+            />
+          ))}
         </div>
       </div>
-    </div>
+    </PageLayout>
   );
 };
 

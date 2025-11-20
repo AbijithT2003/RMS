@@ -1,51 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { applicationsApi } from '../../api/endpoints/applications.api';
-import Header from '../../components/organisms/Header/Header';
+import { useApi } from '../../hooks/useApi';
+import PageLayout from '../../components/common/PageLayout';
 
 const MyApplicationsPage = () => {
-  const [applications, setApplications] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchApplications();
-  }, []);
-
-  const fetchApplications = async () => {
-    try {
-      const user = JSON.parse(localStorage.getItem('user'));
-      if (user?.id) {
-        const response = await applicationsApi.getApplicationsByApplicant(user.id);
-        setApplications(response.data);
-      }
-    } catch (error) {
-      console.error('Error fetching applications:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (loading) return <div>Loading...</div>;
+  const { data: applications, loading, error, refetch } = useApi(
+    () => applicationsApi.getMyApplications()
+  );
 
   return (
-    <div>
-      <Header />
-      <div className="container">
-        <h1>My Applications</h1>
-        
-        <div className="applications-list">
-          {applications.map(application => (
-            <div key={application.id} className="application-card">
-              <h3>{application.jobTitle}</h3>
-              <p>Company: {application.company}</p>
-              <p>Applied: {new Date(application.appliedDate).toLocaleDateString()}</p>
-              <span className={`status ${application.status.toLowerCase()}`}>
-                {application.status}
-              </span>
-            </div>
-          ))}
-        </div>
+    <PageLayout 
+      title="My Applications" 
+      loading={loading} 
+      error={error} 
+      onRetry={refetch}
+      hideHeader={true}
+    >
+      <div className="applications-list">
+        {applications?.map(application => (
+          <div key={application.id} className="application-card">
+            <h3>{application.jobTitle}</h3>
+            <p>Company: {application.company}</p>
+            <p>Applied: {new Date(application.appliedDate).toLocaleDateString()}</p>
+            <span className={`status ${application.status.toLowerCase()}`}>
+              {application.status}
+            </span>
+          </div>
+        ))}
       </div>
-    </div>
+    </PageLayout>
   );
 };
 

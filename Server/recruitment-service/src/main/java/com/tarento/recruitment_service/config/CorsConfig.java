@@ -1,12 +1,13 @@
-package com.tarento.recruitment_service.config;
+// package com.tarento.recruitment_service.config;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
+// import org.springframework.context.annotation.Bean;
+// import org.springframework.context.annotation.Configuration;
+// import org.springframework.web.cors.CorsConfiguration;
+// import org.springframework.web.cors.CorsConfigurationSource;
+// import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+// import org.springframework.web.filter.CorsFilter;
 
-import java.util.Arrays;
+// import java.util.Arrays;
 
 // @Configuration
 // public class CorsConfig {
@@ -15,15 +16,14 @@ import java.util.Arrays;
 //     public CorsFilter corsFilter() {
 //         CorsConfiguration config = new CorsConfiguration();
 //         config.setAllowCredentials(true);
-//         config.setAllowedOrigins(Arrays.asList(
-//             "http://localhost:3000",   // React frontend
-//             "http://localhost:4200"    // Angular frontend
-//         ));
+//         config.addAllowedOrigin("http://localhost:5173");
+//         config.addAllowedOrigin("http://localhost:3000");
+//         config.addAllowedOrigin("http://127.0.0.1:5173");
 //         config.addAllowedHeader("*");
-//         config.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","PATCH","OPTIONS"));
-
+//         config.addAllowedMethod("*");
+        
 //         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//         source.registerCorsConfiguration("/**", config);  // apply to all endpoints
+//         source.registerCorsConfiguration("/**", config);
 //         return new CorsFilter(source);
 //     }
 // }

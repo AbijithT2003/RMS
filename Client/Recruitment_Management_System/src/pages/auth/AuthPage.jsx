@@ -50,15 +50,27 @@ const AuthPage = () => {
 
       const { user } = isLogin ? await login(payload) : await register(payload);
 
+      console.log('Login successful, user:', user);
+      console.log('User role:', user.role);
+      console.log('User roles:', user.roles);
+
       // Redirect based on role
-      navigate(
-        user.role==="ADMIN"?"/admin-dashboard"
-        :user.role==="RECRUITER"
-        ?"/recruiter-dashboard":
-        user.role==="CANDIDATE"
-        ?"/applicant-dashboard"
-        :"/"
-      );
+      const role = user.role;
+      console.log('Redirecting based on role:', role);
+      
+      if (role === "ADMIN") {
+        console.log('Navigating to admin dashboard');
+        navigate("/admin-dashboard");
+      } else if (role === "RECRUITER") {
+        console.log('Navigating to recruiter dashboard');
+        navigate("/recruiter-dashboard");
+      } else if (role === "CANDIDATE" || role === "APPLICANT") {
+        console.log('Navigating to applicant dashboard');
+        navigate("/applicant-dashboard");
+      } else {
+        console.log('Unknown role, defaulting to applicant dashboard for now');
+        navigate("/applicant-dashboard"); // Temporary fallback
+      }
 
     } catch (err) {
       console.error(err);

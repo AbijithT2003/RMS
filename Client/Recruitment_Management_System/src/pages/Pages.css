@@ -1,25 +1,26 @@
-.container {
+/* Legacy styles - being replaced by component-specific styles */
+.legacy-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
 }
 
-.page-header {
+.legacy-page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
 }
 
-/* Job Cards */
-.jobs-grid {
+/* Legacy Job Cards - use JobCard component instead */
+.legacy-jobs-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
   margin-top: 20px;
 }
 
-.job-card {
+.legacy-job-card {
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 20px;

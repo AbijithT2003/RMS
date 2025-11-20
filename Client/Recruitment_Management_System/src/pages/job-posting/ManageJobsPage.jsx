@@ -1,88 +1,71 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { jobsApi } from '../../api/endpoints/jobs.api';
+import { useApi } from '../../hooks/useApi';
 import { useNavigate } from 'react-router-dom';
-import Header from '../../components/organisms/Header/Header';
+import PageLayout from '../../components/common/PageLayout';
 import Button from '../../components/atoms/Button/Button';
+import JobCard from '../../components/ui/Card/JobCard';
+import './ManageJobsPage.css';
 
 const ManageJobsPage = () => {
   const navigate = useNavigate();
-  const [jobs, setJobs] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchJobs();
-  }, []);
-
-  const fetchJobs = async () => {
-    try {
-      const response = await jobsApi.getJobs();
-      setJobs(response.data);
-    } catch (error) {
-      console.error('Error fetching jobs:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { data: jobs, loading, error, refetch } = useApi(() => jobsApi.getallJobs());
+  const [selectedJob, setSelectedJob] = useState(null);
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this job?')) {
       try {
         await jobsApi.deleteJob(id);
-        fetchJobs();
+        refetch();
       } catch (error) {
         console.error('Error deleting job:', error);
       }
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  const handleEdit = (id) => {
+    navigate(`/recruiter/jobs/edit/${id}`);
+  };
+
+  const handleViewApplications = (jobId) => {
+    setSelectedJob(jobId);
+    navigate(`/recruiter/applications?jobId=${jobId}`);
+  };
 
   return (
-    <div>
-      <Header />
-      <div className="container">
+    <PageLayout 
+      title="Manage Jobs" 
+      loading={loading} 
+      error={error} 
+      onRetry={refetch}
+      hideHeader={true}
+    >
+      <div className="manage-jobs-container">
         <div className="page-header">
-          <h1>Manage Jobs</h1>
-          <Button onClick={() => navigate('/recruiter/jobs/create')}>
+          <h1>Manage Job Postings</h1>
+          <Button 
+            variant="primary" 
+            onClick={() => navigate('/recruiter/jobs/create')}
+          >
+            <i className="fas fa-plus"></i>
             Create New Job
           </Button>
         </div>
-        
-        <div className="jobs-table">
-          <table>
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Location</th>
-                <th>Type</th>
-                <th>Posted Date</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {jobs.map(job => (
-                <tr key={job.id}>
-                  <td>{job.title}</td>
-                  <td>{job.location}</td>
-                  <td>{job.type}</td>
-                  <td>{new Date(job.createdDate).toLocaleDateString()}</td>
-                  <td>{job.status}</td>
-                  <td>
-                    <Button onClick={() => navigate(`/recruiter/jobs/edit/${job.id}`)}>
-                      Edit
-                    </Button>
-                    <Button onClick={() => handleDelete(job.id)} variant="danger">
-                      Delete
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+
+        <div className="jobs-grid">
+          {jobs?.map(job => (
+            <JobCard
+              key={job.id}
+              job={job}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              onViewApplications={handleViewApplications}
+              isRecruiter={true}
+            />
+          ))}
         </div>
       </div>
-    </div>
+    </PageLayout>
   );
 };
 
