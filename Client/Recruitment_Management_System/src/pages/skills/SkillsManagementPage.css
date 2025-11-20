@@ -1,0 +1,220 @@
+.skills-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.skills-header {
+  margin-bottom: 32px;
+  padding: 24px;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.skills-header h1 {
+  color: var(--text-primary);
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+}
+
+.skills-header p {
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.skills-actions {
+  background: var(--card-bg);
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 32px;
+}
+
+.add-skill-form {
+  margin-bottom: 24px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.add-skill-form input,
+.add-skill-form textarea,
+.search-skills input {
+  padding: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.add-skill-form textarea {
+  width: 100%;
+  resize: vertical;
+  margin-bottom: 16px;
+}
+
+.search-skills {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding-top: 24px;
+}
+
+.search-skills input {
+  width: 100%;
+  max-width: 400px;
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.skill-card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.skill-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.skill-header h3 {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+}
+
+.delete-btn {
+  background: #ffebee;
+  color: #d32f2f;
+  border: 1px solid #ffcdd2;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.2s;
+}
+
+.delete-btn:hover {
+  background: #ffcdd2;
+  border-color: #d32f2f;
+}
+
+.skill-category {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin: 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.skill-category i {
+  color: var(--primary-color);
+}
+
+.skill-description {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin: 8px 0 0 0;
+}
+
+/* Loading, Error, and Empty States */
+.loading-state,
+.error-state,
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-top: 20px;
+}
+
+.loading-state i,
+.error-state i,
+.empty-state i {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  color: var(--text-secondary);
+}
+
+.loading-state i {
+  color: var(--primary-color);
+}
+
+.error-state i {
+  color: var(--error-color, #dc3545);
+}
+
+.loading-state p,
+.error-state p,
+.empty-state p {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.empty-state h3 {
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  margin: 0 0 8px 0;
+}
+
+.retry-button {
+  margin-top: 16px;
+  padding: 10px 20px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s;
+}
+
+.retry-button:hover {
+  background: var(--primary-hover, #0056b3);
+}
+
+@media (max-width: 768px) {
+  .skills-container {
+    padding: 0 16px;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .skill-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+}

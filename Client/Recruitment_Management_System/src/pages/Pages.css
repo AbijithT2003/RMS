@@ -85,8 +85,8 @@
 }
 
 /* Forms */
-.job-form, .interview-form {
-  max-width: 600px;
+.interview-form {
+  max-width: 600px; 
   background: white;
   padding: 30px;
   border-radius: 8px;

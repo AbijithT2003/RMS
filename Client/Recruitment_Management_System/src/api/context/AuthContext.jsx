@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useEffect } from "react";
 import { authAPI } from "../endpoints/auth.api";
+import {jwtDecode} from "jwt-decode";
 
 const AuthContext = createContext();
 
@@ -9,7 +10,7 @@ export const AuthProvider = ({ children }) => {
     accessToken: null,
     user: null,
     isLoading: true,
-  }); 
+  });
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -35,6 +36,14 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
+  // Helper function to normalize roles
+  const normalizeRoles = (rolesArray) => {
+    if (!Array.isArray(rolesArray)) return [];
+    return rolesArray.map((role) =>
+      typeof role === "string" ? role.replace(/^ROLE_/, "") : role
+    );
+  };
+
   // LOGIN
   const login = async (credentials) => {
     try {
@@ -48,19 +57,26 @@ export const AuthProvider = ({ children }) => {
       // Decode JWT token to extract user info and roles
       let user = {};
       try {
-        const payload = JSON.parse(atob(accessToken.split('.')[1]));
+        const payload = jwtDecode(accessToken);
+
+        // Extract and normalize roles from JWT
+        const rolesFromJWT = normalizeRoles(payload.roles || []);
+        const primaryRole = rolesFromJWT[0] || "CANDIDATE";
+
         user = {
           email: response.email || payload.sub,
           fullName: response.fullName,
-          role: payload.roles?.[0] || 'CANDIDATE',
-          roles: payload.roles || [],
+          roles: rolesFromJWT, // Array of normalized roles
+          role: primaryRole, // Primary role (first in array)
           userId: response.userId,
           applicantId: response.applicantId,
           recruiterId: response.recruiterId,
         };
+
+        console.log("User after login:", user);
       } catch (error) {
-        console.error('Error decoding JWT:', error);
-        throw new Error('Invalid token received');
+        console.error("Error decoding JWT:", error);
+        throw new Error("Invalid token received");
       }
 
       // Save to localStorage
@@ -92,19 +108,26 @@ export const AuthProvider = ({ children }) => {
       // Decode JWT token to extract user info and roles
       let user = {};
       try {
-        const payload = JSON.parse(atob(accessToken.split('.')[1]));
+        const payload = jwtDecode(accessToken);
+
+        // Extract and normalize roles from JWT
+        const rolesFromJWT = normalizeRoles(payload.roles || []);
+        const primaryRole = rolesFromJWT[0] || userData.role || "CANDIDATE";
+
         user = {
           email: response.email || payload.sub,
           fullName: response.fullName,
-          role: payload.roles?.[0] || userData.role || 'CANDIDATE',
-          roles: payload.roles || [],
+          roles: rolesFromJWT,
+          role: primaryRole,
           userId: response.userId,
           applicantId: response.applicantId,
           recruiterId: response.recruiterId,
         };
+
+        console.log("User after registration:", user);
       } catch (error) {
-        console.error('Error decoding JWT:', error);
-        throw new Error('Invalid token received');
+        console.error("Error decoding JWT:", error);
+        throw new Error("Invalid token received");
       }
 
       // Save
@@ -126,7 +149,7 @@ export const AuthProvider = ({ children }) => {
   // LOGOUT
   const logout = async () => {
     try {
-      await authAPI.logout(); // your backend supports this
+      await authAPI.logout();
     } catch (err) {
       console.warn("Logout API failed:", err);
     }
@@ -141,7 +164,13 @@ export const AuthProvider = ({ children }) => {
   // AUTH HELPERS
   const isAuthenticated = !!auth.accessToken && !!auth.user;
 
-  const hasRole = (role) => auth.user?.role === role;
+  const hasRole = (role) => {
+    const userRoles = auth.user?.roles || [];
+    const normalizedRole = role.replace(/^ROLE_/, "");
+    return (
+      userRoles.includes(normalizedRole) || auth.user?.role === normalizedRole
+    );
+  };
 
   return (
     <AuthContext.Provider

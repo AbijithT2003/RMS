@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+// import React, { useState } from 'react';
 import DashboardContainer from '../../components/DashboardContainer';
 import DashboardGrid from '../../components/organisms/DashboardGrid/DashboardGrid';
 import DashboardView from '../../components/common/DashboardView';
-import { JobListPage, MyApplicationsPage, MyInterviewsPage, ApplicantProfilePage } from '../../pages';
+import { JobListPage, MyApplicationsPage, MyInterviewsPage, ApplicantProfilePage, SavedJobsPage } from '../../pages';
 import './Dashboard.css';
-import '../../components/common/Dashboard.css';
 
 const ApplicantDashboard = () => {
   const applicantNav = [
@@ -12,6 +11,7 @@ const ApplicantDashboard = () => {
       label: "Jobs",
       items: [
         { label: "Browse Jobs", view: "jobs", icon: "fas fa-search" },
+        { label: "Saved Jobs", view: "saved-jobs", icon: "fas fa-heart" },
         { label: "My Applications", view: "applications", icon: "fas fa-file-alt" },
       ],
     },
@@ -32,6 +32,12 @@ const ApplicantDashboard = () => {
         title: 'Job Search',
         description: 'Browse and apply to available positions',
         onClick: () => setActiveView('jobs')
+      },
+      {
+        icon: 'fas fa-heart',
+        title: 'Saved Jobs',
+        description: 'View your bookmarked job opportunities',
+        onClick: () => setActiveView('saved-jobs')
       },
       {
         icon: 'fas fa-file-alt',
@@ -61,6 +67,7 @@ const ApplicantDashboard = () => {
     const getViewTitle = (view) => {
       switch (view) {
         case 'jobs': return 'Browse Jobs';
+        case 'saved-jobs': return 'Saved Jobs';
         case 'applications': return 'My Applications';
         case 'interviews': return 'My Interviews';
         case 'profile': return 'My Profile';
@@ -73,6 +80,12 @@ const ApplicantDashboard = () => {
         return (
           <DashboardView title="Browse Jobs" breadcrumbs={getBreadcrumbs('jobs')}>
             <JobListPage />
+          </DashboardView>
+        );
+      case 'saved-jobs': 
+        return (
+          <DashboardView title="Saved Jobs" breadcrumbs={getBreadcrumbs('saved-jobs')}>
+            <SavedJobsPage />
           </DashboardView>
         );
       case 'applications': 
@@ -96,8 +109,10 @@ const ApplicantDashboard = () => {
       default:
         return (
           <div className="dashboard-content">
-            <DashboardGrid cards={dashboardCards} />
-            <div className="dashboard-right">
+            <div className="dashboard-top">
+              <DashboardGrid cards={dashboardCards} />
+            </div>
+            <div className="dashboard-bottom">
               <div className="recent-activity">
                 <h2>Recent Activity</h2>
                 <div className="activity-list">

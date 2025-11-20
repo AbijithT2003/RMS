@@ -6,6 +6,7 @@ import TestimonialCarousel from "../../../components/organisms/TestimonialCarous
 import Button from "../../../components/atoms/Button/Button";
 import Card from "../../../components/ui/Card/Card";
 import FeatureCard from "../../../components/ui/Card/FeatureCard";
+import Footer from "../../../components/common/Footer/Footer";
 
 const LandingPage = () => {
   const features = [
@@ -187,6 +188,7 @@ const LandingPage = () => {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 };

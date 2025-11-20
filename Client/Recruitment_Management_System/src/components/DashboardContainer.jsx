@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../api/context/AuthContext';
 import Header from './organisms/Header/Header';
+import Footer from './common/Footer/Footer';
 
 const DashboardContainer = ({ navigationItems, children, defaultView = 'dashboard' }) => {
   const [activeView, setActiveView] = useState(defaultView);
@@ -20,23 +21,19 @@ const DashboardContainer = ({ navigationItems, children, defaultView = 'dashboar
     }
   };
 
-  try {
-    return (
-      <div className="dashboard">
-        <Header 
-          navigationItems={navigationItems} 
-          onNavigate={handleNavigation}
-          showAuthButtons={false} 
-        />
-        <main className="dashboard-main">
-          {children(activeView, setActiveView)}
-        </main>
-      </div>
-    );
-  } catch (error) {
-    console.error('DashboardContainer error:', error);
-    return <div>Dashboard Error: {error.message}</div>;
-  }
+  return (
+    <div className="dashboard">
+      <Header 
+        navigationItems={navigationItems} 
+        onNavigate={handleNavigation}
+        showAuthButtons={false} 
+      />
+      <main className="dashboard-main">
+        {children(activeView, setActiveView)}
+      </main>
+      <Footer />
+    </div>
+  );
 };
 
 export default DashboardContainer;

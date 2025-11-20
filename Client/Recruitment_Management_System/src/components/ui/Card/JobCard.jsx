@@ -8,6 +8,9 @@ const JobCard = ({
   onEdit, 
   onDelete, 
   onViewApplications,
+  onSave,
+  onUnsave,
+  isSaved = false,
   showActions = true,
   isRecruiter = false 
 }) => {
@@ -74,14 +77,25 @@ const JobCard = ({
               </Button>
             </>
           ) : (
-            <Button 
-              variant="primary" 
-              size="medium"
-              onClick={() => onApply?.(job.id)}
-            >
-              <i className="fas fa-paper-plane"></i>
-              Apply Now
-            </Button>
+            <>
+              <Button 
+                variant="primary" 
+                size="medium"
+                onClick={() => onApply?.(job.id)}
+              >
+                <i className="fas fa-paper-plane"></i>
+                Apply Now
+              </Button>
+              <Button 
+                variant={isSaved ? "secondary" : "outline"}
+                size="medium"
+                onClick={() => isSaved ? onUnsave?.(job.id) : onSave?.(job.id)}
+                className={`save-btn ${isSaved ? 'saved' : ''}`}
+              >
+                <i className={`fas ${isSaved ? 'fa-heart' : 'fa-heart'}`}></i>
+                {isSaved ? 'Saved' : 'Save'}
+              </Button>
+            </>
           )}
         </div>
       )}

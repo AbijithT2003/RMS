@@ -2,6 +2,7 @@ import React from 'react';
 import Header from '../organisms/Header/Header';
 import LoadingSpinner from './LoadingSpinner';
 import ErrorMessage from './ErrorMessage';
+import './PageLayout.css';
 
 const PageLayout = ({ 
   children, 
@@ -19,7 +20,7 @@ const PageLayout = ({
   return (
     <div>
       {!hideHeader && <Header navigationItems={navigationItems} showAuthButtons={showAuthButtons} />}
-      <div className="container">
+      <div className="page-layout-container">
         {title && !hideHeader && <h1>{title}</h1>}
         {children}
       </div>

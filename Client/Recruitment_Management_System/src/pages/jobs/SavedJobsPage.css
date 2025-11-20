@@ -1,13 +1,10 @@
-.manage-applications-container {
+.saved-jobs-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 24px;
 }
 
-.applications-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.saved-jobs-header {
   margin-bottom: 32px;
   padding: 24px;
   background: var(--card-bg);
@@ -15,38 +12,55 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.applications-header h1 {
+.saved-jobs-header h1 {
   color: var(--text-primary);
   font-size: 1.75rem;
   font-weight: 600;
+  margin: 0 0 8px 0;
+}
+
+.saved-jobs-header p {
+  color: var(--text-secondary);
   margin: 0;
 }
 
-.job-filter {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.job-filter label {
-  color: var(--text-secondary);
-  font-weight: 500;
-}
-
-.job-filter select {
-  padding: 8px 12px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  background: var(--input-bg);
-  color: var(--text-primary);
-  font-size: 0.9rem;
-  min-width: 200px;
-}
-
-.applications-grid {
+.saved-jobs-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   gap: 20px;
+}
+
+.saved-job-card {
+  position: relative;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.saved-job-actions {
+  padding: 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.unsave-btn {
+  background: #ffebee;
+  color: #d32f2f;
+  border: 1px solid #ffcdd2;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.unsave-btn:hover {
+  background: #ffcdd2;
+  border-color: #d32f2f;
 }
 
 /* Loading, Error, and Empty States */
@@ -79,6 +93,10 @@
 
 .error-state i {
   color: var(--error-color, #dc3545);
+}
+
+.empty-state i {
+  color: #e91e63;
 }
 
 .loading-state p,
@@ -115,28 +133,11 @@
 }
 
 @media (max-width: 768px) {
-  .manage-applications-container {
+  .saved-jobs-container {
     padding: 0 16px;
   }
   
-  .applications-header {
-    flex-direction: column;
-    gap: 16px;
-    text-align: center;
-  }
-  
-  .job-filter {
-    flex-direction: column;
-    gap: 8px;
-  }
-  
-  .job-filter select {
-    width: 100%;
-    min-width: unset;
-  }
-  
-  .applications-grid {
+  .saved-jobs-grid {
     grid-template-columns: 1fr;
-    gap: 16px;
   }
 }

@@ -4,7 +4,6 @@ import DashboardGrid from '../../components/organisms/DashboardGrid/DashboardGri
 import DashboardView from '../../components/common/DashboardView';
 import { ManageJobsPage, CreateJobPage, ManageApplicationsPage, MyInterviewsPage, InterviewSchedulePage } from '../../pages';
 import './Dashboard.css';
-import '../../components/common/Dashboard.css';
 
 const RecruiterDashboard = () => {
   const recruiterNav = [
@@ -79,7 +78,7 @@ const RecruiterDashboard = () => {
       case 'jobs': 
         return (
           <DashboardView title="Manage Jobs" breadcrumbs={getBreadcrumbs('jobs')}>
-            <ManageJobsPage />
+            <ManageJobsPage onNavigate={setActiveView} />
           </DashboardView>
         );
       case 'create-job': 
@@ -109,26 +108,10 @@ const RecruiterDashboard = () => {
       default:
         return (
           <div className="dashboard-content">
-            <DashboardGrid cards={dashboardCards} />
-            <div className="dashboard-right">
-              <div className="stats-grid">
-                <div className="stat-card">
-                  <h3>12</h3>
-                  <p>Active Jobs</p>
-                </div>
-                <div className="stat-card">
-                  <h3>48</h3>
-                  <p>Applications</p>
-                </div>
-                <div className="stat-card">
-                  <h3>8</h3>
-                  <p>Interviews Scheduled</p>
-                </div>
-                <div className="stat-card">
-                  <h3>3</h3>
-                  <p>Offers Made</p>
-                </div>
-              </div>
+            <div className="dashboard-top">
+              <DashboardGrid cards={dashboardCards} />
+            </div>
+            <div className="dashboard-bottom">
               <div className="recent-activity">
                 <h2>Recent Activity</h2>
                 <div className="activity-list">

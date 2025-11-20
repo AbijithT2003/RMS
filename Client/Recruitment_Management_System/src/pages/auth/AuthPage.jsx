@@ -50,28 +50,25 @@ const AuthPage = () => {
 
       const { user } = isLogin ? await login(payload) : await register(payload);
 
-      console.log('Login successful, user:', user);
-      console.log('User role:', user.role);
-      console.log('User roles:', user.roles);
+      console.log("Login successful, user:", user);
+      console.log("User role:", user.role);
+      console.log("User roles:", user.roles);
 
       // Redirect based on role
+      // In AuthPage.jsx, around line 58-70, update the redirect logic:
       const role = user.role;
-      console.log('Redirecting based on role:', role);
-      
+      console.log("Redirecting based on role:", role);
+
       if (role === "ADMIN") {
-        console.log('Navigating to admin dashboard');
         navigate("/admin-dashboard");
       } else if (role === "RECRUITER") {
-        console.log('Navigating to recruiter dashboard');
         navigate("/recruiter-dashboard");
       } else if (role === "CANDIDATE" || role === "APPLICANT") {
-        console.log('Navigating to applicant dashboard');
         navigate("/applicant-dashboard");
       } else {
-        console.log('Unknown role, defaulting to applicant dashboard for now');
-        navigate("/applicant-dashboard"); // Temporary fallback
+        console.warn("Unknown role:", role);
+        navigate("/applicant-dashboard");
       }
-
     } catch (err) {
       console.error(err);
       alert(err.message);

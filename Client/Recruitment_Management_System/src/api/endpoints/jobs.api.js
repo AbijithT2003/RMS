@@ -38,4 +38,26 @@ export const jobsApi = {
     const res = await apiClient.delete(`/jobs/${id}`);
     return res.data?.data || res.data; // Returns DeletedJobResponse
   },
+
+  // Applicant only - Saved Jobs
+  getSavedJobs: async () => {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const applicantId = user.applicantId || user.userId;
+    const res = await apiClient.get(`/jobs/saved/${applicantId}`);
+    return res.data?.data || res.data; // Returns Array<JobResponse>
+  },
+
+  saveJob: async (jobId) => {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const applicantId = user.applicantId || user.userId;
+    const res = await apiClient.post(`/jobs/${jobId}/save`, { applicantId });
+    return res.data?.data || res.data;
+  },
+
+  unsaveJob: async (jobId) => {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const applicantId = user.applicantId || user.userId;
+    const res = await apiClient.delete(`/jobs/${jobId}/save/${applicantId}`);
+    return res.data?.data || res.data;
+  },
 };

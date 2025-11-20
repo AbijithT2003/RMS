@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const apiClient = axios.create({
-  baseURL: "/api",
+  baseURL: "http://localhost:8080/api", // Direct backend URL
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
@@ -17,22 +17,12 @@ apiClient.interceptors.request.use((config) => {
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.error('API Error:', error);
-    
-    if (error.code === 'ECONNABORTED') {
-      console.error('Request timeout - check if backend server is running');
-    }
-    
-    if (error.message === 'Network Error') {
-      console.error('Network error - check CORS configuration and server status');
-    }
-    
+    console.error("API Error:", error);
     if (error.response?.status === 401) {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('user');
-      window.location.href = '/auth';
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("user");
+      window.location.href = "/auth";
     }
-    
     return Promise.reject(error);
   }
 );
