@@ -13,7 +13,7 @@ const ApplicantProfilePage = () => {
   );
 
   return (
-    <PageLayout title="My Profile">
+    <div className="page-layout" data-title="My Profile">
       <div className="profile-container">
         <div className="profile-card">
           <div className="profile-header">
@@ -102,6 +102,7 @@ const ApplicantProfilePage = () => {
         />
       )}
     </div>
+
   );
 };
 

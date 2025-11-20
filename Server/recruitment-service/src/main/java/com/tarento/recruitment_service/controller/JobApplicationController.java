@@ -62,7 +62,7 @@ public class JobApplicationController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
     
-    @GetMapping("/applicant/")
+    @GetMapping("/applicant/{applicantId}")
     @Operation(summary = "Get applications by applicant", description = "Retrieves all applications by an applicant")
     public ResponseEntity<ApiResponse<PageResponse<JobApplicationResponse>>> getApplicationsByApplicant(
             @PathVariable UUID applicantId,

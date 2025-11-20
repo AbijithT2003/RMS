@@ -47,9 +47,9 @@ public class SecurityConfig {
                 .requestMatchers("GET", "/api/jobs/**").permitAll()
                 .requestMatchers("POST", "/api/jobs/**").hasAnyRole("RECRUITER", "ADMIN")
                 .requestMatchers("PUT", "/api/jobs/**").hasAnyRole("RECRUITER", "ADMIN")
-                .requestMatchers("DELETE", "/api/jobs/**").hasAnyRole("ADMIN")
-                .requestMatchers("/api/applications/**").hasAnyRole("APPLICANT", "RECRUITER", "ADMIN")
-                .requestMatchers("/api/interviews/**").hasAnyRole("RECRUITER", "ADMIN")
+                .requestMatchers("DELETE", "/api/jobs/**").hasAnyRole("RECRUITER","ADMIN")
+                .requestMatchers("/api/applications/**").hasAnyRole("CANDIDATE", "RECRUITER", "ADMIN")
+                .requestMatchers("/api/interviews/**").hasAnyRole("CANDIDATE","RECRUITER", "ADMIN")
                 .requestMatchers("/api/skills/**").permitAll()
                 .requestMatchers("/api/applicants/**").hasAnyRole("RECRUITER", "ADMIN")
 

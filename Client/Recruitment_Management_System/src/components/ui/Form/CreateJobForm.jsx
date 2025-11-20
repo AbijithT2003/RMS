@@ -171,214 +171,203 @@ const CreateJobForm = ({ onSubmit, loading = false }) => {
 
       <form onSubmit={handleSubmit} className="job-form">
         <div className="form-left">
-        <div className="form-section">
-          <h2 className="section-title">Basic Information</h2>
-          
-          <div className="form-row two-cols">
+          <div className="form-section">
+            <h2 className="section-title">Basic Information</h2>
+
+            <div className="form-row two-cols">
+              <FormField
+                label="Job Title"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                error={errors.title}
+                required
+                placeholder="e.g., Senior Software Engineer"
+              />
+              <FormField
+                label="Department"
+                name="department"
+                value={formData.department}
+                onChange={handleChange}
+                error={errors.department}
+                placeholder="e.g., Engineering"
+              />
+            </div>
+
+            <div className="form-row two-cols">
+              <FormField
+                label="Sector"
+                name="sector"
+                value={formData.sector}
+                onChange={handleChange}
+                error={errors.sector}
+                placeholder="e.g., Technology"
+              />
+              <FormField
+                label="Job Status"
+                name="status"
+                type="select"
+                value={formData.status}
+                onChange={handleChange}
+                error={errors.status}
+                options={statusOptions}
+                required
+              />
+            </div>
+
             <FormField
-              label="Job Title"
-              name="title"
-              value={formData.title}
+              label="Job Description"
+              name="description"
+              type="textarea"
+              value={formData.description}
               onChange={handleChange}
-              error={errors.title}
+              error={errors.description}
               required
-              placeholder="e.g., Senior Software Engineer"
-            />
-            <FormField
-              label="Department"
-              name="department"
-              value={formData.department}
-              onChange={handleChange}
-              error={errors.department}
-              placeholder="e.g., Engineering"
+              placeholder="Describe the role, responsibilities, and expectations... (50-5000 characters)"
             />
           </div>
 
-          <div className="form-row two-cols">
-            <FormField
-              label="Sector"
-              name="sector"
-              value={formData.sector}
-              onChange={handleChange}
-              error={errors.sector}
-              placeholder="e.g., Technology"
-            />
-            <FormField
-              label="Job Status"
-              name="status"
-              type="select"
-              value={formData.status}
-              onChange={handleChange}
-              error={errors.status}
-              options={statusOptions}
-              required
-            />
+          <div className="form-section">
+            <h2 className="section-title">Employment Details</h2>
+
+            <div className="form-row two-cols">
+              <FormField
+                label="Job Type"
+                name="jobType"
+                type="select"
+                value={formData.jobType}
+                onChange={handleChange}
+                error={errors.jobType}
+                options={jobTypeOptions}
+                required
+              />
+              <FormField
+                label="Work Mode"
+                name="workMode"
+                type="select"
+                value={formData.workMode}
+                onChange={handleChange}
+                error={errors.workMode}
+                options={workModeOptions}
+                required
+              />
+            </div>
+
+            <div className="form-row">
+              <FormField
+                label="Years of Experience Required"
+                name="experienceRequired"
+                type="number"
+                value={formData.experienceRequired}
+                onChange={handleChange}
+                error={errors.experienceRequired}
+                placeholder="e.g., 5"
+              />
+              <FormField
+                label="Positions Available"
+                name="positionsAvailable"
+                type="number"
+                value={formData.positionsAvailable}
+                onChange={handleChange}
+                error={errors.positionsAvailable}
+                placeholder="e.g., 2"
+              />
+            </div>
           </div>
-
-          <FormField
-            label="Job Description"
-            name="description"
-            type="textarea"
-            value={formData.description}
-            onChange={handleChange}
-            error={errors.description}
-            required
-            placeholder="Describe the role, responsibilities, and expectations... (50-5000 characters)"
-          />
-
-
-        </div>
-
-        <div className="form-section">
-          <h2 className="section-title">Employment Details</h2>
-          
-          <div className="form-row two-cols">
-            <FormField
-              label="Job Type"
-              name="jobType"
-              type="select"
-              value={formData.jobType}
-              onChange={handleChange}
-              error={errors.jobType}
-              options={jobTypeOptions}
-              required
-            />
-            <FormField
-              label="Work Mode"
-              name="workMode"
-              type="select"
-              value={formData.workMode}
-              onChange={handleChange}
-              error={errors.workMode}
-              options={workModeOptions}
-              required
-            />
-          </div>
-
-          <div className="form-row">
-            <FormField
-              label="Years of Experience Required"
-              name="experienceRequired"
-              type="number"
-              value={formData.experienceRequired}
-              onChange={handleChange}
-              error={errors.experienceRequired}
-              placeholder="e.g., 5"
-            />
-            <FormField
-              label="Positions Available"
-              name="positionsAvailable"
-              type="number"
-              value={formData.positionsAvailable}
-              onChange={handleChange}
-              error={errors.positionsAvailable}
-              placeholder="e.g., 2"
-            />
-          </div>
-        </div>
         </div>
 
         <div className="form-right">
-        <div className="form-section">
-          <h2 className="section-title">Requirements</h2>
-          
-          <FormField
-            label="Requirements"
-            name="requirements"
-            type="textarea"
-            value={formData.requirements}
-            onChange={handleChange}
-            error={errors.requirements}
-            required
-            rows={3}
-            placeholder="List required skills, experience, qualifications..."
-          />
-        </div>
+          <div className="form-section">
+            <h2 className="section-title">Requirements</h2>
 
-        <div className="form-section">
-          <h2 className="section-title">Location</h2>
-          
-          <div className="form-row">
             <FormField
-              label="City"
-              name="locationCity"
-              value={formData.locationCity}
+              label="Requirements"
+              name="requirements"
+              type="textarea"
+              value={formData.requirements}
               onChange={handleChange}
-              error={errors.locationCity}
-              placeholder="e.g., San Francisco"
-            />
-            <FormField
-              label="State/Province"
-              name="locationState"
-              value={formData.locationState}
-              onChange={handleChange}
-              error={errors.locationState}
-              placeholder="e.g., CA"
-            />
-            <FormField
-              label="Country"
-              name="locationCountry"
-              value={formData.locationCountry}
-              onChange={handleChange}
-              error={errors.locationCountry}
-              placeholder="e.g., USA"
+              error={errors.requirements}
+              required
+              rows={3}
+              placeholder="List required skills, experience, qualifications..."
             />
           </div>
-        </div>
 
-        <div className="form-section">
-          <h2 className="section-title">Compensation</h2>
-          
-          <div className="form-row">
-            <FormField
-              label="Minimum Salary"
-              name="salaryMin"
-              type="number"
-              value={formData.salaryMin}
-              onChange={handleChange}
-              error={errors.salaryMin}
-              placeholder="e.g., 100000"
-            />
-            <FormField
-              label="Maximum Salary"
-              name="salaryMax"
-              type="number"
-              value={formData.salaryMax}
-              onChange={handleChange}
-              error={errors.salaryMax}
-              placeholder="e.g., 150000"
-            />
+          <div className="form-section">
+            <h2 className="section-title">Location</h2>
+
+            <div className="form-row three-cols">
+              <FormField
+                label="City"
+                name="locationCity"
+                value={formData.locationCity}
+                onChange={handleChange}
+                error={errors.locationCity}
+                placeholder="e.g., San Francisco"
+              />
+              <FormField
+                label="State/Province"
+                name="locationState"
+                value={formData.locationState}
+                onChange={handleChange}
+                error={errors.locationState}
+                placeholder="e.g., CA"
+              />
+              <FormField
+                label="Country"
+                name="locationCountry"
+                value={formData.locationCountry}
+                onChange={handleChange}
+                error={errors.locationCountry}
+                placeholder="e.g., USA"
+              />
+            </div>
           </div>
-        </div>
 
-        <div className="form-section">
-          <h2 className="section-title">Application Settings</h2>
-          
-          <FormField
-            label="Application Deadline"
-            name="applicationDeadline"
-            type="datetime-local"
-            value={formData.applicationDeadline}
-            onChange={handleChange}
-            error={errors.applicationDeadline}
-            placeholder="Select date and time"
-          />
-        </div>
+          <div className="form-section">
+            <h2 className="section-title">Compensation & Application</h2>
+
+            <div className="form-row two-cols">
+              <FormField
+                label="Minimum Salary"
+                name="salaryMin"
+                type="number"
+                value={formData.salaryMin}
+                onChange={handleChange}
+                error={errors.salaryMin}
+                placeholder="e.g., 100000"
+              />
+              <FormField
+                label="Maximum Salary"
+                name="salaryMax"
+                type="number"
+                value={formData.salaryMax}
+                onChange={handleChange}
+                error={errors.salaryMax}
+                placeholder="e.g., 150000"
+              />
+              <FormField
+                label="Application Deadline"
+                name="applicationDeadline"
+                type="datetime-local"
+                value={formData.applicationDeadline}
+                onChange={handleChange}
+                error={errors.applicationDeadline}
+                placeholder="Select date and time"
+              />
+            </div>
+          </div>
         </div>
 
         <div className="form-actions">
-          <button
-            type="submit"
-            disabled={loading}
-            className="btn btn-primary"
-          >
+          <button type="submit" disabled={loading} className="btn btn-primary">
             {loading ? (
               <>
                 <i className="fas fa-spinner fa-spin"></i>
                 Creating...
               </>
             ) : (
-              'Create Job Posting'
+              "Create Job Posting"
             )}
           </button>
           <button
