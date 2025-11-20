@@ -23,6 +23,7 @@ import java.util.Arrays;
 import com.tarento.recruitment_service.model.enums.JobStatus;
 import com.tarento.recruitment_service.model.enums.ApplicationStatus;
 import java.util.List;
+import com.tarento.recruitment_service.model.enums.Platform;
 
 
 @Service
@@ -57,7 +58,7 @@ public class JobApplicationService {
         JobApplication application = JobApplication.builder()
                 .job(job)
                 .applicant(applicant)
-                .platform(Platform.valueOf(request.getPlatform().toUpperCase()))
+                .platform(request.getPlatform())
                 .sourceUrl(request.getSourceUrl())
                 .status(ApplicationStatus.SUBMITTED)
                 .resumeVersionUrl(request.getResumeVersionUrl())

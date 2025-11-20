@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
+import java.util.List;
 
 
 @RestController
@@ -44,7 +45,15 @@ public class JobController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
-    
+    @GetMapping("/{id}")
+    @Operation(summary = "Get job by ID", description = "Retrieve a single job posting by its ID")
+    public ResponseEntity<ApiResponse<JobResponse>> getJob(
+            @PathVariable UUID id) {
+
+        JobResponse job = jobService.getJobById(id);
+        return ResponseEntity.ok(ApiResponse.success(job));
+    }
+
     @PostMapping
     @PreAuthorize("hasRole('RECRUITER') or hasRole('ADMIN')")
     @Operation(summary = "Create a new job posting", description = "Allows an Admin or Recruiter to create a new job posting")
@@ -97,7 +106,7 @@ public class JobController {
     }
     
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('RECRUITER')")
     public ResponseEntity<ApiResponse<DeletedJobResponse>> deleteJob(@PathVariable UUID id) {
 
         DeletedJobResponse deleted = jobService.deleteJob(id);
@@ -106,6 +115,8 @@ public class JobController {
                 ApiResponse.success("Job deleted successfully", deleted)
         );
     }   
+
+       
     
 }
             

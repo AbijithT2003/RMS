@@ -27,6 +27,28 @@
   align-items: center;
   gap: 12px;
 }
+/* STATUS FILTER (same style as job filter) */
+.status-filter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.status-filter label {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.status-filter select {
+  padding: 8px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  min-width: 200px;
+}
+
 
 .job-filter label {
   color: var(--text-secondary);

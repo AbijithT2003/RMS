@@ -41,7 +41,7 @@ public class InterviewController {
         return ResponseEntity.ok(ApiResponse.success("Interview updated successfully", response));
     }
     
-    @GetMapping("/application/")
+    @GetMapping("/application/{applicationId}")
     @Operation(summary = "Get interviews by application", description = "Retrieves all interviews for an application")
     public ResponseEntity<ApiResponse<List<InterviewResponse>>> getInterviewsByApplication(
             @PathVariable UUID applicationId) {
@@ -49,7 +49,7 @@ public class InterviewController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
     
-    @GetMapping("/interviewer/")
+    @GetMapping("/interviewer/{interviewerId}")
     @Operation(summary = "Get interviews by interviewer", description = "Retrieves all interviews for an interviewer")
     public ResponseEntity<ApiResponse<List<InterviewResponse>>> getInterviewsByInterviewer(
             @PathVariable UUID interviewerId) {

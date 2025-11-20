@@ -2,10 +2,19 @@ import React from "react";
 import Button from "../../atoms/Button/Button";
 import Dropdown from "../../molecules/Dropdown/Dropdown";
 import "./Header.css";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../api/context/AuthContext";
+
 
 const Header = ({ onLogin, onRegister ,navigationItems=[],showAuthButtons=true } )=> {
-  
+  const navigate = useNavigate();
+  const { logout } = useAuth();
 
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
+
+  };
   return (
     <header className="header">
       <div className="container">
@@ -38,10 +47,12 @@ const Header = ({ onLogin, onRegister ,navigationItems=[],showAuthButtons=true }
             </Button>
           </div>
           )}
+          
         </div>
       </div>
     </header>
   );
 };
+
 
 export default Header;

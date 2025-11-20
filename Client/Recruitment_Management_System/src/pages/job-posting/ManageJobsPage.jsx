@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { jobsApi } from '../../api/endpoints/jobs.api';
-import { useApi } from '../../hooks/useApi';
+import { useApi } from '../../hooks/useApi';  
 import { useNavigate } from 'react-router-dom';
+import {jobId} from '../../utils/constants';
+
+
 
 import PageLayout from '../../components/common/PageLayout';
 import Button from '../../components/atoms/Button/Button';
@@ -10,7 +13,13 @@ import './ManageJobsPage.css';
 
 const ManageJobsPage = ({ onNavigate }) => {
   const navigate = useNavigate();
-  const { data: jobs, loading, error, refetch } = useApi(() => jobsApi.getallJobs());
+  const {
+    data: jobs,
+    loading,
+    error,
+    refetch,
+  } = useApi(() => jobsApi.getJob(jobId));
+
   const [selectedJob, setSelectedJob] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
@@ -26,14 +35,13 @@ const ManageJobsPage = ({ onNavigate }) => {
     }
   };
 
-  const handleEdit = (id) => {
-    // For now, just log the edit action - implement edit functionality as needed
-    console.log('Edit job:', id);
-  };
+ const handleEdit = (id) => {
+   navigate(`/recruiter/jobs/edit/${id}`);
+ };
 
   const handleViewApplications = (jobId) => {
     setSelectedJob(jobId);
-    navigate(`/recruiter/applications?jobId=${jobId}`);
+    navigate(`/recruiter/applications/jobs/${jobId}`);
   };
 
   const filteredJobs = jobs?.filter(job => {

@@ -5,10 +5,16 @@ import PageLayout from '../../components/common/PageLayout';
 import Button from '../../components/atoms/Button/Button';
 import JobCard from '../../components/ui/Card/JobCard';
 import './JobListPage.css';
+import {jobId} from '../../utils/constants';
 
 const JobListPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const { data: jobs, loading, error, refetch } = useApi(() => jobsApi.getallJobs());
+  const {
+    data: jobs,
+    loading,
+    error,
+    refetch,
+  } = useApi(() => jobsApi.getJob(jobId));
 
   const handleSearch = async () => {
     if (!searchTerm) {

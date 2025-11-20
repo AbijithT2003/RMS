@@ -1,12 +1,17 @@
 package com.tarento.recruitment_service.dto.RequestDto;
 
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.URL;
+
+import com.tarento.recruitment_service.model.enums.Platform;
+
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.Data;
+import jakarta.persistence.EnumType;
 
 @Data
 @NoArgsConstructor
@@ -22,7 +27,8 @@ public class CreateJobApplicationRequest {
     @NotBlank(message = "Platform is required")
     @Pattern(regexp = "LINKEDIN|INDEED|GLASSDOOR|COMPANY_SITE|OTHER", 
             message = "Invalid platform value. Must be one of: LINKEDIN, INDEED, GLASSDOOR, COMPANY_SITE, OTHER")
-    private String platform;
+    @Enumerated(EnumType.STRING)
+private Platform platform;
     
     private String sourceUrl;
     

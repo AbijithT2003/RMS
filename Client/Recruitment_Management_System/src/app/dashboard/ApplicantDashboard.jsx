@@ -28,81 +28,108 @@ const ApplicantDashboard = () => {
   const renderView = (activeView, setActiveView) => {
     const dashboardCards = [
       {
-        icon: 'fas fa-search',
-        title: 'Job Search',
-        description: 'Browse and apply to available positions',
-        onClick: () => setActiveView('jobs')
+        icon: "fas fa-search",
+        title: "Job Search",
+        description: "Browse and apply to available positions",
+        onClick: () => setActiveView("jobs"),
       },
       {
-        icon: 'fas fa-heart',
-        title: 'Saved Jobs',
-        description: 'View your bookmarked job opportunities',
-        onClick: () => setActiveView('saved-jobs')
+        icon: "fas fa-heart",
+        title: "Saved Jobs",
+        description: "View your bookmarked job opportunities",
+        onClick: () => setActiveView("saved-jobs"),
       },
       {
-        icon: 'fas fa-file-alt',
-        title: 'My Applications',
-        description: 'Track your job applications and status',
-        onClick: () => setActiveView('applications')
+        icon: "fas fa-file-alt",
+        title: "My Applications",
+        description: "Track your job applications and status",
+        onClick: () => setActiveView("applications"),
       },
       {
-        icon: 'fas fa-calendar',
-        title: 'Interviews',
-        description: 'Manage your upcoming interviews',
-        onClick: () => setActiveView('interviews')
+        icon: "fas fa-calendar",
+        title: "Interviews",
+        description: "Manage your upcoming interviews",
+        onClick: () => setActiveView("interviews"),
       },
       {
-        icon: 'fas fa-user',
-        title: 'Profile',
-        description: 'Update your resume and personal information',
-        onClick: () => setActiveView('profile')
-      }
+        icon: "fas fa-user",
+        title: "Profile",
+        description: "Update your resume and personal information",
+        onClick: () => setActiveView("profile"),
+      },
     ];
 
     const getBreadcrumbs = (view) => [
-      { label: 'Dashboard', onClick: () => setActiveView('dashboard') },
-      { label: getViewTitle(view) }
+      { label: "Dashboard", onClick: () => setActiveView("dashboard") },
+      { label: getViewTitle(view) },
     ];
 
     const getViewTitle = (view) => {
       switch (view) {
-        case 'jobs': return 'Browse Jobs';
-        case 'saved-jobs': return 'Saved Jobs';
-        case 'applications': return 'My Applications';
-        case 'interviews': return 'My Interviews';
-        case 'profile': return 'My Profile';
-        default: return 'Dashboard';
+        case "jobs":
+          return "Browse Jobs";
+        case "saved-jobs":
+          return "Saved Jobs";
+        case "applications":
+          return "My Applications";
+        case "interviews":
+          return "My Interviews";
+        case "profile":
+          return "My Profile";
+        default:
+          return "Dashboard";
       }
     };
+    // Add application statistics
+    const applicationStats = [
+      { status: "Applied", count: 5, color: "#blue" },
+      { status: "Under Review", count: 2, color: "#orange" },
+      { status: "Interviews", count: 1, color: "#green" },
+    ];
 
     switch (activeView) {
-      case 'jobs': 
+      case "jobs":
         return (
-          <DashboardView title="Browse Jobs" breadcrumbs={getBreadcrumbs('jobs')}>
+          <DashboardView
+            title="Browse Jobs"
+            breadcrumbs={getBreadcrumbs("jobs")}
+          >
             <JobListPage />
           </DashboardView>
         );
-      case 'saved-jobs': 
+      case "saved-jobs":
         return (
-          <DashboardView title="Saved Jobs" breadcrumbs={getBreadcrumbs('saved-jobs')}>
+          <DashboardView
+            title="Saved Jobs"
+            breadcrumbs={getBreadcrumbs("saved-jobs")}
+          >
             <SavedJobsPage />
           </DashboardView>
         );
-      case 'applications': 
+      case "applications":
         return (
-          <DashboardView title="My Applications" breadcrumbs={getBreadcrumbs('applications')}>
+          <DashboardView
+            title="My Applications"
+            breadcrumbs={getBreadcrumbs("applications")}
+          >
             <MyApplicationsPage />
           </DashboardView>
         );
-      case 'interviews': 
+      case "interviews":
         return (
-          <DashboardView title="My Interviews" breadcrumbs={getBreadcrumbs('interviews')}>
+          <DashboardView
+            title="My Interviews"
+            breadcrumbs={getBreadcrumbs("interviews")}
+          >
             <MyInterviewsPage />
           </DashboardView>
         );
-      case 'profile': 
+      case "profile":
         return (
-          <DashboardView title="My Profile" breadcrumbs={getBreadcrumbs('profile')}>
+          <DashboardView
+            title="My Profile"
+            breadcrumbs={getBreadcrumbs("profile")}
+          >
             <ApplicantProfilePage />
           </DashboardView>
         );
@@ -118,7 +145,9 @@ const ApplicantDashboard = () => {
                 <div className="activity-list">
                   <div className="activity-item">
                     <i className="fas fa-plus-circle"></i>
-                    <span>Applied to Software Engineer position at TechCorp</span>
+                    <span>
+                      Applied to Software Engineer position at TechCorp
+                    </span>
                     <small>2 hours ago</small>
                   </div>
                   <div className="activity-item">
@@ -127,6 +156,15 @@ const ApplicantDashboard = () => {
                     <small>1 day ago</small>
                   </div>
                 </div>
+              </div>
+              // Show in dashboard
+              <div className="stats-section">
+                <h3>Your Application Stats</h3>
+                {applicationStats.map((stat) => (
+                  <div key={stat.status} className="stat">
+                    {stat.status}: {stat.count}
+                  </div>
+                ))}
               </div>
             </div>
           </div>

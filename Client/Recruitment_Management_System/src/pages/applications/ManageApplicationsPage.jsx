@@ -5,37 +5,51 @@ import ApplicationCard from '../../components/ui/Card/ApplicationCard';
 import './ManageApplicationsPage.css';
 
 const ManageApplicationsPage = () => {
-  const { data: applications, loading, error, refetch } = useApi(() => applicationsApi.getApplications());
-  const [selectedJob, setSelectedJob] = useState('all');
+  const {
+    data,
+    loading,
+    error,
+    refetch,
+  } = useApi(() => applicationsApi.getApplications());
+  const [selectedJob, setSelectedJob] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
 
-  const updateStatus = async (id, status) => {
-    try {
-      await applicationsApi.updateApplicationStatus(id, status);
-      refetch();
-    } catch (error) {
-      console.error('Error updating status:', error);
-    }
-  };
-
-  const handleViewDetails = (applicationId) => {
-    console.log('View application details:', applicationId);
-  };
-
-  // Ensure applications is an array
-  const applicationsArray = Array.isArray(applications) ? applications : 
-    (applications?.content || applications?.data || []);
+  const applicationsArray = Array.isArray(data)
+    ? data
+    : data?.content || data?.data || [];
 
   // Group applications by job
   const groupedApplications = applicationsArray.reduce((acc, app) => {
-    const jobTitle = app.jobTitle || 'Unknown Job';
+    const jobTitle = app.jobTitle || "Unknown Job";
     if (!acc[jobTitle]) acc[jobTitle] = [];
     acc[jobTitle].push(app);
     return acc;
   }, {});
 
-  const filteredApplications = selectedJob === 'all' 
-    ? applicationsArray 
-    : groupedApplications[selectedJob] || [];
+  const filteredApplications =
+    selectedJob === "all"
+      ? applicationsArray
+      : groupedApplications[selectedJob] || [];
+
+  // Filter by status
+  if (statusFilter !== "all") {
+    filteredApplications = filteredApplications.filter(
+      (app) => app.status === statusFilter
+    );
+  }
+
+ const updateStatus = async (id, status) => {
+   try {
+     await applicationsApi.updateApplicationStatus(id, status);
+     refetch();
+   } catch (error) {
+     console.error("Error updating status:", error);
+   }
+ };
+
+ const handleViewDetails = (applicationId) => {
+   console.log("View application details:", applicationId);
+ };
 
   if (loading) {
     return (
@@ -69,16 +83,29 @@ const ManageApplicationsPage = () => {
         <h1>Job Applications</h1>
         <div className="job-filter">
           <label>Filter by Job:</label>
-          <select 
-            value={selectedJob} 
+          <select
+            value={selectedJob}
             onChange={(e) => setSelectedJob(e.target.value)}
           >
             <option value="all">All Jobs</option>
-            {Object.keys(groupedApplications).map(jobTitle => (
+            {Object.keys(groupedApplications).map((jobTitle) => (
               <option key={jobTitle} value={jobTitle}>
                 {jobTitle} ({groupedApplications[jobTitle].length})
               </option>
             ))}
+          </select>
+        </div>
+        <div className="status-filter">
+          <label>Status:</label>
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="all">All</option>
+            <option value="PENDING">Pending</option>
+            <option value="REVIEWED">Reviewed</option>
+            <option value="SHORTLISTED">Shortlisted</option>
+            <option value="REJECTED">Rejected</option>
           </select>
         </div>
       </div>
@@ -91,7 +118,7 @@ const ManageApplicationsPage = () => {
         </div>
       ) : (
         <div className="applications-grid">
-          {filteredApplications.map(application => (
+          {filteredApplications.map((application) => (
             <ApplicationCard
               key={application.id}
               application={application}
