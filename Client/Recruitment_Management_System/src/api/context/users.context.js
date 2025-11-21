@@ -127,9 +127,7 @@ export const UserValidation = {
       errors.push('Valid role is required');
     }
     
-    if (data.phone && !isValidPhoneNumber(data.phone)) {
-      errors.push('Invalid phone number format');
-    }
+   
     
     return errors;
   },
@@ -171,13 +169,6 @@ export const UserValidation = {
     return errors;
   }
 };
-
-// Helper function for phone number validation
-function isValidPhoneNumber(phone) {
-  // Basic phone number validation - adjust regex based on requirements
-  const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
-  return phoneRegex.test(phone.replace(/[\s\-\(\)]/g, ''));
-}
 
 // Utility functions
 export const UserUtils = {
