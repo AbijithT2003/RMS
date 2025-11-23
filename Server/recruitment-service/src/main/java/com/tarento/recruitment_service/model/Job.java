@@ -9,7 +9,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
-import jakarta.persistence.Version;
+import java.util.List;
 
 // Job.java
 @Entity
@@ -84,5 +84,13 @@ public class Job extends AuditableEntity {
     
     @Column(name = "positions_available")
     private Integer positionsAvailable;
-    
+
+    @OneToMany(
+    mappedBy = "job",
+    cascade = CascadeType.ALL,
+    orphanRemoval = true
+    )
+    private List<JobApplication> applications;
+
+        
 }

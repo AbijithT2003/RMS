@@ -13,6 +13,9 @@ const ManageApplicationsPage = () => {
   } = useApi(() => applicationsApi.getApplications());
   const [selectedJob, setSelectedJob] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [applicationDetails, setApplicationDetails] = useState(null);
+
 
   const applicationsArray = Array.isArray(data)
     ? data
@@ -47,9 +50,40 @@ const ManageApplicationsPage = () => {
    }
  };
 
- const handleViewDetails = (applicationId) => {
-   console.log("View application details:", applicationId);
+ const handleViewDetails = async (applicationId) => {
+   try {
+     const app = await applicationsApi.getApplicationById(applicationId);
+
+     // fetch applicant details
+     const applicant = await applicationsApi.getApplicantById(app.applicantId);
+
+     // fetch job details
+     const job = await applicationsApi.getJobById(app.jobId);
+
+     // merge everything into one object
+     const fullDetails = {
+       ...app,
+       applicant,
+       job,
+     };
+
+     setApplicationDetails(fullDetails);
+     setShowDetailsModal(true);
+   } catch (err) {
+     console.error("Error loading full application details:", err);
+   }
  };
+
+
+ const formatDate = (dateString) => {
+   if (!dateString) return "N/A";
+   return new Date(dateString).toLocaleDateString("en-IN", {
+     year: "numeric",
+     month: "short",
+     day: "numeric",
+   });
+ };
+
 
   if (loading) {
     return (
@@ -126,6 +160,97 @@ const ManageApplicationsPage = () => {
               onViewDetails={handleViewDetails}
             />
           ))}
+        </div>
+      )}
+      {showDetailsModal && applicationDetails && (
+        <div className="details-modal">
+          <div className="details-modal-content">
+            <h2>Application Details</h2>
+
+            {/* Applicant Section */}
+            <h3 className="section-title">Applicant Information</h3>
+            <p>
+              <strong>Name:</strong> {applicationDetails.applicant.fullName}
+            </p>
+            <p>
+              <strong>Email:</strong> {applicationDetails.applicant.email}
+            </p>
+            <p>
+              <strong>Phone:</strong>{" "}
+              {applicationDetails.applicant.phone || "N/A"}
+            </p>
+            <p>
+              <strong>Experience:</strong>{" "}
+              {applicationDetails.applicant.experience ||
+                applicationDetails.yearsOfExperience}{" "}
+              years
+            </p>
+            <p>
+              <strong>Skills:</strong>{" "}
+              {applicationDetails.applicant.skills?.join(", ") || "N/A"}
+            </p>
+
+            {/* Job Section */}
+            <h3 className="section-title">Job Information</h3>
+            <p>
+              <strong>Job Title:</strong> {applicationDetails.job.title}
+            </p>
+            <p>
+              <strong>Job ID:</strong> {applicationDetails.job.id}
+            </p>
+            <p>
+              <strong>Posted By:</strong>{" "}
+              {applicationDetails.job.recruiterName || "Unknown"}
+            </p>
+
+            {/* Application Section */}
+            <h3 className="section-title">Application Data</h3>
+            <p>
+              <strong>Status:</strong> {applicationDetails.status}
+            </p>
+            <p>
+              <strong>Applied On:</strong>{" "}
+              {formatDate(applicationDetails.appliedDate)}
+            </p>
+
+            <p>
+              <strong>Resume:</strong>
+              {applicationDetails.resumeUrl ? (
+                <a href={applicationDetails.resumeUrl} target="_blank">
+                  View Resume
+                </a>
+              ) : (
+                "N/A"
+              )}
+            </p>
+
+            <p>
+              <strong>Cover Letter:</strong>
+            </p>
+            <p className="cover-letter-box">
+              {applicationDetails.coverLetter || "No cover letter provided"}
+            </p>
+
+            {/* Update Status */}
+            <div className="update-status">
+              <label>Update Status:</label>
+              <select
+                value={applicationDetails.status}
+                onChange={(e) =>
+                  updateStatus(applicationDetails.id, e.target.value)
+                }
+              >
+                <option value="PENDING">Pending</option>
+                <option value="REVIEWED">Reviewed</option>
+                <option value="SHORTLISTED">Shortlisted</option>
+                <option value="REJECTED">Rejected</option>
+              </select>
+            </div>
+
+            <div className="modal-actions">
+              <button onClick={() => setShowDetailsModal(false)}>Close</button>
+            </div>
+          </div>
         </div>
       )}
     </div>

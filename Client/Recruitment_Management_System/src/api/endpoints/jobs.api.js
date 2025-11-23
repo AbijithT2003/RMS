@@ -17,11 +17,12 @@ export const jobsApi = {
 
   // Recruiter/Admin only
   getJobsByRecruiter: async () => {
-    const res = await apiClient.get("/jobs/my"); // assuming backend route /jobs/my returns jobs created by current user
+    const res = await apiClient.get("/jobs/my", {
+      params: { page: 0, size: 1000 },
+    }); // Get all jobs for recruiter (up to 1000)
     const maybeData = res.data?.data || res.data;
     return maybeData?.content || maybeData;
   },
-
 
   searchJobs: async (searchParams) => {
     // searchParams: { status?, keyword?, jobType?, workMode?, locationCity?, page?, size? }
@@ -49,21 +50,21 @@ export const jobsApi = {
 
   // Applicant only - Saved Jobs
   getSavedJobs: async () => {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
     const applicantId = user.applicantId || user.userId;
     const res = await apiClient.get(`/jobs/saved/${applicantId}`);
     return res.data?.data || res.data; // Returns Array<JobResponse>
   },
 
   saveJob: async (jobId) => {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
     const applicantId = user.applicantId || user.userId;
     const res = await apiClient.post(`/jobs/${jobId}/save`, { applicantId });
     return res.data?.data || res.data;
   },
 
   unsaveJob: async (jobId) => {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
     const applicantId = user.applicantId || user.userId;
     const res = await apiClient.delete(`/jobs/${jobId}/save/${applicantId}`);
     return res.data?.data || res.data;

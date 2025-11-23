@@ -19,16 +19,18 @@ const JobListPage = () => {
   const fetchJobs = async () => {
     setLoading(true);
     try {
-      const allJobs = await jobsApi.getAllJobs(0,100); // Fetch all jobs
+      const allJobs = await jobsApi.getAllJobs(0, 100); // Fetch all jobs
       const myApplications = await applicationsApi.getMyApplications(0, 1000); // large size
 
       // Extract job IDs already applied to
       const appliedIds = myApplications?.content?.map((app) => app.jobId) || [];
       setAppliedJobIds(appliedIds);
 
-      // Filter out already applied jobs
+      // Filter out already applied jobs and non-active jobs
       const jobsToShow =
-        allJobs?.filter((job) => !appliedIds.includes(job.id)) || [];
+        allJobs?.filter(
+          (job) => job?.status === "ACTIVE" && !appliedIds.includes(job.id)
+        ) || [];
       setJobs(jobsToShow);
     } catch (err) {
       console.error("Error fetching jobs:", err);
@@ -51,7 +53,6 @@ const JobListPage = () => {
         job.company?.toLowerCase().includes(term);
       return matchesSearch;
     }) || [];
-
 
   const handleApply = async (job) => {
     if (!user?.applicantId) {

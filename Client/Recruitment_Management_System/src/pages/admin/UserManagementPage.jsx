@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { usersApi } from '../../api/endpoints/users.api';
 import Header from '../../components/organisms/Header/Header';
+import { applicationsApi } from '../../api/endpoints/applications.api';
+
 
 const UserManagementPage = () => {
   const [applicants, setApplicants] = useState([]);
@@ -12,7 +13,7 @@ const UserManagementPage = () => {
 
   const fetchApplicants = async () => {
     try {
-      const response = await usersApi.getApplicants();
+      const response = await applicationsApi.getApplicants();
       setApplicants(response.data);
     } catch (error) {
       console.error('Error fetching applicants:', error);

@@ -5,7 +5,6 @@ const FeatureCard = ({
   image,
   title,
   description,
-  actionText = "Learn More",
   actionHref = "#",
 }) => {
   // Resolve image path: allow passing either a full path (starting with '/' or 'http')
@@ -24,6 +23,8 @@ const FeatureCard = ({
 
   const imageSrc = resolveImage(image);
 
+  
+
   return (
     <div className="feature-card">
       <div className="feature-image">
@@ -36,10 +37,10 @@ const FeatureCard = ({
           <span className="feature-title">{title}</span>
         </a>
         <p className="feature-desc">{description}</p>
-        <a className="feature-action" href={actionHref}>
+        {/* <a className="feature-action" href={actionHref}>
           {actionText}
           <span aria-hidden="true">→</span>
-        </a>
+        </a> */}
       </div>
     </div>
   );

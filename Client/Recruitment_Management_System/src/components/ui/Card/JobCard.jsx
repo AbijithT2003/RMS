@@ -20,15 +20,17 @@ const JobCard = ({
     : job.applications?.content || [];
 
   const isClosed = job.status !== "ACTIVE";
+  // For recruiters, don't show closed state since they can edit job status
+  const showClosedState = !isRecruiter && isClosed;
 
   return (
-    <div className={`job-card ${isClosed ? "closed-job" : ""}`}>
+    <div className={`job-card ${showClosedState ? "closed-job" : ""}`}>
       <div className="job-header">
         <h3 className="job-title">{job.title}</h3>
         <span className={`job-type ${job.type?.toLowerCase()}`}>
           {job.type?.replace("_", " ")}
         </span>
-        {isClosed && <span className="job-closed-badge">Closed</span>}
+        {showClosedState && <span className="job-closed-badge">Closed</span>}
       </div>
 
       <div className="job-details">

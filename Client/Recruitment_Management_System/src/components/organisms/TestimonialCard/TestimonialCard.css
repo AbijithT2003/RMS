@@ -17,10 +17,10 @@
   height: 100%;
 }
 
-.testimonial-card:hover {
+/* .testimonial-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 12px 40px rgba(2, 6, 23, 0.1);
-}
+} */
 
 .testimonial-image {
   width: 72px;

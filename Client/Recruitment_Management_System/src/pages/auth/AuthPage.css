@@ -64,7 +64,7 @@
   max-width: 100%;
 }
 
-/* Mode-specific visual emphasis */
+/* Mode-specific visual emphasis
 .auth-page.mode-login .auth-form-container {
   box-shadow: 0 10px 36px rgba(37, 38, 87, 0.18);
   border-left: 6px solid var(--accent-primary);
@@ -75,28 +75,24 @@
   filter: grayscale(10%);
   transform: translateY(0);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
-}
+} */
 
-.auth-page.mode-register .auth-showcase {
+/* .auth-page.mode-register .auth-showcase {
   box-shadow: 0 18px 60px rgba(37, 38, 87, 0.18);
   border-left: 6px solid var(--accent-hover);
   transform: translateY(-4px);
-}
+} */
 
-.auth-page.mode-register .auth-form-container {
+/* .auth-page.mode-register .auth-form-container {
   opacity: 0.95;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
   border: 1px solid rgba(0, 0, 0, 0.04);
-}
+} */
 
 /* Make submit button more vibrant on register to draw attention */
 .auth-page.mode-register .auth-submit {
-  background: linear-gradient(
-    90deg,
-    var(--accent-primary),
-    var(--accent-hover)
-  );
-  box-shadow: 0 10px 30px rgba(37, 38, 87, 0.18);
+   background: var(--accent-primary);
+  box-shadow: 0 6px 18px rgba(37, 38, 87, 0.12);
 }
 
 /* Slightly mute submit for login so users focus on entering credentials */
@@ -266,7 +262,7 @@
   background: var(--bg-secondary);
   border-radius: 1rem;
   padding: 2.5rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   border: 1px solid rgba(0, 0, 0, 0.05);
   position: relative;
   overflow: hidden;
@@ -281,11 +277,11 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(
+  /* background: linear-gradient(
     90deg,
     var(--accent-primary),
     var(--accent-hover)
-  );
+  ); */
 }
 
 .showcase-content {
@@ -332,12 +328,16 @@
   backdrop-filter: blur(10px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   position: relative; /* ensure internal positioning is relative */
+  text-decoration: none;
+  color: inherit;
 }
 
 .showcase-card:hover {
   transform: translateY(-4px) scale(1.02);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
   background: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  color: inherit;
 }
 
 .showcase-icon {

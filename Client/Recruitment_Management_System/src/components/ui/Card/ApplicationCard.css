@@ -1,18 +1,19 @@
 .application-card {
   background: var(--card-bg);
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  transition: transform 200ms ease, box-shadow 200ms ease;
+  transition: all 0.2s ease;
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
 .application-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(2, 6, 23, 0.08);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: var(--primary-color, #667eea);
 }
 
 .application-header {
@@ -24,6 +25,7 @@
 
 .applicant-info {
   flex: 1;
+  min-width: 0;
 }
 
 .applicant-name {
@@ -31,12 +33,14 @@
   font-size: 1.1rem;
   font-weight: 600;
   margin: 0 0 4px 0;
+  word-break: break-word;
 }
 
 .job-title {
   color: rgba(0, 0, 0, 0.6);
   font-size: 0.9rem;
   margin: 0;
+  word-break: break-word;
 }
 
 .status-badge {
@@ -47,6 +51,7 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .status-badge.pending {
@@ -91,45 +96,88 @@
 
 .applied-date i,
 .applicant-email i {
-  color: var(--accent-primary);
+  color: var(--accent-primary, #667eea);
   width: 14px;
+  flex-shrink: 0;
 }
 
 .application-actions {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
-  align-items: center;
-  padding-top: 8px;
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  align-items: stretch;
+  padding-top: 12px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  margin-top: auto;
 }
 
 .application-actions button {
   flex: 1;
-  min-width: fit-content;
+  min-width: 80px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
 }
 
 @media (max-width: 768px) {
   .application-card {
     padding: 16px;
   }
-  
+
   .application-header {
     flex-direction: column;
     align-items: flex-start;
+    gap: 10px;
   }
-  
+
+  .status-badge {
+    align-self: flex-start;
+  }
+
   .application-meta {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
   }
-  
+
   .application-actions {
     flex-direction: column;
+    gap: 10px;
   }
-  
+
   .application-actions button {
     width: 100%;
+    min-width: unset;
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .application-card {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .applicant-name {
+    font-size: 1rem;
+  }
+
+  .job-title {
+    font-size: 0.85rem;
+  }
+
+  .application-actions button {
+    padding: 8px 10px;
+    font-size: 0.8rem;
   }
 }

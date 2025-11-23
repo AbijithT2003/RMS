@@ -1,14 +1,13 @@
-import React from 'react';
-import Breadcrumb from './Breadcrumb';
-import './DashboardView.css';
+import React from "react";
+import Breadcrumb from "./Breadcrumb";
+import "./DashboardView.css";
 
-const DashboardView = ({ breadcrumbs, children }) => {
+const DashboardView = ({ title, breadcrumbs, children }) => {
   return (
     <div className="dashboard-view">
       {breadcrumbs && <Breadcrumb items={breadcrumbs} />}
-      <div className="dashboard-view-content">
-        {children}
-      </div>
+      {title && <h1 className="dashboard-view-title">{title}</h1>}
+      <div className="dashboard-view-content">{children}</div>
     </div>
   );
 };

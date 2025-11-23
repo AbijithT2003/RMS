@@ -79,25 +79,105 @@ const AuthPage = () => {
 
   // Split showcase companies into two sets so the showcase grid matches the form height
   const companiesLogin = [
-    { name: "Google", positions: "312 open positions", color: "#4285F4" },
-    { name: "Microsoft", positions: "185 open positions", color: "#2B7CD3" },
-    { name: "Amazon", positions: "420 open positions", color: "#FF9900" },
-    { name: "Meta", positions: "96 open positions", color: "#1877F2" },
-    { name: "Netflix", positions: "38 open positions", color: "#E50914" },
-    { name: "Apple", positions: "74 open positions", color: "#A2AAAD" },
+    {
+      name: "Google",
+      positions: "312 open positions",
+      color: "#4285F4",
+      url: "https://www.google.com/careers",
+    },
+    {
+      name: "Microsoft",
+      positions: "185 open positions",
+      color: "#2B7CD3",
+      url: "https://careers.microsoft.com",
+    },
+    {
+      name: "Amazon",
+      positions: "420 open positions",
+      color: "#FF9900",
+      url: "https://www.amazon.jobs",
+    },
+    {
+      name: "Meta",
+      positions: "96 open positions",
+      color: "#1877F2",
+      url: "https://www.metacareers.com",
+    },
+    {
+      name: "Netflix",
+      positions: "38 open positions",
+      color: "#E50914",
+      url: "https://www.netflix.com/careers",
+    },
+    {
+      name: "Apple",
+      positions: "74 open positions",
+      color: "#A2AAAD",
+      url: "https://www.apple.com/careers",
+    },
   ];
 
   const companiesRegister = [
-    { name: "Google", positions: "312 open positions", color: "#4285F4" },
-    { name: "Microsoft", positions: "185 open positions", color: "#2B7CD3" },
-    { name: "Amazon", positions: "420 open positions", color: "#FF9900" },
-    { name: "Meta", positions: "96 open positions", color: "#1877F2" },
-    { name: "Netflix", positions: "38 open positions", color: "#E50914" },
-    { name: "Apple", positions: "74 open positions", color: "#A2AAAD" },
-    { name: "LinkedIn", positions: "58 open positions", color: "#0077B5" },
-    { name: "Adobe", positions: "67 open positions", color: "#FF0000" },
-    { name: "IBM", positions: "102 open positions", color: "#0530AD" },
-    { name: "Salesforce", positions: "89 open positions", color: "#00A1E0" },
+    {
+      name: "Google",
+      positions: "312 open positions",
+      color: "#4285F4",
+      url: "https://www.google.com/careers",
+    },
+    {
+      name: "Microsoft",
+      positions: "185 open positions",
+      color: "#2B7CD3",
+      url: "https://careers.microsoft.com",
+    },
+    {
+      name: "Amazon",
+      positions: "420 open positions",
+      color: "#FF9900",
+      url: "https://www.amazon.jobs",
+    },
+    {
+      name: "Meta",
+      positions: "96 open positions",
+      color: "#1877F2",
+      url: "https://www.metacareers.com",
+    },
+    {
+      name: "Netflix",
+      positions: "38 open positions",
+      color: "#E50914",
+      url: "https://www.netflix.com/careers",
+    },
+    {
+      name: "Apple",
+      positions: "74 open positions",
+      color: "#A2AAAD",
+      url: "https://www.apple.com/careers",
+    },
+    {
+      name: "LinkedIn",
+      positions: "58 open positions",
+      color: "#0077B5",
+      url: "https://www.linkedin.com/careers",
+    },
+    {
+      name: "Adobe",
+      positions: "67 open positions",
+      color: "#FF0000",
+      url: "https://www.adobe.com/careers",
+    },
+    {
+      name: "IBM",
+      positions: "102 open positions",
+      color: "#0530AD",
+      url: "https://www.ibm.com/careers",
+    },
+    {
+      name: "Salesforce",
+      positions: "89 open positions",
+      color: "#00A1E0",
+      url: "https://www.salesforce.com/company/careers",
+    },
   ];
 
   const companiesToShow = isLogin ? companiesLogin : companiesRegister;
@@ -248,7 +328,13 @@ const AuthPage = () => {
 
               <div className="showcase-grid">
                 {companiesToShow.map((c, i) => (
-                  <div className="showcase-card" key={i}>
+                  <a
+                    href={c.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="showcase-card"
+                    key={i}
+                  >
                     <div
                       className="showcase-icon"
                       style={{ backgroundColor: c.color }}
@@ -259,7 +345,7 @@ const AuthPage = () => {
                       <h3 className="showcase-company">{c.name}</h3>
                       <p className="showcase-positions">{c.positions}</p>
                     </div>
-                  </div>
+                  </a>
                 ))}
               </div>
             </div>

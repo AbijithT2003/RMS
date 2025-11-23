@@ -1,27 +1,32 @@
-import React from 'react';
-import Header from '../organisms/Header/Header';
-import LoadingSpinner from './LoadingSpinner';
-import ErrorMessage from './ErrorMessage';
-import './PageLayout.css';
+import React from "react";
+import Header from "../organisms/Header/Header";
+import LoadingSpinner from "./LoadingSpinner";
+import ErrorMessage from "./ErrorMessage";
+import "./PageLayout.css";
 
-const PageLayout = ({ 
-  children, 
-  title, 
-  loading = false, 
-  error = null, 
+const PageLayout = ({
+  children,
+  title,
+  loading = false,
+  error = null,
   onRetry = null,
   navigationItems = [],
   showAuthButtons = false,
-  hideHeader = false
+  hideHeader = false,
 }) => {
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage error={error} onRetry={onRetry} />;
 
   return (
     <div>
-      {!hideHeader && <Header navigationItems={navigationItems} showAuthButtons={showAuthButtons} />}
+      {!hideHeader && (
+        <Header
+          navigationItems={navigationItems}
+          showAuthButtons={showAuthButtons}
+        />
+      )}
       <div className="page-layout-container">
-        {title && !hideHeader && <h1>{title}</h1>}
+        {title && !hideHeader && <h1 className="panel-title">{title}</h1>}
         {children}
       </div>
     </div>

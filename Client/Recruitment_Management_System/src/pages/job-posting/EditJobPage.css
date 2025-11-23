@@ -1,0 +1,59 @@
+.edit-job-page {
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.edit-job-loading,
+.edit-job-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  min-height: 300px;
+}
+
+.edit-job-loading i,
+.edit-job-error i {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  color: var(--text-secondary);
+}
+
+.edit-job-loading i {
+  color: var(--primary-color);
+  animation: spin 1s linear infinite;
+}
+
+.edit-job-error i {
+  color: #dc2626;
+}
+
+.edit-job-loading p,
+.edit-job-error p {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.edit-job-error .btn {
+  margin-top: 16px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .edit-job-loading,
+  .edit-job-error {
+    padding: 40px 16px;
+    min-height: 200px;
+  }
+}

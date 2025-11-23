@@ -1,0 +1,172 @@
+:root {
+  /* Font stack */
+  --font-sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+
+  /* Font weights */
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  /* Type scale */
+  --type-xxs: 0.6875rem; /* 11px */
+  --type-xs: 0.75rem; /* 12px */
+  --type-sm: 0.875rem; /* 14px */
+  --type-base: 1rem; /* 16px */
+  --type-lg: 1.125rem; /* 18px */
+  --type-xl: 1.25rem; /* 20px */
+  --type-2xl: 1.5rem; /* 24px */
+  --type-3xl: 1.875rem; /* 30px */
+  --type-4xl: 2.25rem; /* 36px */
+  --type-5xl: 3rem; /* 48px */
+
+  /* Line heights */
+  --leading-tight: 1.1;
+  --leading-snug: 1.25;
+  --leading-normal: 1.5;
+  --leading-loose: 1.75;
+
+  /* Colors (depend on project palettes) */
+  --muted: #6b7280;
+  --text-default: #111827;
+  --heading-default: #0f172a;
+}
+
+/* Base typography */
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--type-base);
+  line-height: var(--leading-normal);
+  color: var(--text-default);
+}
+
+/* Headings: establish clear hierarchy */
+h1 {
+  font-size: var(--type-5xl);
+  line-height: var(--leading-tight);
+  margin: 0 0 0.5rem;
+  color: var(--heading-default);
+}
+h2 {
+  font-size: var(--type-4xl);
+  line-height: var(--leading-tight);
+  margin: 0 0 0.5rem;
+  color: var(--heading-default);
+}
+h3 {
+  font-size: var(--type-3xl);
+  line-height: var(--leading-snug);
+  margin: 0 0 0.5rem;
+  color: var(--heading-default);
+}
+h4 {
+  font-size: var(--type-2xl);
+  line-height: var(--leading-snug);
+  margin: 0 0 0.5rem;
+  color: var(--heading-default);
+}
+h5 {
+  font-size: var(--type-xl);
+  line-height: var(--leading-normal);
+  margin: 0 0 0.5rem;
+  color: var(--heading-default);
+}
+h6 {
+  font-size: var(--type-lg);
+  line-height: var(--leading-normal);
+  margin: 0 0 0.5rem;
+  color: var(--heading-default);
+}
+
+/* Utility text classes */
+.lead {
+  font-size: var(--type-lg);
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+}
+.muted {
+  color: var(--muted);
+}
+.small {
+  font-size: var(--type-sm);
+}
+.caps {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.text-quiet {
+  color: var(--muted);
+}
+
+/* Font weight utilities */
+.fw-regular {
+  font-weight: var(--fw-regular);
+}
+.fw-medium {
+  font-weight: var(--fw-medium);
+}
+.fw-semibold {
+  font-weight: var(--fw-semibold);
+}
+.fw-bold {
+  font-weight: var(--fw-bold);
+}
+
+/* Component helper classes for a consistent hierarchy */
+.card-title {
+  font-size: var(--type-xl);
+  font-weight: var(--fw-semibold);
+  margin: 0 0 0.5rem;
+}
+.card-body {
+  font-size: var(--type-base);
+  color: var(--muted);
+}
+.panel-title {
+  font-size: var(--type-2xl);
+  font-weight: var(--fw-semibold);
+}
+.form-label {
+  display: block;
+  font-size: var(--type-sm);
+  font-weight: var(--fw-medium);
+  margin-bottom: 0.25rem;
+}
+.form-input {
+  font-size: var(--type-base);
+}
+
+/* Small responsive tweak: scale headings slightly on small screens */
+@media (max-width: 640px) {
+  h1 {
+    font-size: var(--type-4xl);
+  }
+  h2 {
+    font-size: var(--type-3xl);
+  }
+  h3 {
+    font-size: var(--type-2xl);
+  }
+}
+
+/* Convenience spacing classes (kept minimal) */
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+.mb-3 {
+  margin-bottom: 1rem;
+}
+.mb-4 {
+  margin-bottom: 1.5rem;
+}

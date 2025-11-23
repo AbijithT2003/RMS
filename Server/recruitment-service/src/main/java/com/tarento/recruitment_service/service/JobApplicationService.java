@@ -214,4 +214,11 @@ public class JobApplicationService {
         
         return response;
     }
+
+    public void deleteApplication(@NonNull UUID applicationId) {
+        JobApplication application = jobApplicationRepository.findById(applicationId)
+                .orElseThrow(() -> new ResourceNotFoundException("Application not found with id: " + applicationId));
+        
+        jobApplicationRepository.delete(application);
+    }
 }
