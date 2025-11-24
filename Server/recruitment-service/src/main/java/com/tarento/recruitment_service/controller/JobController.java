@@ -102,6 +102,22 @@ public class JobController {
         return ResponseEntity.ok(ApiResponse.success(job));
     }
 
+    @PostMapping
+    @PreAuthorize("hasRole('RECRUITER') or hasRole('ADMIN')")
+    @Operation(summary = "Create a new job", description = "Creates a new job posting")
+    public ResponseEntity<ApiResponse<JobResponse>> createJob(
+            @RequestHeader("Authorization") String authHeader,
+            @Valid @RequestBody CreateJobRequest request) {
+        
+        String token = authHeader.replace("Bearer ", "").trim();
+        String email = jwtService.extractUsername(token);
+        UserResponse userResponse = userService.getUserByValue(email);
+        
+        JobResponse response = jobService.createJob(userResponse.getId(), request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success("Job created successfully", response));
+    }
+
     @PostMapping("/{jobId}/save")
     @PreAuthorize("hasRole('CANDIDATE') or hasRole('APPLICANT')")
     @Operation(summary = "Save a job", description = "Saves a job for the applicant")
