@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "../organisms/Header/Header";
+import Header from "../Header/Header";
 import LoadingSpinner from "./LoadingSpinner";
 import ErrorMessage from "./ErrorMessage";
 import "./PageLayout.css";

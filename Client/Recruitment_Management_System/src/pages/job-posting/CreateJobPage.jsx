@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import CreateJobForm from '../../components/ui/Form/CreateJobForm';
-import './CreateJobPage.css';
+import React, { useState } from "react";
+import CreateJobForm from "../../components/Form/CreateJobForm";
+import "./CreateJobPage.css";
 import { jobsApi } from "../../api/endpoints/jobs.api";
 
 const CreateJobPage = ({ onNavigate }) => {

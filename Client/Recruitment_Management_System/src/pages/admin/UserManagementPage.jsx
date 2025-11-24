@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import Header from '../../components/organisms/Header/Header';
-import { applicationsApi } from '../../api/endpoints/applications.api';
-
+import React, { useState, useEffect } from "react";
+import Header from "../../components/Header/Header";
+import { applicationsApi } from "../../api/endpoints/applications.api";
 
 const UserManagementPage = () => {
   const [applicants, setApplicants] = useState([]);
@@ -16,7 +15,7 @@ const UserManagementPage = () => {
       const response = await applicationsApi.getApplicants();
       setApplicants(response.data);
     } catch (error) {
-      console.error('Error fetching applicants:', error);
+      console.error("Error fetching applicants:", error);
     } finally {
       setLoading(false);
     }
@@ -29,7 +28,7 @@ const UserManagementPage = () => {
       <Header />
       <div className="container">
         <h1>User Management</h1>
-        
+
         <div className="users-table">
           <table>
             <thead>
@@ -42,12 +41,16 @@ const UserManagementPage = () => {
               </tr>
             </thead>
             <tbody>
-              {applicants.map(applicant => (
+              {applicants.map((applicant) => (
                 <tr key={applicant.id}>
-                  <td>{applicant.firstName} {applicant.lastName}</td>
+                  <td>
+                    {applicant.firstName} {applicant.lastName}
+                  </td>
                   <td>{applicant.email}</td>
                   <td>{applicant.phone}</td>
-                  <td>{new Date(applicant.createdDate).toLocaleDateString()}</td>
+                  <td>
+                    {new Date(applicant.createdDate).toLocaleDateString()}
+                  </td>
                   <td>{applicant.status}</td>
                 </tr>
               ))}

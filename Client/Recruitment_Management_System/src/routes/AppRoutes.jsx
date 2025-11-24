@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import ProtectedRoute from "../components/ProtectedRoute";
+import ProtectedRoute from "./ProtectedRoute";
 import {
   JobListPage,
   MyApplicationsPage,
@@ -193,8 +193,6 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-
-      
 
       {/* ========== ADMIN ROUTES ========== */}
       <Route

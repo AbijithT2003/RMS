@@ -3,8 +3,8 @@ import { jobsApi } from "../../api/endpoints/jobs.api";
 import { applicationsApi } from "../../api/endpoints/applications.api";
 import { useAuth } from "../../api/context/AuthContext";
 import PageLayout from "../../components/common/PageLayout";
-import Button from "../../components/atoms/Button/Button";
-import JobCard from "../../components/ui/Card/JobCard";
+import Button from "../../components/Button/Button";
+import JobCard from "../../components/Card/JobCard";
 import "./JobListPage.css";
 
 const JobListPage = () => {
@@ -40,10 +40,10 @@ const JobListPage = () => {
       setLoading(false);
     }
   };
-const fetchSavedJobs = async () => {
-  const saved = await jobsApi.getSavedJobs();
-  setSavedJobIds(saved.map((job) => job.id));
-};
+  const fetchSavedJobs = async () => {
+    const saved = await jobsApi.getSavedJobs();
+    setSavedJobIds(saved.map((job) => job.id));
+  };
 
   useEffect(() => {
     fetchJobs();
@@ -69,7 +69,7 @@ const fetchSavedJobs = async () => {
     if (job.status !== "ACTIVE") {
       alert(`Applications for "${job.title}" are closed.`);
       return;
-    }  
+    }
 
     try {
       const request = {
@@ -92,12 +92,12 @@ const fetchSavedJobs = async () => {
     }
   };
 
-  const handlesave= async(jobId)=>{
-    try{await jobsApi.saveJob(jobId);
-      setSavedJobIds((prev)=>[...prev,jobId]);
+  const handlesave = async (jobId) => {
+    try {
+      await jobsApi.saveJob(jobId);
+      setSavedJobIds((prev) => [...prev, jobId]);
       alert("Job saved successfully!");
-    }
-    catch(err){
+    } catch (err) {
       console.error("Error saving job:", err);
       alert("Failed to save job. Please try again.");
     }
@@ -151,8 +151,8 @@ const fetchSavedJobs = async () => {
                 key={job.id}
                 job={job}
                 onApply={() => handleApply(job)}
-                onSave={()=> handlesave(job.id)}
-                onUnsave={()=> handleUnsave(job.id)}
+                onSave={() => handlesave(job.id)}
+                onUnsave={() => handleUnsave(job.id)}
                 isSaved={savedJobIds.includes(job.id)}
                 isRecruiter={false}
                 showActions={true}

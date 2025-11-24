@@ -1,7 +1,7 @@
 import React from "react";
 import { jobsApi } from "../../api/endpoints/jobs.api";
 import { useApi } from "../../hooks/useApi";
-import JobCard from "../../components/ui/Card/JobCard";
+import JobCard from "../../components/Card/JobCard";
 import "./SavedJobsPage.css";
 
 const SavedJobsPage = () => {
@@ -81,7 +81,6 @@ const SavedJobsPage = () => {
                 showSaveButton={false}
                 onUnsave={() => handleUnsaveJob(job.id)}
               />
-             
             </div>
           ))}
         </div>

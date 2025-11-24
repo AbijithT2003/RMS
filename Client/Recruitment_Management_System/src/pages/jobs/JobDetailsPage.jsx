@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Header from "../../components/organisms/Header/Header";
+import Header from "../../components/Header/Header";
 import "../Pages.css";
 import { jobsApi } from "../../api/endpoints/jobs.api";
 
 const JobDetailsPage = () => {
   const { id } = useParams();
   const [job, setJob] = useState(null);
-
- 
 
   useEffect(() => {
     const fetchJob = async () => {
@@ -22,7 +20,6 @@ const JobDetailsPage = () => {
     };
     fetchJob();
   }, [id]);
-
 
   if (!job)
     return (

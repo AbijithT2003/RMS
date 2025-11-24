@@ -1,10 +1,10 @@
 import React from "react";
-import DashboardContainer from "../../components/DashboardContainer";
-import DashboardGrid from "../../components/organisms/DashboardGrid/DashboardGrid";
+import DashboardContainer from "./DashboardContainer";
+import DashboardGrid from "../../components/DashboardGrid/DashboardGrid";
 import DashboardView from "../../components/common/DashboardView";
-import StatsCard from "../../components/ui/StatsCard/StatsCard";
-import PipelineCard from "../../components/ui/PipelineCard/PipelineCard";
-import TimelineItem from "../../components/ui/TimelineItem/TimelineItem";
+import StatsCard from "../../components/StatsCard/StatsCard";
+import PipelineCard from "../../components/PipelineCard/PipelineCard";
+import TimelineItem from "../../components/TimelineItem/TimelineItem";
 import {
   ManageJobsPage,
   CreateJobPage,

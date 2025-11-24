@@ -1,28 +1,28 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import PageLayout from '../../components/common/PageLayout';
-import FormField from '../../components/common/FormField';
-import Button from '../../components/atoms/Button/Button';
-import './EditProfilePage.css';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import PageLayout from "../../components/common/PageLayout";
+import FormField from "../../components/common/FormField";
+import Button from "../../components/Button/Button";
+import "./EditProfilePage.css";
 
 const EditProfilePage = () => {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
-  
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+
   const [formData, setFormData] = useState({
-    firstName: user.firstName || '',
-    lastName: user.lastName || '',
-    email: user.email || '',
-    phone: user.phone || '',
-    location: user.location || ''
+    firstName: user.firstName || "",
+    lastName: user.lastName || "",
+    email: user.email || "",
+    phone: user.phone || "",
+    location: user.location || "",
   });
-  
+
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -31,10 +31,10 @@ const EditProfilePage = () => {
     setLoading(true);
     try {
       // API call to update profile
-      localStorage.setItem('user', JSON.stringify({ ...user, ...formData }));
+      localStorage.setItem("user", JSON.stringify({ ...user, ...formData }));
       navigate(-1);
     } catch (error) {
-      console.error('Error updating profile:', error);
+      console.error("Error updating profile:", error);
     } finally {
       setLoading(false);
     }
@@ -50,7 +50,7 @@ const EditProfilePage = () => {
           onChange={handleChange}
           required
         />
-        
+
         <FormField
           label="Last Name"
           name="lastName"
@@ -58,7 +58,7 @@ const EditProfilePage = () => {
           onChange={handleChange}
           required
         />
-        
+
         <FormField
           label="Email"
           type="email"
@@ -67,24 +67,24 @@ const EditProfilePage = () => {
           onChange={handleChange}
           required
         />
-        
+
         <FormField
           label="Phone"
           name="phone"
           value={formData.phone}
           onChange={handleChange}
         />
-        
+
         <FormField
           label="Location"
           name="location"
           value={formData.location}
           onChange={handleChange}
         />
-        
+
         <div className="form-actions">
           <Button type="submit" disabled={loading}>
-            {loading ? 'Saving...' : 'Save Changes'}
+            {loading ? "Saving..." : "Save Changes"}
           </Button>
           <Button type="button" onClick={() => navigate(-1)}>
             Cancel

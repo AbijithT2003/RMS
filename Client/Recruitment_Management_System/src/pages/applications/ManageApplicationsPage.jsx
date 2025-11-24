@@ -1,21 +1,17 @@
-import React, { useState } from 'react';
-import { applicationsApi } from '../../api/endpoints/applications.api';
-import { useApi } from '../../hooks/useApi';
-import ApplicationCard from '../../components/ui/Card/ApplicationCard';
-import './ManageApplicationsPage.css';
+import React, { useState } from "react";
+import { applicationsApi } from "../../api/endpoints/applications.api";
+import { useApi } from "../../hooks/useApi";
+import ApplicationCard from "../../components/Card/ApplicationCard";
+import "./ManageApplicationsPage.css";
 
 const ManageApplicationsPage = () => {
-  const {
-    data,
-    loading,
-    error,
-    refetch,
-  } = useApi(() => applicationsApi.getApplications());
+  const { data, loading, error, refetch } = useApi(() =>
+    applicationsApi.getApplications()
+  );
   const [selectedJob, setSelectedJob] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [applicationDetails, setApplicationDetails] = useState(null);
-
 
   const applicationsArray = Array.isArray(data)
     ? data
@@ -29,7 +25,7 @@ const ManageApplicationsPage = () => {
     return acc;
   }, {});
 
-  const filteredApplications =
+  let filteredApplications =
     selectedJob === "all"
       ? applicationsArray
       : groupedApplications[selectedJob] || [];
@@ -41,49 +37,47 @@ const ManageApplicationsPage = () => {
     );
   }
 
- const updateStatus = async (id, status) => {
-   try {
-     await applicationsApi.updateApplicationStatus(id, status);
-     refetch();
-   } catch (error) {
-     console.error("Error updating status:", error);
-   }
- };
+  const updateStatus = async (id, status) => {
+    try {
+      await applicationsApi.updateApplicationStatus(id, status);
+      refetch();
+    } catch (error) {
+      console.error("Error updating status:", error);
+    }
+  };
 
- const handleViewDetails = async (applicationId) => {
-   try {
-     const app = await applicationsApi.getApplicationById(applicationId);
+  const handleViewDetails = async (applicationId) => {
+    try {
+      const app = await applicationsApi.getApplicationById(applicationId);
 
-     // fetch applicant details
-     const applicant = await applicationsApi.getApplicantById(app.applicantId);
+      // fetch applicant details
+      const applicant = await applicationsApi.getApplicantById(app.applicantId);
 
-     // fetch job details
-     const job = await applicationsApi.getJobById(app.jobId);
+      // fetch job details
+      const job = await applicationsApi.getJobById(app.jobId);
 
-     // merge everything into one object
-     const fullDetails = {
-       ...app,
-       applicant,
-       job,
-     };
+      // merge everything into one object
+      const fullDetails = {
+        ...app,
+        applicant,
+        job,
+      };
 
-     setApplicationDetails(fullDetails);
-     setShowDetailsModal(true);
-   } catch (err) {
-     console.error("Error loading full application details:", err);
-   }
- };
+      setApplicationDetails(fullDetails);
+      setShowDetailsModal(true);
+    } catch (err) {
+      console.error("Error loading full application details:", err);
+    }
+  };
 
-
- const formatDate = (dateString) => {
-   if (!dateString) return "N/A";
-   return new Date(dateString).toLocaleDateString("en-IN", {
-     year: "numeric",
-     month: "short",
-     day: "numeric",
-   });
- };
-
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    return new Date(dateString).toLocaleDateString("en-IN", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
 
   if (loading) {
     return (

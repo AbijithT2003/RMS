@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../../atoms/Button/Button";
+import Button from "../Button/Button";
 import "./ConfirmDialog.css";
 
 const ConfirmDialog = ({

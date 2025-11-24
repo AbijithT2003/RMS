@@ -1,9 +1,9 @@
-import DashboardContainer from "../../components/DashboardContainer";
-import DashboardGrid from "../../components/organisms/DashboardGrid/DashboardGrid";
+import DashboardContainer from "./DashboardContainer";
+import DashboardGrid from "../../components/DashboardGrid/DashboardGrid";
 import DashboardView from "../../components/common/DashboardView";
-import StatsCard from "../../components/ui/StatsCard/StatsCard";
-import AlertCard from "../../components/ui/AlertCard/AlertCard";
-import ApplicationJourney from "../../components/ui/ApplicationJourney/ApplicationJourney";
+import StatsCard from "../../components/StatsCard/StatsCard";
+import AlertCard from "../../components/AlertCard/AlertCard";
+import ApplicationJourney from "../../components/ApplicationJourney/ApplicationJourney";
 import {
   JobListPage,
   MyApplicationsPage,

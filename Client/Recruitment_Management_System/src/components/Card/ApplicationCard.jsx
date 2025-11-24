@@ -1,20 +1,25 @@
-import React from 'react';
-import Button from '../../atoms/Button/Button';
-import './ApplicationCard.css';
+import React from "react";
+import Button from "../Button/Button";
+import "./ApplicationCard.css";
 
-const ApplicationCard = ({ 
-  application, 
-  onUpdateStatus, 
+const ApplicationCard = ({
+  application,
+  onUpdateStatus,
   onViewDetails,
-  showActions = true 
+  showActions = true,
 }) => {
   const getStatusColor = (status) => {
     switch (status?.toLowerCase()) {
-      case 'pending': return 'pending';
-      case 'reviewed': return 'reviewed';
-      case 'accepted': return 'accepted';
-      case 'rejected': return 'rejected';
-      default: return 'pending';
+      case "pending":
+        return "pending";
+      case "reviewed":
+        return "reviewed";
+      case "accepted":
+        return "accepted";
+      case "rejected":
+        return "rejected";
+      default:
+        return "pending";
     }
   };
 
@@ -47,28 +52,28 @@ const ApplicationCard = ({
 
       {showActions && (
         <div className="application-actions">
-          <Button 
-            variant="secondary" 
+          <Button
+            variant="secondary"
             size="small"
             onClick={() => onViewDetails?.(application.id)}
           >
             <i className="fas fa-eye"></i>
             View Details
           </Button>
-          {application.status?.toLowerCase() === 'pending' && (
+          {application.status?.toLowerCase() === "pending" && (
             <>
-              <Button 
-                variant="primary" 
+              <Button
+                variant="primary"
                 size="small"
-                onClick={() => onUpdateStatus?.(application.id, 'REVIEWED')}
+                onClick={() => onUpdateStatus?.(application.id, "REVIEWED")}
               >
                 <i className="fas fa-check"></i>
                 Review
               </Button>
-              <Button 
-                variant="secondary" 
+              <Button
+                variant="secondary"
                 size="small"
-                onClick={() => onUpdateStatus?.(application.id, 'REJECTED')}
+                onClick={() => onUpdateStatus?.(application.id, "REJECTED")}
               >
                 <i className="fas fa-times"></i>
                 Reject

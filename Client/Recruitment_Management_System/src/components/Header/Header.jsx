@@ -1,9 +1,9 @@
 import React from "react";
-import Button from "../../atoms/Button/Button";
-import Dropdown from "../../molecules/Dropdown/Dropdown";
+import Button from "../Button/Button";
+import Dropdown from "../Dropdown/Dropdown";
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../../api/context/AuthContext";
+import { useAuth } from "../../api/context/AuthContext";
 
 const Header = ({
   onLogin,

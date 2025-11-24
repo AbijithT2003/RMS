@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../../atoms/Button/Button";
+import Button from "../Button/Button";
 import "./JobCard.css";
 
 const JobCard = ({
@@ -22,7 +22,6 @@ const JobCard = ({
   const applicationCount = Array.isArray(job.applications)
     ? job.applications.length
     : job.applications?.totalElements || 0;
-  
 
   const isClosed = job.status !== "ACTIVE";
   // For recruiters, don't show closed state since they can edit job status

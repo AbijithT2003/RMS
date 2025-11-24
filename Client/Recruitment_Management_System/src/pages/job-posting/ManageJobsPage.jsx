@@ -4,10 +4,10 @@ import { jobsApi } from "../../api/endpoints/jobs.api";
 import { applicationsApi } from "../../api/endpoints/applications.api";
 import { useApi } from "../../hooks/useApi";
 import DashboardView from "../../components/common/DashboardView";
-import Button from "../../components/atoms/Button/Button";
-import JobCard from "../../components/ui/Card/JobCard";
+import Button from "../../components/Button/Button";
+import JobCard from "../../components/Card/JobCard";
 import "./ManageJobsPage.css";
-import ConfirmDialog from "../../components/common/ConfirmDialog/ConfirmDialog";
+import ConfirmDialog from "../../components/ConfirmDialog/ConfirmDialog";
 
 const ManageJobsPage = () => {
   const navigate = useNavigate();

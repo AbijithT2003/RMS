@@ -1,25 +1,35 @@
-import React from 'react';
-import PageLayout from '../../components/common/PageLayout';
-import Button from '../../components/atoms/Button/Button';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import PageLayout from "../../components/common/PageLayout";
+import Button from "../../components/Button/Button";
+import { useNavigate } from "react-router-dom";
 
 const RecruiterProfilePage = () => {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   return (
     <PageLayout title="Recruiter Profile">
       <div className="profile-section">
         <div className="profile-info">
-          <h2>{user.firstName} {user.lastName}</h2>
-          <p><strong>Email:</strong> {user.email}</p>
-          <p><strong>Phone:</strong> {user.phone}</p>
-          <p><strong>Company:</strong> {user.company}</p>
-          <p><strong>Department:</strong> {user.department}</p>
+          <h2>
+            {user.firstName} {user.lastName}
+          </h2>
+          <p>
+            <strong>Email:</strong> {user.email}
+          </p>
+          <p>
+            <strong>Phone:</strong> {user.phone}
+          </p>
+          <p>
+            <strong>Company:</strong> {user.company}
+          </p>
+          <p>
+            <strong>Department:</strong> {user.department}
+          </p>
         </div>
-        
+
         <div className="profile-actions">
-          <Button onClick={() => navigate('/recruiter/profile/edit')}>
+          <Button onClick={() => navigate("/recruiter/profile/edit")}>
             Edit Profile
           </Button>
         </div>

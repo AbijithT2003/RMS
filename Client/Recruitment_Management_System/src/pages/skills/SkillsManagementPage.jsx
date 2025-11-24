@@ -1,34 +1,43 @@
-import React, { useState } from 'react';
-import { skillsApi } from '../../api/endpoints/skills.api';
-import { useApi } from '../../hooks/useApi';
-import Button from '../../components/atoms/Button/Button';
-import './SkillsManagementPage.css';
+import React, { useState } from "react";
+import { skillsApi } from "../../api/endpoints/skills.api";
+import { useApi } from "../../hooks/useApi";
+import Button from "../../components/Button/Button";
+import "./SkillsManagementPage.css";
 
 const SkillsManagementPage = () => {
-  const { data: skills, loading, error, refetch } = useApi(() => skillsApi.getSkills());
-  const [newSkill, setNewSkill] = useState({ name: '', category: '', description: '' });
-  const [searchTerm, setSearchTerm] = useState('');
+  const {
+    data: skills,
+    loading,
+    error,
+    refetch,
+  } = useApi(() => skillsApi.getSkills());
+  const [newSkill, setNewSkill] = useState({
+    name: "",
+    category: "",
+    description: "",
+  });
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleAddSkill = async (e) => {
     e.preventDefault();
     if (!newSkill.name.trim()) return;
-    
+
     try {
       await skillsApi.createSkill(newSkill);
-      setNewSkill({ name: '', category: '', description: '' });
+      setNewSkill({ name: "", category: "", description: "" });
       refetch();
     } catch (error) {
-      console.error('Error adding skill:', error);
+      console.error("Error adding skill:", error);
     }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this skill?')) {
+    if (window.confirm("Are you sure you want to delete this skill?")) {
       try {
         await skillsApi.deleteSkill(id);
         refetch();
       } catch (error) {
-        console.error('Error deleting skill:', error);
+        console.error("Error deleting skill:", error);
       }
     }
   };
@@ -59,21 +68,26 @@ const SkillsManagementPage = () => {
     );
   }
 
-  const skillsArray = Array.isArray(skills) ? skills : 
-    (skills?.content || skills?.data || []);
+  const skillsArray = Array.isArray(skills)
+    ? skills
+    : skills?.content || skills?.data || [];
 
-  const filteredSkills = skillsArray.filter(skill => 
-    skill.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    skill.category?.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredSkills = skillsArray.filter(
+    (skill) =>
+      skill.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      skill.category?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <div className="skills-container">
       <div className="skills-header">
         <h1>Skills Management</h1>
-        <p>Manage system skills that can be added to job postings and applicant profiles</p>
+        <p>
+          Manage system skills that can be added to job postings and applicant
+          profiles
+        </p>
       </div>
-      
+
       <div className="skills-actions">
         <form onSubmit={handleAddSkill} className="add-skill-form">
           <div className="form-row">
@@ -81,20 +95,26 @@ const SkillsManagementPage = () => {
               type="text"
               placeholder="Skill name..."
               value={newSkill.name}
-              onChange={(e) => setNewSkill({...newSkill, name: e.target.value})}
+              onChange={(e) =>
+                setNewSkill({ ...newSkill, name: e.target.value })
+              }
               required
             />
             <input
               type="text"
               placeholder="Category (optional)..."
               value={newSkill.category}
-              onChange={(e) => setNewSkill({...newSkill, category: e.target.value})}
+              onChange={(e) =>
+                setNewSkill({ ...newSkill, category: e.target.value })
+              }
             />
           </div>
           <textarea
             placeholder="Description (optional)..."
             value={newSkill.description}
-            onChange={(e) => setNewSkill({...newSkill, description: e.target.value})}
+            onChange={(e) =>
+              setNewSkill({ ...newSkill, description: e.target.value })
+            }
             rows="2"
           />
           <Button type="submit" variant="primary">
@@ -102,7 +122,7 @@ const SkillsManagementPage = () => {
             Add Skill
           </Button>
         </form>
-        
+
         <div className="search-skills">
           <input
             type="text"
@@ -117,16 +137,19 @@ const SkillsManagementPage = () => {
         <div className="empty-state">
           <i className="fas fa-cogs"></i>
           <h3>No Skills Found</h3>
-          <p>No skills match your search criteria or no skills have been added yet.</p>
+          <p>
+            No skills match your search criteria or no skills have been added
+            yet.
+          </p>
         </div>
       ) : (
         <div className="skills-grid">
-          {filteredSkills.map(skill => (
+          {filteredSkills.map((skill) => (
             <div key={skill.id} className="skill-card">
               <div className="skill-header">
                 <h3>{skill.name}</h3>
-                <button 
-                  onClick={() => handleDelete(skill.id)} 
+                <button
+                  onClick={() => handleDelete(skill.id)}
                   className="delete-btn"
                   title="Delete skill"
                 >

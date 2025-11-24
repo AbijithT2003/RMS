@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { jobsApi } from "../../api/endpoints/jobs.api";
 import DashboardView from "../../components/common/DashboardView";
-import EditJobForm from "../../components/ui/Form/EditJobForm";
+import EditJobForm from "../../components/Form/EditJobForm";
 import "./EditJobPage.css";
-import Button from "../../components/atoms/Button/Button";
+import Button from "../../components/Button/Button";
 
 const EditJobPage = () => {
   const { id } = useParams();
