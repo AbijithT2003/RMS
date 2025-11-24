@@ -81,16 +81,7 @@ const SavedJobsPage = () => {
                 showSaveButton={false}
                 onUnsave={() => handleUnsaveJob(job.id)}
               />
-              <div className="saved-job-actions">
-                <button
-                  className="unsave-btn"
-                  onClick={() => handleUnsaveJob(job.id)}
-                  title="Remove from saved jobs"
-                >
-                  <i className="fas fa-heart-broken"></i>
-                  Remove
-                </button>
-              </div>
+             
             </div>
           ))}
         </div>

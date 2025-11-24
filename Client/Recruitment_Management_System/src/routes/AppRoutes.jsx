@@ -216,7 +216,7 @@ const AppRoutes = () => {
       <Route
         path="/admin/skills"
         element={
-          <ProtectedRoute allowedRoles={["ADMIN"]}>
+          <ProtectedRoute allowedRoles={["ADMIN", "RECRUITER", "APPLICANT"]}>
             <SkillsManagementPage />
           </ProtectedRoute>
         }

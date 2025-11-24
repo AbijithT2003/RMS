@@ -17,6 +17,9 @@ export default defineConfig({
     }
   })],
   server: {
+    host: true,
+    strictPort: true,
+    port: 5173,
     proxy: {
       '/api': {
         target: 'http://localhost:8080',
@@ -26,6 +29,13 @@ export default defineConfig({
       }
     }
   },
+
+  hmr: {
+    protocol: 'ws',
+    host: 'localhost',
+    port: 5173,
+  },
+
   test: {
     projects: [{
       extends: true,

@@ -14,6 +14,7 @@ const JobListPage = () => {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState([]);
   const [_appliedJobIds, setAppliedJobIds] = useState([]);
+  const [savedJobIds, setSavedJobIds] = useState([]);
 
   // Fetch all jobs and user's applied jobs
   const fetchJobs = async () => {
@@ -39,9 +40,14 @@ const JobListPage = () => {
       setLoading(false);
     }
   };
+const fetchSavedJobs = async () => {
+  const saved = await jobsApi.getSavedJobs();
+  setSavedJobIds(saved.map((job) => job.id));
+};
 
   useEffect(() => {
     fetchJobs();
+    fetchSavedJobs();
   }, []);
 
   const filteredJobs =
@@ -63,7 +69,7 @@ const JobListPage = () => {
     if (job.status !== "ACTIVE") {
       alert(`Applications for "${job.title}" are closed.`);
       return;
-    }
+    }  
 
     try {
       const request = {
@@ -83,6 +89,28 @@ const JobListPage = () => {
     } catch (err) {
       console.error("Error applying to job:", err);
       alert("Failed to apply. Please try again.");
+    }
+  };
+
+  const handlesave= async(jobId)=>{
+    try{await jobsApi.saveJob(jobId);
+      setSavedJobIds((prev)=>[...prev,jobId]);
+      alert("Job saved successfully!");
+    }
+    catch(err){
+      console.error("Error saving job:", err);
+      alert("Failed to save job. Please try again.");
+    }
+  };
+
+  const handleUnsave = async (jobId) => {
+    try {
+      await jobsApi.unsaveJob(jobId);
+      setSavedJobIds((prev) => prev.filter((id) => id !== jobId));
+      alert("Job unsaved successfully!");
+    } catch (err) {
+      console.error("Error unsaving job:", err);
+      alert("Failed to unsave job. Please try again.");
     }
   };
 
@@ -123,6 +151,9 @@ const JobListPage = () => {
                 key={job.id}
                 job={job}
                 onApply={() => handleApply(job)}
+                onSave={()=> handlesave(job.id)}
+                onUnsave={()=> handleUnsave(job.id)}
+                isSaved={savedJobIds.includes(job.id)}
                 isRecruiter={false}
                 showActions={true}
               />
