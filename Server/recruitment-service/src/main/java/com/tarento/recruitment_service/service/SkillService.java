@@ -82,14 +82,11 @@ public class SkillService {
     // ----------------------------
     public ApplicantSkillResponse addSkillToApplicant(AddApplicantSkillRequest request) {
 
-        ApplicantProfile applicant = applicantProfileRepository.findById(request.getApplicantId())
-                .orElseThrow(() -> new RuntimeException("Applicant not found with id: " + request.getApplicantId()));
-
         Skill skill = skillRepository.findById(request.getSkillId())
                 .orElseThrow(() -> new RuntimeException("Skill not found with id: " + request.getSkillId()));
 
         ApplicantSkill applicantSkill = ApplicantSkill.builder()
-                .applicant(applicant)
+                
                 .skill(skill)
                 .proficiencyLevel(request.getProficiencyLevel())
                 .yearsOfExperience(request.getYearsOfExperience())

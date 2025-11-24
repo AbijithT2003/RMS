@@ -13,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.util.UUID;
+import java.util.List;
 import java.time.LocalDateTime;
 import com.tarento.recruitment_service.exception.BusinessException;
 import com.tarento.recruitment_service.exception.ResourceNotFoundException;
@@ -23,7 +24,9 @@ import com.tarento.recruitment_service.exception.ResourceNotFoundException;
 @Transactional
 public class JobService {
     private final JobRepository jobRepository;
+    private final SavedJobRepository savedJobRepository;
     private final UserRepository userRepository;
+    private final ApplicantProfileRepository applicantProfileRepository;
     private final ModelMapper modelMapper;
     
     public JobResponse createJob(UUID createdById, CreateJobRequest request) {
@@ -151,4 +154,42 @@ public class JobService {
         }
         return response;
     }
+
+    // ===== SAVED JOBS =====
+    public List<JobResponse> getSavedJobs(UUID applicantId) {
+        List<SavedJob> savedJobs = savedJobRepository.findByApplicantId(applicantId);
+        return savedJobs.stream()
+                .map(savedJob -> mapToJobResponse(savedJob.getJob()))
+                .toList();
+    }
+
+    public void saveJob(UUID applicantId, UUID jobId) {
+        ApplicantProfile applicant = applicantProfileRepository.findById(applicantId)
+                .orElseThrow(() -> new ResourceNotFoundException("Applicant not found with id: " + applicantId));
+        
+        Job job = jobRepository.findById(jobId)
+                .orElseThrow(() -> new ResourceNotFoundException("Job not found with id: " + jobId));
+        
+        if (savedJobRepository.existsByApplicantIdAndJobId(applicantId, jobId)) {
+            throw new BusinessException("Job already saved by this applicant");
+        }
+        
+        SavedJob savedJob = SavedJob.builder()
+                .applicant(applicant)
+                .job(job)
+                .savedAt(LocalDateTime.now())
+                .build();
+        
+        savedJobRepository.save(savedJob);
+    }
+
+    public void unsaveJob(UUID applicantId, UUID jobId) {
+        if (!savedJobRepository.existsByApplicantIdAndJobId(applicantId, jobId)) {
+            throw new ResourceNotFoundException("Saved job not found for applicant: " + applicantId + " and job: " + jobId);
+        }
+        
+        savedJobRepository.deleteByApplicantIdAndJobId(applicantId, jobId);
+    }
 }
+
+

@@ -14,8 +14,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class AddApplicantSkillRequest {
-    @NotNull(message = "Applicant ID is required")
-    private UUID applicantId;
     
     @NotNull(message = "Skill ID is required")
     private UUID skillId;

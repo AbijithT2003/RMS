@@ -16,6 +16,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
+import org.springframework.http.HttpMethod;
 
 @Configuration
 @RequiredArgsConstructor
@@ -30,35 +31,63 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .csrf(csrf -> csrf.disable())
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                    "/v3/api-docs/**",
-                    "/swagger-ui/**",
-                    "/swagger-ui.html",
-                    "/api/auth/**",
-                    "/api/auth/login",
-                    "/api/auth/register"
-                ).permitAll()
-                .requestMatchers("GET", "/api/jobs/**").permitAll()
-                .requestMatchers("POST", "/api/jobs/**").hasAnyRole("RECRUITER", "ADMIN")
-                .requestMatchers("PUT", "/api/jobs/**").hasAnyRole("RECRUITER", "ADMIN")
-                .requestMatchers("DELETE", "/api/jobs/**").hasAnyRole("RECRUITER","ADMIN")
-                .requestMatchers("/api/applications/**").hasAnyRole("CANDIDATE", "RECRUITER", "ADMIN")
-                .requestMatchers("/api/interviews/**").hasAnyRole("CANDIDATE","RECRUITER", "ADMIN")
-                .requestMatchers("/api/skills/**").permitAll()
-                .requestMatchers("/api/applicants/**").hasAnyRole("RECRUITER", "ADMIN")
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-                .anyRequest().authenticated()
-            )
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class); // ✅ filter injected correctly
+    http
+        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        .csrf(csrf -> csrf.disable())
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authorizeHttpRequests(auth -> auth
 
-        return http.build();
-    }
+            // ===== PUBLIC ENDPOINTS =====
+            .requestMatchers(
+                "/v3/api-docs/**",
+                "/swagger-ui/**",
+                "/swagger-ui.html"
+            ).permitAll()
+
+            // Auth APIs
+            .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+
+            .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
+            .requestMatchers("/api/auth/**").permitAll()
+
+            // Public READ Jobs
+            .requestMatchers(HttpMethod.GET, "/api/jobs/**").permitAll()
+
+            // Allow candidates to save jobs
+            .requestMatchers(HttpMethod.POST, "/api/jobs/*/save").hasAnyRole("CANDIDATE")
+            .requestMatchers(HttpMethod.POST, "/api/jobs/*/unsave").hasAnyRole("CANDIDATE")
+
+
+            // Restricted job management
+            .requestMatchers(HttpMethod.POST, "/api/jobs/**").hasAnyRole("RECRUITER", "ADMIN")
+            .requestMatchers(HttpMethod.PUT, "/api/jobs/**").hasAnyRole("RECRUITER", "ADMIN")
+            .requestMatchers(HttpMethod.DELETE, "/api/jobs/**").hasAnyRole("RECRUITER", "ADMIN")
+
+            // Applications
+            .requestMatchers("/api/applications/**")
+                .hasAnyRole("CANDIDATE", "RECRUITER", "ADMIN")
+
+            // Interviews
+            .requestMatchers("/api/interviews/**")
+                .hasAnyRole("CANDIDATE", "RECRUITER", "ADMIN")
+
+            // Skills (public)
+            .requestMatchers("/api/skills/**").permitAll()
+
+            // Applicants
+            .requestMatchers("/api/applicants/**")
+                .hasAnyRole("RECRUITER", "ADMIN")
+
+            // Any other request must be authenticated
+            .anyRequest().authenticated()
+        )
+        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+    return http.build();
+}
+
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -66,16 +95,19 @@ public class SecurityConfig {
     }
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        // configuration.setAllowCredentials(true);
-        configuration.setMaxAge(3600L);
-        
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    
+    configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
+    configuration.setAllowCredentials(true);  // Required for cookies / JWT in headers
+    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+    configuration.setAllowedHeaders(Arrays.asList("*"));
+    configuration.setExposedHeaders(Arrays.asList("Authorization")); // Optional but useful
+
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+
+    return source;
+}
+
 }

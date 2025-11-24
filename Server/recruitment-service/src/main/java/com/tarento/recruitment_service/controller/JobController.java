@@ -5,6 +5,7 @@ import com.tarento.recruitment_service.dto.RequestDto.*;
 import com.tarento.recruitment_service.dto.ResponseDto.*;
 import com.tarento.recruitment_service.service.*;   
 import com.tarento.recruitment_service.config.*; 
+import com.tarento.recruitment_service.exception.*;
 import com.tarento.recruitment_service.model.enums.*;
 import com.tarento.recruitment_service.model.User;   
 
@@ -22,6 +23,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -45,15 +47,6 @@ public class JobController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
-    @GetMapping("/{id}")
-    @Operation(summary = "Get job by ID", description = "Retrieve a single job posting by its ID")
-    public ResponseEntity<ApiResponse<JobResponse>> getJob(
-            @PathVariable UUID id) {
-
-        JobResponse job = jobService.getJobById(id);
-        return ResponseEntity.ok(ApiResponse.success(job));
-    }
-
     @GetMapping("/my")
     @PreAuthorize("hasRole('RECRUITER') or hasRole('ADMIN')")
     @Operation(summary = "Get jobs created by the logged-in recruiter")
@@ -72,27 +65,6 @@ public class JobController {
         return ResponseEntity.ok(ApiResponse.success(jobs));
     }
 
-    @PostMapping
-    @PreAuthorize("hasRole('RECRUITER') or hasRole('ADMIN')")
-    @Operation(summary = "Create a new job posting", description = "Allows an Admin or Recruiter to create a new job posting")
-    public ResponseEntity<ApiResponse<JobResponse>> createJob(
-            @Valid @RequestBody CreateJobRequest request,
-            @RequestHeader("Authorization") String authHeader
-    ) {
-        String token = authHeader.replace("Bearer ", "").trim();
-        String email = jwtService.extractUsername(token);
-        UserResponse userResponse = userService.getUserByValue(email);
-
-        JobResponse jobResponse = jobService.createJob(userResponse.getId(), request);
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success("Job created successfully", jobResponse));
-    }
-
-    
-    
-    
-    
     @GetMapping("/search")
     @Operation(summary = "Search jobs", description = "Search jobs with filters")
     public ResponseEntity<ApiResponse<PageResponse<JobResponse>>> searchJobs(
@@ -111,6 +83,50 @@ public class JobController {
         PageResponse<JobResponse> response = jobService.searchJobs(
                 searchStatus, keyword, jobType, workMode, locationCity, pageable);
         return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    @GetMapping("/saved/{applicantId}")
+    @Operation(summary = "Get saved jobs by applicant", description = "Retrieves all jobs saved by a specific applicant")
+    public ResponseEntity<ApiResponse<List<JobResponse>>> getSavedJobs(
+            @PathVariable UUID applicantId) {
+        List<JobResponse> savedJobs = jobService.getSavedJobs(applicantId);
+        return ResponseEntity.ok(ApiResponse.success(savedJobs));
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Get job by ID", description = "Retrieve a single job posting by its ID")
+    public ResponseEntity<ApiResponse<JobResponse>> getJob(
+            @PathVariable UUID id) {
+
+        JobResponse job = jobService.getJobById(id);
+        return ResponseEntity.ok(ApiResponse.success(job));
+    }
+
+    @PostMapping("/{jobId}/save")
+    @PreAuthorize("hasRole('CANDIDATE') or hasRole('APPLICANT')")
+    @Operation(summary = "Save a job", description = "Saves a job for the applicant")
+    public ResponseEntity<ApiResponse<String>> saveJob(
+            @PathVariable UUID jobId,
+            @RequestBody Map<String, UUID> request) {
+        
+        UUID applicantId = request.get("applicantId");
+        if (applicantId == null) {
+            throw new BusinessException("Applicant ID is required");
+        }
+        
+        jobService.saveJob(applicantId, jobId);
+        return ResponseEntity.ok(ApiResponse.success("Job saved successfully", "Job saved"));
+    }
+
+    @DeleteMapping("/{jobId}/save/{applicantId}")
+    @PreAuthorize("hasRole('CANDIDATE') or hasRole('APPLICANT')")
+    @Operation(summary = "Unsave a job", description = "Removes a saved job for the applicant")
+    public ResponseEntity<ApiResponse<String>> unsaveJob(
+            @PathVariable UUID jobId,
+            @PathVariable UUID applicantId) {
+        
+        jobService.unsaveJob(applicantId, jobId);
+        return ResponseEntity.ok(ApiResponse.success("Job unsaved successfully", "Job unsaved"));
     }
     
     @PutMapping("/{id}")

@@ -103,10 +103,10 @@ public class JobApplicationController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
-    // @DeleteMapping("/{id}")
-    // @Operation(summary = "Delete application by ID", description = "Deletes a job application by its unique identifier")
-    // public ResponseEntity<ApiResponse<Void>> deleteApplication(@PathVariable UUID id) {
-    //     jobApplicationService.deleteApplication(id);
-    //     return ResponseEntity.ok(ApiResponse.success("Application deleted successfully"));
-    // }
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete application by ID", description = "Deletes a job application by its unique identifier")
+    public ResponseEntity<ApiResponse<String>> deleteApplication(@PathVariable UUID id) {
+        jobApplicationService.deleteApplication(id);
+        return ResponseEntity.ok(ApiResponse.success("Application deleted successfully"));
+    }
 }

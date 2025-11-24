@@ -29,7 +29,6 @@ public class SkillController {
     // Create Skill
     // --------------------------------------------------------
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Create a new skill")
     public ResponseEntity<ApiResponse<SkillResponse>> createSkill(
             @RequestBody CreateSkillRequest request) {
@@ -42,7 +41,6 @@ public class SkillController {
     // Update Skill
     // --------------------------------------------------------
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Update existing skill")
     public ResponseEntity<ApiResponse<SkillResponse>> updateSkill(
             @PathVariable UUID id,
@@ -76,6 +74,17 @@ public class SkillController {
     }
 
     // --------------------------------------------------------
+    // Get Skill by ID
+    // --------------------------------------------------------
+    @GetMapping("/{id}")
+    @Operation(summary = "Get skill by ID")
+    public ResponseEntity<ApiResponse<SkillResponse>> getSkillById(@PathVariable UUID id) {
+
+        SkillResponse response = skillService.getSkillById(id);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    // --------------------------------------------------------
     // Search Skill
     // --------------------------------------------------------
     @GetMapping("/search")
@@ -89,16 +98,15 @@ public class SkillController {
 
     // --------------------------------------------------------
     // Add Skill to Applicant
-    // --------------------------------------------------------
     @PostMapping("/applicant")
-    @PreAuthorize("hasRole('APPLICANT') or hasRole('ADMIN')")
-    @Operation(summary = "Add a skill to an applicant profile")
-    public ResponseEntity<ApiResponse<ApplicantSkillResponse>> addSkillToApplicant(
-            @RequestBody AddApplicantSkillRequest request) {
+@Operation(summary = "Add a skill to the logged-in applicant profile")
+public ResponseEntity<ApiResponse<ApplicantSkillResponse>> addSkillToApplicant(
+        @RequestBody AddApplicantSkillRequest request) {
 
-        ApplicantSkillResponse response = skillService.addSkillToApplicant(request);
-        return ResponseEntity.ok(ApiResponse.success("Skill added to applicant", response));
-    }
+    ApplicantSkillResponse response = skillService.addSkillToApplicant(request);
+    return ResponseEntity.ok(ApiResponse.success("Skill added to applicant", response));
+}
+
 
     // --------------------------------------------------------
     // Get Applicant's Skills
