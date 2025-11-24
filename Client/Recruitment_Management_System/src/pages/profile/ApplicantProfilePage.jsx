@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { skillsApi } from "../../api/endpoints/skills.api";
 import { useApi } from "../../hooks/useApi";
+import { useNotification } from "../../api/context/useNotificationHook";
 import Button from "../../components/Button/Button";
 import "./ApplicantProfilePage.css";
 import { useNavigate } from "react-router-dom";
@@ -116,6 +117,7 @@ const ApplicantProfilePage = () => {
 };
 
 const SkillsModal = ({ availableSkills, onClose, onSkillAdded, userId }) => {
+  const notification = useNotification();
   const [selectedSkill, setSelectedSkill] = useState("");
   const [proficiencyLevel, setProficiencyLevel] = useState("BEGINNER");
   const [yearsOfExperience, setYearsOfExperience] = useState("");
@@ -133,10 +135,11 @@ const SkillsModal = ({ availableSkills, onClose, onSkillAdded, userId }) => {
           ? parseInt(yearsOfExperience)
           : undefined,
       });
+      notification.success("Skill added successfully!", "Success");
       onSkillAdded();
       onClose();
-    } catch (error) {
-      console.error("Error adding skill:", error);
+    } catch {
+      notification.error("Failed to add skill", "Error");
     }
   };
 

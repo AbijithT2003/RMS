@@ -8,16 +8,29 @@ const ApplicationCard = ({
   onViewDetails,
   showActions = true,
 }) => {
+  /**
+   * Map backend statuses to UI badge colors
+   */
   const getStatusColor = (status) => {
-    switch (status?.toLowerCase()) {
-      case "pending":
-        return "pending";
-      case "reviewed":
+    if (!status) return "submitted";
+
+    switch (status) {
+      case "SUBMITTED":
+        return "submitted";
+      case "UNDER_REVIEW":
         return "reviewed";
-      case "accepted":
+      case "SHORTLISTED":
+        return "shortlisted";
+      case "INTERVIEW_SCHEDULED":
+        return "scheduled";
+      case "INTERVIEWED":
+        return "interviewed";
+      case "SELECTED":
         return "accepted";
-      case "rejected":
+      case "REJECTED":
         return "rejected";
+      case "WITHDRAWN":
+        return "withdrawn";
       default:
         return "pending";
     }
@@ -27,11 +40,14 @@ const ApplicationCard = ({
     <div className="application-card">
       <div className="application-header">
         <div className="applicant-info">
-          <h4 className="applicant-name">{application.applicantName}</h4>
-          <p className="job-title">{application.jobTitle}</p>
+          <h4 className="applicant-name">
+            {application.applicantName || "Unknown Applicant"}
+          </h4>
+          <p className="job-title">{application.jobTitle || "Unknown Job"}</p>
         </div>
+
         <span className={`status-badge ${getStatusColor(application.status)}`}>
-          {application.status}
+          {application.status?.replaceAll("_", " ")}
         </span>
       </div>
 
@@ -39,12 +55,14 @@ const ApplicationCard = ({
         <div className="application-meta">
           <span className="applied-date">
             <i className="fas fa-calendar"></i>
-            Applied: {new Date(application.appliedDate).toLocaleDateString()}
+            Applied:{" "}
+            {new Date(application.appliedAt).toLocaleDateString() || "N/A"}
           </span>
-          {application.email && (
+
+          {(application.applicantEmail || application.email) && (
             <span className="applicant-email">
               <i className="fas fa-envelope"></i>
-              {application.email}
+              {application.applicantEmail || application.email || "N/A"}
             </span>
           )}
         </div>
@@ -60,16 +78,18 @@ const ApplicationCard = ({
             <i className="fas fa-eye"></i>
             View Details
           </Button>
-          {application.status?.toLowerCase() === "pending" && (
+
+          {application.status === "PENDING" && (
             <>
               <Button
                 variant="primary"
                 size="small"
-                onClick={() => onUpdateStatus?.(application.id, "REVIEWED")}
+                onClick={() => onUpdateStatus?.(application.id, "UNDER_REVIEW")}
               >
                 <i className="fas fa-check"></i>
                 Review
               </Button>
+
               <Button
                 variant="secondary"
                 size="small"

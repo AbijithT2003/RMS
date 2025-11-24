@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { skillsApi } from "../../api/endpoints/skills.api";
 import { useApi } from "../../hooks/useApi";
+import { useNotification } from "../../api/context/useNotificationHook";
 import Button from "../../components/Button/Button";
 import "./SkillsManagementPage.css";
 
 const SkillsManagementPage = () => {
+  const notification = useNotification();
   const {
     data: skills,
     loading,
@@ -24,21 +26,21 @@ const SkillsManagementPage = () => {
 
     try {
       await skillsApi.createSkill(newSkill);
+      notification.success("Skill created successfully!", "Success");
       setNewSkill({ name: "", category: "", description: "" });
       refetch();
-    } catch (error) {
-      console.error("Error adding skill:", error);
+    } catch {
+      notification.error("Failed to create skill", "Error");
     }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this skill?")) {
-      try {
-        await skillsApi.deleteSkill(id);
-        refetch();
-      } catch (error) {
-        console.error("Error deleting skill:", error);
-      }
+    try {
+      await skillsApi.deleteSkill(id);
+      notification.success("Skill deleted successfully!", "Success");
+      refetch();
+    } catch {
+      notification.error("Failed to delete skill", "Error");
     }
   };
 

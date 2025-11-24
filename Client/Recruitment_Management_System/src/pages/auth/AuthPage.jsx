@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./AuthPage.css";
 import { useAuth } from "../../api/context/AuthContext";
+import { useNotification } from "../../api/context/useNotificationHook";
 
 const AuthPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { login, register } = useAuth(); //to get login and register functions
+  const notification = useNotification();
 
   // Detect auth mode from query params
   const [isLogin, setIsLogin] = useState(() => {
@@ -50,14 +52,8 @@ const AuthPage = () => {
 
       const { user } = isLogin ? await login(payload) : await register(payload);
 
-      console.log("Login successful, user:", user);
-      console.log("User role:", user.role);
-      console.log("User roles:", user.roles);
-
       // Redirect based on role
-      // In AuthPage.jsx, around line 58-70, update the redirect logic:
       const role = user.role;
-      console.log("Redirecting based on role:", role);
 
       if (role === "ADMIN") {
         navigate("/admin-dashboard");
@@ -66,12 +62,10 @@ const AuthPage = () => {
       } else if (role === "CANDIDATE" || role === "APPLICANT") {
         navigate("/applicant-dashboard");
       } else {
-        console.warn("Unknown role:", role);
         navigate("/applicant-dashboard");
       }
     } catch (err) {
-      console.error(err);
-      alert(err.message);
+      notification.error(err.message, "Authentication Error");
     } finally {
       setLoading(false);
     }

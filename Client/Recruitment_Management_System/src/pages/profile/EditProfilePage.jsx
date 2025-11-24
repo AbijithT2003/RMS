@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useNotification } from "../../api/context/useNotificationHook";
 import PageLayout from "../../components/common/PageLayout";
 import FormField from "../../components/common/FormField";
 import Button from "../../components/Button/Button";
@@ -7,6 +8,7 @@ import "./EditProfilePage.css";
 
 const EditProfilePage = () => {
   const navigate = useNavigate();
+  const notification = useNotification();
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   const [formData, setFormData] = useState({
@@ -32,9 +34,10 @@ const EditProfilePage = () => {
     try {
       // API call to update profile
       localStorage.setItem("user", JSON.stringify({ ...user, ...formData }));
+      notification.success("Profile updated successfully!", "Success");
       navigate(-1);
     } catch (error) {
-      console.error("Error updating profile:", error);
+      notification.error("Failed to update profile", "Error");
     } finally {
       setLoading(false);
     }

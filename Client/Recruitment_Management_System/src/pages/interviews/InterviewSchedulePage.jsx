@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { interviewsApi } from "../../api/endpoints/interviews.api";
 import { useNavigate } from "react-router-dom";
+import { useNotification } from "../../api/context/useNotificationHook";
 import Header from "../../components/Header/Header";
 import Button from "../../components/Button/Button";
 
 const InterviewSchedulePage = () => {
   const navigate = useNavigate();
+  const notification = useNotification();
   const [formData, setFormData] = useState({
     applicationId: "",
     interviewerId: "",
@@ -37,9 +39,10 @@ const InterviewSchedulePage = () => {
       };
 
       await interviewsApi.scheduleInterview(interviewData);
+      notification.success("Interview scheduled successfully!", "Success");
       navigate("/recruiter/interviews");
     } catch (error) {
-      console.error("Error scheduling interview:", error);
+      notification.error("Failed to schedule interview", "Error");
     } finally {
       setLoading(false);
     }

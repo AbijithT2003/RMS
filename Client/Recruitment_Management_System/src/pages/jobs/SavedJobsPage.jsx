@@ -1,10 +1,12 @@
 import React from "react";
 import { jobsApi } from "../../api/endpoints/jobs.api";
 import { useApi } from "../../hooks/useApi";
+import { useNotification } from "../../api/context/useNotificationHook";
 import JobCard from "../../components/Card/JobCard";
 import "./SavedJobsPage.css";
 
 const SavedJobsPage = () => {
+  const notification = useNotification();
   const {
     data: savedJobs,
     loading,
@@ -15,9 +17,10 @@ const SavedJobsPage = () => {
   const handleUnsaveJob = async (jobId) => {
     try {
       await jobsApi.unsaveJob(jobId);
+      notification.success("Job removed from saved!", "Success");
       refetch();
-    } catch (error) {
-      console.error("Error unsaving job:", error);
+    } catch {
+      notification.error("Failed to remove saved job", "Error");
     }
   };
 

@@ -24,11 +24,22 @@ export const jobsApi = {
     return maybeData?.content || maybeData;
   },
 
-  searchJobs: async (searchParams) => {
-    // searchParams: { status?, keyword?, jobType?, workMode?, locationCity?, page?, size? }
-    const res = await apiClient.get("/jobs/search", { params: searchParams });
-    return res.data?.data || res.data; // Returns PageResponse<JobResponse>
-  },
+  searchJobs: async (filters, page = 0, size = 50) => {
+  const params = new URLSearchParams();
+
+  if (filters.keyword) params.append("keyword", filters.keyword);
+  if (filters.jobType !== "ALL") params.append("jobType", filters.jobType);
+  if (filters.workMode !== "ALL") params.append("workMode", filters.workMode);
+  if (filters.location !== "ALL") params.append("locationCity", filters.location);
+
+  params.append("status", "ACTIVE");
+  params.append("page", page);
+  params.append("size", size);
+
+  const res = await apiClient.get(`/jobs/search?${params.toString()}`);
+  return res.data.data;
+}
+,
 
   // Recruiter/Admin only
   createJob: async (createJobRequest) => {

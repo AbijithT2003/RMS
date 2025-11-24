@@ -36,7 +36,10 @@
   word-break: break-word;
 }
 
-
+/* ============================
+   STATUS BADGES
+   Matches backend ApplicationStatus enum
+   ============================ */
 
 .status-badge {
   padding: 6px 12px;
@@ -49,24 +52,52 @@
   flex-shrink: 0;
 }
 
-.status-badge.pending {
-  background: rgba(251, 191, 36, 0.1);
+/* PENDING */
+.status-badge.submitted {
+  background: rgba(251, 191, 36, 0.15);
   color: #d97706;
 }
 
+/* UNDER_REVIEW */
 .status-badge.reviewed {
-  background: rgba(59, 130, 246, 0.1);
+  background: rgba(59, 130, 246, 0.15);
   color: #2563eb;
 }
 
+/* SHORTLISTED */
+.status-badge.shortlisted {
+  background: rgba(168, 85, 247, 0.15);
+  color: #7e22ce;
+}
+
+/* INTERVIEW_SCHEDULED */
+.status-badge.scheduled {
+  background: rgba(20, 184, 166, 0.15);
+  color: #0d9488;
+}
+
+/* INTERVIEWED */
+.status-badge.interviewed {
+  background: rgba(99, 102, 241, 0.15);
+  color: #4f46e5;
+}
+
+/* SELECTED */
 .status-badge.accepted {
-  background: rgba(34, 197, 94, 0.1);
+  background: rgba(34, 197, 94, 0.15);
   color: #15803d;
 }
 
+/* REJECTED */
 .status-badge.rejected {
-  background: rgba(239, 68, 68, 0.1);
+  background: rgba(239, 68, 68, 0.15);
   color: #dc2626;
+}
+
+/* WITHDRAWN */
+.status-badge.withdrawn {
+  background: rgba(156, 163, 175, 0.2);
+  color: #4b5563;
 }
 
 .application-details {
@@ -122,6 +153,10 @@
   gap: 6px;
   white-space: nowrap;
 }
+
+/* ============================
+   RESPONSIVE STYLES
+   ============================ */
 
 @media (max-width: 768px) {
   .application-card {
