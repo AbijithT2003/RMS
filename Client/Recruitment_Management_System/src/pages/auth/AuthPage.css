@@ -1,6 +1,6 @@
 .auth-page {
   min-height: 100vh;
-  background: var(--bg-primary);
+  background: linear-gradient(180deg var(--bg-primary) 3%, #96aeff 50%, var(--bg-primary) 100% , #e0e8fd 100%);
   font-family: "Inter", sans-serif;
   padding: 2rem 0;
 }

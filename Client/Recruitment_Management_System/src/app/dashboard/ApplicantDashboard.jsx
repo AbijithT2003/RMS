@@ -1,7 +1,9 @@
-// import React, { useState } from 'react';
 import DashboardContainer from "../../components/DashboardContainer";
 import DashboardGrid from "../../components/organisms/DashboardGrid/DashboardGrid";
 import DashboardView from "../../components/common/DashboardView";
+import StatsCard from "../../components/ui/StatsCard/StatsCard";
+import AlertCard from "../../components/ui/AlertCard/AlertCard";
+import ApplicationJourney from "../../components/ui/ApplicationJourney/ApplicationJourney";
 import {
   JobListPage,
   MyApplicationsPage,
@@ -14,6 +16,36 @@ import { useApi } from "../../hooks/useApi";
 import { applicationsApi } from "../../api/endpoints/applications.api";
 
 const ApplicantDashboard = () => {
+  const { data: applicationsData } = useApi(() =>
+    applicationsApi.getMyApplications()
+  );
+
+  const applications = applicationsData?.content || [];
+
+  // Calculate stats
+  const totalApplications = applications.length;
+  const scheduledInterviews = applications.filter(
+    (app) =>
+      app.status === "INTERVIEW_SCHEDULED" || app.status === "INTERVIEWED"
+  ).length;
+  const shortlistedJobs = applications.filter((app) =>
+    ["SHORTLISTED", "INTERVIEW_SCHEDULED", "INTERVIEWED", "SELECTED"].includes(
+      app.status
+    )
+  ).length;
+  const rejections = applications.filter(
+    (app) => app.status === "REJECTED"
+  ).length;
+  const rejectionRate =
+    totalApplications > 0
+      ? Math.round((rejections / totalApplications) * 100)
+      : 0;
+
+  // Get recent applications for timeline
+  const recentApplications = [...applications]
+    .sort((a, b) => new Date(b.appliedAt) - new Date(a.appliedAt))
+    .slice(0, 3);
+
   const applicantNav = [
     {
       label: "Jobs",
@@ -36,17 +68,6 @@ const ApplicantDashboard = () => {
       ],
     },
   ];
-
-  const { data: applicationsData, loading: applicationsLoading } = useApi(() =>
-    applicationsApi.getMyApplications()
-  );
-
-  const applications = applicationsData?.content || [];
-
-  // Assuming `applications` is fetched via useApi
-  const recentApplications = [...applications]
-    .sort((a, b) => new Date(b.appliedAt) - new Date(a.appliedAt))
-    .slice(0, 5); // latest 5 applications
 
   const renderView = (activeView, setActiveView) => {
     const dashboardCards = [
@@ -104,59 +125,6 @@ const ApplicantDashboard = () => {
       }
     };
 
-    const applicationStats = [
-      {
-        status: "Applied",
-        count: applications.filter((app) => app.status === "SUBMITTED").length,
-        color: "#3498db",
-      },
-      {
-        status: "Under Review",
-        count: applications.filter((app) => app.status === "UNDER_REVIEW")
-          .length,
-        color: "#f39c12",
-      },
-      {
-        status: "Shortlisted",
-        count: applications.filter((app) => app.status === "SHORTLISTED")
-          .length,
-        color: "#2ecc71",
-      },
-      {
-        status: "Interview Scheduled",
-        count: applications.filter(
-          (app) => app.status === "INTERVIEW_SCHEDULED"
-        ).length,
-        color: "#9b59b6",
-      },
-      {
-        status: "Interviewed",
-        count: applications.filter((app) => app.status === "INTERVIEWED")
-          .length,
-        color: "#16a085",
-      },
-      {
-        status: "Selected",
-        count: applications.filter((app) => app.status === "SELECTED").length,
-        color: "#27ae60",
-      },
-      {
-        status: "Rejected",
-        count: applications.filter((app) => app.status === "REJECTED").length,
-        color: "#e74c3c",
-      },
-    ];
-
-    const statusIconMap = {
-      SUBMITTED: "fas fa-hourglass-start",
-      UNDER_REVIEW: "fas fa-search",
-      SHORTLISTED: "fas fa-star",
-      INTERVIEW_SCHEDULED: "fas fa-calendar-check",
-      INTERVIEWED: "fas fa-user-check",
-      SELECTED: "fas fa-check-circle",
-      REJECTED: "fas fa-times-circle",
-    };
-
     switch (activeView) {
       case "jobs":
         return (
@@ -206,49 +174,140 @@ const ApplicantDashboard = () => {
       default:
         return (
           <div className="dashboard-content">
+            {/* Stats Cards Grid */}
+            <div className="dashboard-stats-grid">
+              <StatsCard
+                icon="fas fa-file-alt"
+                label="Total Applications"
+                value={totalApplications}
+                color="primary"
+                onClick={() => setActiveView("applications")}
+              />
+              <StatsCard
+                icon="fas fa-video"
+                label="Scheduled Interviews"
+                value={scheduledInterviews}
+                color="warning"
+                onClick={() => setActiveView("interviews")}
+              />
+              <StatsCard
+                icon="fas fa-star"
+                label="Shortlisted Jobs"
+                value={shortlistedJobs}
+                color="secondary"
+              />
+              <StatsCard
+                icon="fas fa-times-circle"
+                label="Rejection Rate"
+                value={`${rejectionRate}%`}
+                color="danger"
+              />
+            </div>
+
+            {/* Quick Actions Grid */}
             <div className="dashboard-top">
               <DashboardGrid cards={dashboardCards} />
             </div>
-            <div className="dashboard-bottom">
-              <div className="recent-activity">
-                <h2 className="panel-title">Recent Activity</h2>
-                <div className="activity-list">
-                  {recentApplications.length === 0 ? (
-                    <p>No recent activity</p>
-                  ) : (
-                    recentApplications.map((app) => (
-                      <div key={app.id} className="activity-item">
-                        <i className={statusIconMap[app.status]}></i>
 
-                        <span>
-                          Applied to <strong>{app.jobTitle}</strong> at{" "}
-                          {app.recruiterName || "Unknown Company"}
-                        </span>
-                        <small>
-                          {new Date(app.appliedAt).toLocaleString()}
-                        </small>
-                      </div>
+            {/* Timeline & Alert Section */}
+            <div className="dashboard-bottom applicant-layout">
+              <div className="timeline-column">
+                <h2 className="section-title">Recent Applications</h2>
+                <div className="applications-timeline">
+                  {recentApplications.length > 0 ? (
+                    recentApplications.map((app) => (
+                      <ApplicationJourney
+                        key={app.id}
+                        status={app.status}
+                        appliedAt={app.appliedAt}
+                        jobTitle={app.jobTitle || "Position"}
+                        recruiterName={app.recruiterName || "Company"}
+                      />
                     ))
+                  ) : (
+                    <div className="empty-state">
+                      <i className="fas fa-inbox"></i>
+                      <p>No recent applications</p>
+                    </div>
                   )}
                 </div>
               </div>
 
-              <div className="stats-section">
-                <h3 className="panel-title">Your Application Stats</h3>
-                {applicationsLoading ? (
-                  <p>Loading stats...</p>
-                ) : (
-                  <div className="stats-grid">
-                    {applicationStats
-                      .filter((stat) => stat.count > 0) // only show statuses with at least 1
-                      .map((stat) => (
-                        <div key={stat.status} className="stat-card">
-                          <h3 style={{ color: stat.color }}>{stat.count}</h3>
-                          <p>{stat.status.replace("_", " ")}</p>
-                        </div>
-                      ))}
-                  </div>
-                )}
+              <div className="alert-column">
+                <h2 className="section-title">Alerts & Updates</h2>
+                <div className="alerts-container">
+                  {shortlistedJobs > 0 && (
+                    <AlertCard
+                      icon="fas fa-star"
+                      title="Shortlisted!"
+                      subtitle={`You have ${shortlistedJobs} shortlisted position(s)`}
+                      severity="success"
+                      actionButton={{
+                        label: "View Applications",
+                        onClick: () => setActiveView("applications"),
+                      }}
+                    />
+                  )}
+
+                  {scheduledInterviews > 0 && (
+                    <AlertCard
+                      icon="fas fa-video"
+                      title="Upcoming Interviews"
+                      subtitle={`You have ${scheduledInterviews} interview(s) scheduled`}
+                      severity="info"
+                      actionButton={{
+                        label: "View Schedule",
+                        onClick: () => setActiveView("interviews"),
+                      }}
+                    />
+                  )}
+
+                  {rejections > 0 && rejectionRate > 50 && (
+                    <AlertCard
+                      icon="fas fa-chart-line"
+                      title="Keep Trying!"
+                      subtitle="Optimize your applications to increase success rate"
+                      details={[
+                        { label: "Applied", value: totalApplications },
+                        {
+                          label: "Success Rate",
+                          value: `${100 - rejectionRate}%`,
+                        },
+                      ]}
+                      severity="warning"
+                      actionButton={{
+                        label: "Browse More Jobs",
+                        onClick: () => setActiveView("jobs"),
+                      }}
+                    />
+                  )}
+
+                  {shortlistedJobs === 0 && totalApplications > 0 && (
+                    <AlertCard
+                      icon="fas fa-lightbulb"
+                      title="Tip: Enhance Your Profile"
+                      subtitle="A complete profile increases your chances of being shortlisted"
+                      severity="info"
+                      actionButton={{
+                        label: "Update Profile",
+                        onClick: () => setActiveView("profile"),
+                      }}
+                    />
+                  )}
+
+                  {totalApplications === 0 && (
+                    <AlertCard
+                      icon="fas fa-search"
+                      title="Start Your Journey"
+                      subtitle="Apply to jobs that match your skills and experience"
+                      severity="info"
+                      actionButton={{
+                        label: "Browse Jobs",
+                        onClick: () => setActiveView("jobs"),
+                      }}
+                    />
+                  )}
+                </div>
               </div>
             </div>
           </div>

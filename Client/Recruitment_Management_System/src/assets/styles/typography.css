@@ -50,28 +50,45 @@ body {
 
 /* Headings: establish clear hierarchy */
 h1 {
-  font-size: var(--type-5xl);
-  line-height: var(--leading-tight);
-  margin: 0 0 0.5rem;
-  color: var(--heading-default);
+  font-size: 2.5rem;      /* 40px */
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
 }
+
 h2 {
-  font-size: var(--type-4xl);
-  line-height: var(--leading-tight);
-  margin: 0 0 0.5rem;
-  color: var(--heading-default);
+  font-size: 2rem;        /* 32px */
+  font-weight: 700;
+  letter-spacing: -0.25px;
+  line-height: 1.3;
 }
+
 h3 {
-  font-size: var(--type-3xl);
-  line-height: var(--leading-snug);
-  margin: 0 0 0.5rem;
-  color: var(--heading-default);
+  font-size: 1.5rem;      /* 24px */
+  font-weight: 600;
+  line-height: 1.4;
 }
+
 h4 {
-  font-size: var(--type-2xl);
-  line-height: var(--leading-snug);
-  margin: 0 0 0.5rem;
-  color: var(--heading-default);
+  font-size: 1.125rem;    /* 18px */
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+body {
+  font-size: 1rem;        /* 16px base */
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.text-sm {
+  font-size: 0.875rem;    /* 14px */
+  line-height: 1.5;
+}
+
+.text-xs {
+  font-size: 0.75rem;     /* 12px */
+  line-height: 1.4;
 }
 h5 {
   font-size: var(--type-xl);
