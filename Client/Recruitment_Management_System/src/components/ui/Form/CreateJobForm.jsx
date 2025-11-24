@@ -2,86 +2,93 @@ import React, { useState } from 'react';
 import FormField from './FormField';
 import './CreateJobForm.css';
 
-const CreateJobForm = ({ onSubmit, loading = false }) => {
+const CreateJobForm = ({ onSubmit, loading = false, onSuccessNavigate }) => {
   const [formData, setFormData] = useState({
-    title: '',
-    department: '',
-    sector: '',
-    description: '',
-    requirements: '',
-    jobType: '',
-    workMode: '',
-    locationCity: '',
-    locationState: '',
-    locationCountry: '',
-    salaryMin: '',
-    salaryMax: '',
-    experienceRequired: '',
-    status: 'ACTIVE',
-    applicationDeadline: '',
-    positionsAvailable: ''
+    title: "",
+    department: "",
+    sector: "",
+    description: "",
+    requirements: "",
+    jobType: "",
+    workMode: "",
+    locationCity: "",
+    locationState: "",
+    locationCountry: "",
+    salaryMin: "",
+    salaryMax: "",
+    experienceRequired: "",
+    status: "ACTIVE",
+    applicationDeadline: "",
+    positionsAvailable: "",
   });
 
   const [errors, setErrors] = useState({});
-  const [successMessage, setSuccessMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState("");
 
   const jobTypeOptions = [
-    { value: 'FULL_TIME', label: 'Full Time' },
-    { value: 'PART_TIME', label: 'Part Time' },
-    { value: 'CONTRACT', label: 'Contract' },
-    { value: 'INTERN', label: 'Internship' },
-    { value: 'TEMPORARY', label: 'Temporary' }
+    { value: "FULL_TIME", label: "Full Time" },
+    { value: "PART_TIME", label: "Part Time" },
+    { value: "CONTRACT", label: "Contract" },
+    { value: "INTERNSHIP", label: "Internship" },
+    { value: "TEMPORARY", label: "Temporary" },
   ];
 
+  // [TEMPORARY, CONTRACT, FULL_TIME, INTERNSHIP, PART_TIME]]
+
   const workModeOptions = [
-    { value: 'REMOTE', label: 'Remote' },
-    { value: 'HYBRID', label: 'Hybrid' },
-    { value: 'ONSITE', label: 'On-site' }
+    { value: "REMOTE", label: "Remote" },
+    { value: "HYBRID", label: "Hybrid" },
+    { value: "ONSITE", label: "On-site" },
   ];
 
   const statusOptions = [
-    { value: 'ACTIVE', label: 'Active' },
-    { value: 'INACTIVE', label: 'Inactive' },
-    { value: 'CLOSED', label: 'Closed' }
+    { value: "ACTIVE", label: "Active" },
+    { value: "INACTIVE", label: "Inactive" },
+    { value: "CLOSED", label: "Closed" },
   ];
 
   const validateForm = () => {
     const newErrors = {};
 
     if (!formData.title || formData.title.trim().length < 3) {
-      newErrors.title = 'Title must be at least 3 characters';
+      newErrors.title = "Title must be at least 3 characters";
     }
     if (formData.title.length > 100) {
-      newErrors.title = 'Title must not exceed 100 characters';
+      newErrors.title = "Title must not exceed 100 characters";
     }
 
     if (!formData.description || formData.description.trim().length < 50) {
-      newErrors.description = 'Description must be at least 50 characters';
+      newErrors.description = "Description must be at least 50 characters";
     }
     if (formData.description.length > 5000) {
-      newErrors.description = 'Description must not exceed 5000 characters';
+      newErrors.description = "Description must not exceed 5000 characters";
     }
 
     if (!formData.requirements || formData.requirements.trim().length === 0) {
-      newErrors.requirements = 'Requirements are required';
+      newErrors.requirements = "Requirements are required";
     }
 
     if (!formData.jobType) {
-      newErrors.jobType = 'Job type is required';
+      newErrors.jobType = "Job type is required";
     }
 
     if (!formData.workMode) {
-      newErrors.workMode = 'Work mode is required';
+      newErrors.workMode = "Work mode is required";
     }
 
-    if (formData.salaryMin && formData.salaryMax && Number(formData.salaryMin) > Number(formData.salaryMax)) {
-      newErrors.salaryMin = 'Minimum salary cannot exceed maximum salary';
+    if (
+      formData.salaryMin &&
+      formData.salaryMax &&
+      Number(formData.salaryMin) > Number(formData.salaryMax)
+    ) {
+      newErrors.salaryMin = "Minimum salary cannot exceed maximum salary";
     }
 
     if (formData.applicationDeadline) {
       const deadline = new Date(formData.applicationDeadline);
       if (deadline <= new Date()) {
-        newErrors.applicationDeadline = 'Application deadline must be in the future';
+        newErrors.applicationDeadline =
+          "Application deadline must be in the future";
       }
     }
 
@@ -91,84 +98,82 @@ const CreateJobForm = ({ onSubmit, loading = false }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
-    
+
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: ''
+        [name]: "",
       }));
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
 
     try {
       await onSubmit(formData);
-      setSuccessMessage('Job created successfully!');
+      setSuccessMessage("Job created successfully!");
       setFormData({
-        title: '',
-        department: '',
-        sector: '',
-        description: '',
-        requirements: '',
-        jobType: '',
-        workMode: '',
-        locationCity: '',
-        locationState: '',
-        locationCountry: '',
-        salaryMin: '',
-        salaryMax: '',
-        experienceRequired: '',
-        status: 'ACTIVE',
-        applicationDeadline: '',
-        positionsAvailable: ''
+        title: "",
+        department: "",
+        sector: "",
+        description: "",
+        requirements: "",
+        jobType: "",
+        workMode: "",
+        locationCity: "",
+        locationState: "",
+        locationCountry: "",
+        salaryMin: "",
+        salaryMax: "",
+        experienceRequired: "",
+        status: "ACTIVE",
+        applicationDeadline: "",
+        positionsAvailable: "",
       });
-      setTimeout(() => setSuccessMessage(''), 3000);
+      setTimeout(() => setSuccessMessage(""), 3000);
+
+      if (onSuccessNavigate) {
+        onSuccessNavigate();
+        return; // <-- do NOT show success banner in this page anymore
+      }
     } catch (error) {
-      console.error('Error creating job:', error);
+      console.error("Error creating job:", error);
     }
   };
 
   const handleReset = () => {
     setFormData({
-      title: '',
-      department: '',
-      sector: '',
-      description: '',
-      requirements: '',
-      jobType: '',
-      workMode: '',
-      locationCity: '',
-      locationState: '',
-      locationCountry: '',
-      salaryMin: '',
-      salaryMax: '',
-      experienceRequired: '',
-      status: 'ACTIVE',
-      applicationDeadline: '',
-      positionsAvailable: ''
+      title: "",
+      department: "",
+      sector: "",
+      description: "",
+      requirements: "",
+      jobType: "",
+      workMode: "",
+      locationCity: "",
+      locationState: "",
+      locationCountry: "",
+      salaryMin: "",
+      salaryMax: "",
+      experienceRequired: "",
+      status: "ACTIVE",
+      applicationDeadline: "",
+      positionsAvailable: "",
     });
     setErrors({});
   };
 
   return (
     <div className="create-job-form">
-      {successMessage && (
-        <div className="success-banner">
-          <i className="fas fa-check-circle"></i>
-          {successMessage}
-        </div>
-      )}
-
       <form onSubmit={handleSubmit} className="job-form">
         <div className="form-left">
           <div className="form-section">
@@ -379,6 +384,12 @@ const CreateJobForm = ({ onSubmit, loading = false }) => {
           </button>
         </div>
       </form>
+      {successMessage && (
+        <div className="success-banner">
+          <i className="fas fa-check-circle"></i>
+          {successMessage}
+        </div>
+      )}
     </div>
   );
 };

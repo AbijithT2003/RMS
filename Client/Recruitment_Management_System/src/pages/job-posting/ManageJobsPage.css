@@ -312,3 +312,23 @@
     justify-content: center; /* better on small screens */
   }
 }
+
+.up-btn {
+  width: 42px;
+  height: 42px;
+  background: #333;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 18px;
+  transition: 0.2s ease;
+}
+
+.up-btn:hover {
+  background: #000;
+  transform: translateY(-3px);
+}
+

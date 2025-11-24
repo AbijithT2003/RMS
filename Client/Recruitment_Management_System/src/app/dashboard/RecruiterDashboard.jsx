@@ -19,7 +19,7 @@ const RecruiterDashboard = () => {
       items: [
         { label: "All Applications", view: "applications", icon: "fas fa-file-alt" },
         { label: "My Interviews", view: "interviews", icon: "fas fa-calendar" },
-        { label: "Schedule Interview", view: "schedule", icon: "fas fa-calendar-plus" },
+        // { label: "Schedule Interview", view: "schedule", icon: "fas fa-calendar-plus" },
       ],
     },
     {
@@ -83,8 +83,11 @@ const RecruiterDashboard = () => {
         );
       case 'create-job': 
         return (
-          <DashboardView title="Create New Job" breadcrumbs={getBreadcrumbs('create-job')}>
-            <CreateJobPage />
+          <DashboardView
+            title="Create New Job"
+            breadcrumbs={getBreadcrumbs("create-job")}
+          >
+            <CreateJobPage onNavigate={setActiveView} />
           </DashboardView>
         );
       case 'applications': 

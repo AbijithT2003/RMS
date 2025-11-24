@@ -36,12 +36,7 @@
   word-break: break-word;
 }
 
-.job-title {
-  color: rgba(0, 0, 0, 0.6);
-  font-size: 0.9rem;
-  margin: 0;
-  word-break: break-word;
-}
+
 
 .status-badge {
   padding: 6px 12px;

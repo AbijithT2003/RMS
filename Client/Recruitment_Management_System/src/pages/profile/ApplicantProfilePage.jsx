@@ -3,6 +3,7 @@ import { skillsApi } from '../../api/endpoints/skills.api';
 import { useApi } from '../../hooks/useApi';
 import Button from '../../components/atoms/Button/Button';
 import './ApplicantProfilePage.css';
+import { useNavigate } from 'react-router-dom';
 
 const ApplicantProfilePage = () => {
   const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -12,6 +13,7 @@ const ApplicantProfilePage = () => {
     skillsApi.getSkillsByApplicant(user.applicantId || user.userId)
   );
 
+  const navigate = useNavigate();
   return (
     <div className="page-layout" data-title="My Profile">
       <div className="profile-container">
@@ -26,7 +28,7 @@ const ApplicantProfilePage = () => {
             </div>
             <Button 
               variant="secondary" 
-              onClick={() => console.log('Edit profile clicked')}
+              onClick={() => navigate('/applicant/edit-profile')}
             >
               <i className="fas fa-edit"></i>
               Edit Profile

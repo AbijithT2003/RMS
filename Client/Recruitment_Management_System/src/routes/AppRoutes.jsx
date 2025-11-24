@@ -20,10 +20,11 @@ import {
   JobDetailsPage,
   ApplicationDetailsPage,
   InterviewDetailsPage,
+  EditProfilePage,
 } from "../pages";
 import ManageJobsPageWrapper from "../pages/job-posting/ManageJobsPageWrapper";
 import UnauthorizedPage from "../pages/UnauthorizedPage";
-import LandingPage from "../app/layout/LandingPage/LandingPage";
+import LandingPage from "../app/LandingPage/LandingPage";
 import ApplicantDashboard from "../app/dashboard/ApplicantDashboard";
 import RecruiterDashboard from "../app/dashboard/RecruiterDashboard";
 import AdminDashboard from "../pages/admin/AdminDashboardPage";
@@ -98,6 +99,15 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute allowedRoles={["CANDIDATE", "APPLICANT"]}>
             <ApplicantProfilePage />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/applicant/edit-profile"
+        element={
+          <ProtectedRoute allowedRoles={["CANDIDATE", "APPLICANT"]}>
+            <EditProfilePage isEditMode={true} />
           </ProtectedRoute>
         }
       />
@@ -183,6 +193,8 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+
+      
 
       {/* ========== ADMIN ROUTES ========== */}
       <Route

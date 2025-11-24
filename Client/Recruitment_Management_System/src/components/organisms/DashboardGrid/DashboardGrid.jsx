@@ -1,5 +1,5 @@
-import React from 'react';
-import './DashboardGrid.css';
+import React from "react";
+import "./DashboardGrid.css";
 
 const DashboardGrid = ({ cards }) => {
   return (
@@ -9,8 +9,8 @@ const DashboardGrid = ({ cards }) => {
           <div className="card-icon">
             <i className={card.icon}></i>
           </div>
-          <h3>{card.title}</h3>
-          <p>{card.description}</p>
+          <h3 className="card-title">{card.title}</h3>
+          <p className="card-body">{card.description}</p>
         </div>
       ))}
     </div>

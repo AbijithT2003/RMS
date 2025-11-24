@@ -59,8 +59,8 @@ const SavedJobsPage = () => {
   return (
     <div className="saved-jobs-container">
       <div className="saved-jobs-header">
-        <h1>Saved Jobs</h1>
-        <p>Your bookmarked job opportunities</p>
+        <h1 className="panel-title">Saved Jobs</h1>
+        <p className="lead">Your bookmarked job opportunities</p>
       </div>
 
       {visibleSavedJobs.length === 0 ? (

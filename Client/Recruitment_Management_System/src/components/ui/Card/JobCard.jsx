@@ -19,6 +19,11 @@ const JobCard = ({
     ? job.applications
     : job.applications?.content || [];
 
+  const applicationCount = Array.isArray(job.applications)
+    ? job.applications.length
+    : job.applications?.totalElements || 0;
+  
+
   const isClosed = job.status !== "ACTIVE";
   // For recruiters, don't show closed state since they can edit job status
   const showClosedState = !isRecruiter && isClosed;
@@ -27,8 +32,8 @@ const JobCard = ({
     <div className={`job-card ${showClosedState ? "closed-job" : ""}`}>
       <div className="job-header">
         <h3 className="job-title">{job.title}</h3>
-        <span className={`job-type ${job.type?.toLowerCase()}`}>
-          {job.type?.replace("_", " ")}
+        <span className={`job-type ${job.jobType?.toLowerCase()}`}>
+          {job.jobType?.replace("_", " ")}
         </span>
         {showClosedState && <span className="job-closed-badge">Closed</span>}
       </div>
@@ -37,7 +42,7 @@ const JobCard = ({
         <div className="job-meta">
           <span className="job-location">
             <i className="fas fa-map-marker-alt"></i>
-            {job.location}
+            {job.locationCity}
           </span>
           {job.salary && (
             <span className="job-salary">
@@ -47,27 +52,34 @@ const JobCard = ({
           )}
         </div>
 
-        <p className="job-description">{job.description}</p>
+        <p className="job-description card-body">{job.description}</p>
 
         {job.requirements && (
           <div className="job-requirements">
-            <strong>Requirements:</strong>
-            <p>{job.requirements}</p>
+            <strong className="fw-semibold">Requirements:</strong>
+            <p className="card-body">{job.requirements}</p>
           </div>
         )}
 
-        <div className="job-applicants">
-          <strong>Applicants:</strong>
-          {applications.length === 0 ? (
-            <p className="no-applicants">No applicants yet</p>
-          ) : (
-            <ul className="applicant-list">
-              {applications.map((app) => (
-                <li key={app.id}>{app.applicantName || "Unnamed Applicant"}</li>
-              ))}
-            </ul>
-          )}
-        </div>
+        {isRecruiter && (
+          <div className="job-applicants">
+            <strong className="fw-semibold">
+              Active Applicants({applicationCount})
+            </strong>
+
+            {applications.length === 0 ? (
+              <p className="no-applicants">No applications to review</p>
+            ) : (
+              <ul className="applicant-list">
+                {applications.map((app) => (
+                  <li key={app.id}>
+                    {app.applicantName || "Unnamed Applicant"}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
       </div>
 
       {showActions && (
@@ -91,7 +103,7 @@ const JobCard = ({
                 Edit
               </Button>
               <Button
-                variant="secondary"
+                variant="danger"
                 size="small"
                 onClick={() => onDelete?.(job.id)}
               >

@@ -6,7 +6,7 @@ const DashboardView = ({ title, breadcrumbs, children }) => {
   return (
     <div className="dashboard-view">
       {breadcrumbs && <Breadcrumb items={breadcrumbs} />}
-      {title && <h1 className="dashboard-view-title">{title}</h1>}
+      {title && <h1 className="dashboard-view-title panel-title">{title}</h1>}
       <div className="dashboard-view-content">{children}</div>
     </div>
   );

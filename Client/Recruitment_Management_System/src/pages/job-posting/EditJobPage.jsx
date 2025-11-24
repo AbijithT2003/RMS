@@ -4,6 +4,7 @@ import { jobsApi } from "../../api/endpoints/jobs.api";
 import DashboardView from "../../components/common/DashboardView";
 import EditJobForm from "../../components/ui/Form/EditJobForm";
 import "./EditJobPage.css";
+import Button from "../../components/atoms/Button/Button";
 
 const EditJobPage = () => {
   const { id } = useParams();
@@ -45,7 +46,7 @@ const EditJobPage = () => {
   };
 
   const getBreadcrumbs = () => [
-    { label: "Dashboard", onClick: () => navigate("/recruiter/dashboard") },
+    { label: "Dashboard", onClick: () => navigate("/recruiter-dashboard") },
     { label: "Jobs", onClick: () => navigate("/recruiter/jobs") },
     { label: "Edit Job" },
   ];
@@ -67,12 +68,12 @@ const EditJobPage = () => {
         <div className="edit-job-error">
           <i className="fas fa-exclamation-triangle"></i>
           <p>{error}</p>
-          <button
+          <Button
             onClick={() => navigate("/recruiter/jobs")}
             className="btn btn-primary"
           >
             Back to Jobs
-          </button>
+          </Button>
         </div>
       </DashboardView>
     );

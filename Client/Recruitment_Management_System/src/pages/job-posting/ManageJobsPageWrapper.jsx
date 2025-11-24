@@ -7,7 +7,7 @@ const ManageJobsPageWrapper = () => {
   const navigate = useNavigate();
 
   const breadcrumbs = [
-    { label: "Dashboard", onClick: () => navigate("/recruiter/dashboard") },
+    { label: "Dashboard", onClick: () => navigate("/recruiter-dashboard") },
     { label: "Jobs" },
   ];
 

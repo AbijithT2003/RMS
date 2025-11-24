@@ -7,6 +7,7 @@ import DashboardView from "../../components/common/DashboardView";
 import Button from "../../components/atoms/Button/Button";
 import JobCard from "../../components/ui/Card/JobCard";
 import "./ManageJobsPage.css";
+import ConfirmDialog from "../../components/common/ConfirmDialog/ConfirmDialog";
 
 const ManageJobsPage = () => {
   const navigate = useNavigate();
@@ -23,6 +24,8 @@ const ManageJobsPage = () => {
   const [showApplicationsModal, setShowApplicationsModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleEdit = (id) => {
     navigate(`/recruiter/jobs/edit/${id}`);
@@ -45,21 +48,26 @@ const ManageJobsPage = () => {
       console.error("Failed to fetch applications:", error);
     }
   };
+  const handleDelete = (id) => {
+    setConfirmDeleteId(id);
+  };
 
-  const handleDelete = async (id) => {
-    if (
-      window.confirm(
-        "Are you sure you want to delete this job? This will also delete all associated applications."
-      )
-    ) 
-      try{ 
-        await jobsApi.deleteJob(id);
-        refetch();
-      } catch (error) {
-        console.error("Error deleting job:", error);
-        alert("Error deleting job. Please try again.");
-      }
+  const executeDelete = async (id) => {
+    if (!id) return;
+    setIsDeleting(true);
+    try {
+      await jobsApi.deleteJob(id);
+      // Close dialog first
+      setConfirmDeleteId(null);
+      // Refresh list and wait for completion so UI updates reliably
+      await refetch();
+    } catch (error) {
+      console.error("Error deleting job:", error);
+      alert("Error deleting job. Please try again.");
+    } finally {
+      setIsDeleting(false);
     }
+  };
 
   const filteredJobs = jobs.filter((job) => {
     const matchesSearch =
@@ -102,8 +110,8 @@ const ManageJobsPage = () => {
         </div>
       ) : filteredJobs.length === 0 ? (
         <div className="empty-state">
-          <h3>No jobs found</h3>
-          <p>Try adjusting your search or filter criteria.</p>
+          <h3 className="panel-title">No jobs found</h3>
+          <p className="lead">Try adjusting your search or filter criteria.</p>
         </div>
       ) : (
         <div className="jobs-grid">
@@ -124,7 +132,9 @@ const ManageJobsPage = () => {
       {showApplicationsModal && selectedJob && (
         <div className="modal">
           <div className="modal-content">
-            <h2>Applications for: {selectedJob.title}</h2>
+            <h2 className="panel-title">
+              Applications for: {selectedJob.title}
+            </h2>
             {jobApplications.length === 0 ? (
               <p>No applications found</p>
             ) : (
@@ -183,9 +193,23 @@ const ManageJobsPage = () => {
           </div>
         </div>
       )}
+      {confirmDeleteId && (
+        <ConfirmDialog
+          title="Delete Job?"
+          message="This will permanently remove the job and all associated applications."
+          onConfirm={() => executeDelete(confirmDeleteId)}
+          onCancel={() => setConfirmDeleteId(null)}
+          isProcessing={isDeleting}
+        />
+      )}
+      <div
+        className="up-btn"
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      >
+        <i className="fas fa-arrow-up"></i>
+      </div>
     </div>
   );
 };
-
 
 export default ManageJobsPage;

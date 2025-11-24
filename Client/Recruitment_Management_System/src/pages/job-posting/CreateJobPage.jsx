@@ -3,10 +3,8 @@ import CreateJobForm from '../../components/ui/Form/CreateJobForm';
 import './CreateJobPage.css';
 import { jobsApi } from "../../api/endpoints/jobs.api";
 
-const CreateJobPage = () => {
+const CreateJobPage = ({ onNavigate }) => {
   const [loading, setLoading] = useState(false);
-
-  
 
   const handleSubmit = async (formData) => {
     setLoading(true);
@@ -23,16 +21,20 @@ const CreateJobPage = () => {
     }
   };
 
-
   return (
     <div className="create-job-page">
       <div className="page-container">
-        <div className="page-header">
-          <h1>Create New Job Posting</h1>
-          <p>Fill out all required fields to create a new job posting</p>
-        </div>
-
-        <CreateJobForm onSubmit={handleSubmit} loading={loading} />
+        <CreateJobForm
+          onSubmit={handleSubmit}
+          loading={loading}
+          onSuccessNavigate={() => onNavigate("jobs")}
+        />
+      </div>
+      <div
+        className="up-btn"
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      >
+        <i className="fas fa-arrow-up"></i>
       </div>
     </div>
   );

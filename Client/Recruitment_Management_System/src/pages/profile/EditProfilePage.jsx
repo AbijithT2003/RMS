@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import PageLayout from '../../components/common/PageLayout';
 import FormField from '../../components/common/FormField';
 import Button from '../../components/atoms/Button/Button';
+import './EditProfilePage.css';
 
 const EditProfilePage = () => {
   const navigate = useNavigate();

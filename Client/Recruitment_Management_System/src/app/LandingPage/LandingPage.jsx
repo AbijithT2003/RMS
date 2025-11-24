@@ -1,12 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./LandingPage.css";
-import Header from "../../../components/organisms/Header/Header";
-import TestimonialCarousel from "../../../components/organisms/TestimonialCarousel/TestimonialCarousel";
-import Button from "../../../components/atoms/Button/Button";
-import Card from "../../../components/ui/Card/Card";
-import FeatureCard from "../../../components/ui/Card/FeatureCard";
-import Footer from "../../../components/common/Footer/Footer";
+import Header from "../../components/organisms/Header/Header";
+import TestimonialCarousel from "../../components/organisms/TestimonialCarousel/TestimonialCarousel";
+import Button from "../../components/atoms/Button/Button";
+import Card from "../../components/ui/Card/Card";
+import FeatureCard from "../../components/ui/Card/FeatureCard";
+import Footer from "../../components/common/Footer/Footer";
 import features from "./data/features";
 import testimonials from "./data/testimonials";
 import navigationItems from "./data/navigation";

@@ -17,9 +17,13 @@ const PageLayout = ({
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage error={error} onRetry={onRetry} />;
 
+  const shouldRenderHeader =
+    !hideHeader &&
+    ((navigationItems && navigationItems.length > 0) || showAuthButtons);
+
   return (
     <div>
-      {!hideHeader && (
+      {shouldRenderHeader && (
         <Header
           navigationItems={navigationItems}
           showAuthButtons={showAuthButtons}

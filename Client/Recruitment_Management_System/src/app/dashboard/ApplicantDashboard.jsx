@@ -1,12 +1,17 @@
 // import React, { useState } from 'react';
-import DashboardContainer from '../../components/DashboardContainer';
-import DashboardGrid from '../../components/organisms/DashboardGrid/DashboardGrid';
-import DashboardView from '../../components/common/DashboardView';
-import { JobListPage, MyApplicationsPage, MyInterviewsPage, ApplicantProfilePage, SavedJobsPage } from '../../pages';
-import './Dashboard.css';
+import DashboardContainer from "../../components/DashboardContainer";
+import DashboardGrid from "../../components/organisms/DashboardGrid/DashboardGrid";
+import DashboardView from "../../components/common/DashboardView";
+import {
+  JobListPage,
+  MyApplicationsPage,
+  MyInterviewsPage,
+  ApplicantProfilePage,
+  SavedJobsPage,
+} from "../../pages";
+import "./Dashboard.css";
 import { useApi } from "../../hooks/useApi";
 import { applicationsApi } from "../../api/endpoints/applications.api";
-
 
 const ApplicantDashboard = () => {
   const applicantNav = [
@@ -152,7 +157,6 @@ const ApplicantDashboard = () => {
       REJECTED: "fas fa-times-circle",
     };
 
-
     switch (activeView) {
       case "jobs":
         return (
@@ -207,7 +211,7 @@ const ApplicantDashboard = () => {
             </div>
             <div className="dashboard-bottom">
               <div className="recent-activity">
-                <h2>Recent Activity</h2>
+                <h2 className="panel-title">Recent Activity</h2>
                 <div className="activity-list">
                   {recentApplications.length === 0 ? (
                     <p>No recent activity</p>
@@ -230,7 +234,7 @@ const ApplicantDashboard = () => {
               </div>
 
               <div className="stats-section">
-                <h3>Your Application Stats</h3>
+                <h3 className="panel-title">Your Application Stats</h3>
                 {applicationsLoading ? (
                   <p>Loading stats...</p>
                 ) : (

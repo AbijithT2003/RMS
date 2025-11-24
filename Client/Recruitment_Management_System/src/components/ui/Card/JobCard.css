@@ -20,16 +20,19 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 12px;
+  gap: 20px;
 }
 
 .job-title {
-  color: var(--text-primary);
   font-size: 1.25rem;
   font-weight: 600;
   margin: 0;
-  line-height: 1.3;
+  color: #000000;
   flex: 1;
+  /* word-break: break-word; */
+
+
+
 }
 
 .job-type {
@@ -133,6 +136,13 @@
   min-width: fit-content;
 }
 
+.job-actions 
+.job-applicants .no-applicants {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
 .closed-job {
   opacity: 0.6;
   pointer-events: none; /* Optional: makes card less interactive */
@@ -148,27 +158,26 @@
   font-weight: bold;
 }
 
-
 @media (max-width: 768px) {
   .job-card {
     padding: 20px;
   }
-  
+
   .job-header {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .job-meta {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
   }
-  
+
   .job-actions {
     flex-direction: column;
   }
-  
+
   .job-actions button {
     width: 100%;
   }

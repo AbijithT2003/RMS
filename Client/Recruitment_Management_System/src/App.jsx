@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./styles.css";
 import { AuthProvider } from "./api/context/AuthContext";
 import AppRoutes from "./routes/AppRoutes";
-import LandingPage from "./app/layout/LandingPage/LandingPage.jsx";
+import LandingPage from "./app/LandingPage/LandingPage.jsx";
 
 function App() {
   return (

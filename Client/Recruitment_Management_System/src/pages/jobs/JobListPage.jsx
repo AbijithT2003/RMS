@@ -13,7 +13,7 @@ const JobListPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState([]);
-  const [appliedJobIds, setAppliedJobIds] = useState([]);
+  const [_appliedJobIds, setAppliedJobIds] = useState([]);
 
   // Fetch all jobs and user's applied jobs
   const fetchJobs = async () => {
@@ -97,7 +97,7 @@ const JobListPage = () => {
       <div className="job-list-container">
         <div className="search-section">
           <div className="search-bar">
-            <i className="fas fa-search"></i>
+            {/* <i className="fas fa-search"></i> */}
             <input
               type="text"
               placeholder="Search jobs by title, location, or company..."

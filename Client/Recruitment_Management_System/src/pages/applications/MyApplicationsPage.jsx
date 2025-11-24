@@ -6,7 +6,7 @@ import "./MyApplicationsPage.css";
 
 const MyApplicationsPage = () => {
   const { data, loading, error, refetch } = useApi(() =>
-    applicationsApi.getMyApplications()
+    applicationsApi.getMyApplications(0,100)
   );
 
   const applications = data?.content || [];
@@ -49,6 +49,12 @@ const MyApplicationsPage = () => {
             </div>
           ))
         )}
+        <div
+          className="up-btn"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        >
+          <i className="fas fa-arrow-up"></i>
+        </div>
       </div>
     </PageLayout>
   );
