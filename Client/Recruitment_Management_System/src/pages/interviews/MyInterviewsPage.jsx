@@ -27,8 +27,8 @@ const MyInterviewsPage = () => {
           <h3>Unable to Load Interviews</h3>
           <p>There was an issue loading your interviews. This might be because:</p>
           <ul>
-            <li>Your account is not properly configured as a recruiter</li>
-            <li>The interview service is temporarily unavailable</li>
+            <li>Your account cannout access this feature</li>
+            <li>The interview service is available for premium users only!</li>
           </ul>
           <button onClick={refetch} className="retry-button">
             <i className="fas fa-redo"></i>
@@ -40,7 +40,7 @@ const MyInterviewsPage = () => {
   }
 
   const interviewsArray = Array.isArray(interviews) ? interviews : 
-    (interviews?.content || interviews?.data || []);
+    (interviews?.data || []);
 
   return (
     <div className="interviews-container">

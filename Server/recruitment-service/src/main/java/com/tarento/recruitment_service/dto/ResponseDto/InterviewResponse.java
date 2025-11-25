@@ -15,6 +15,9 @@ import java.util.UUID;
 public class InterviewResponse {
     private UUID id;
     private UUID applicationId;
+
+    
+    private String fullName;
     private UUID interviewerId;
     private String interviewerName;
     private Integer interviewRound;

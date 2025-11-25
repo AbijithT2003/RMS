@@ -19,9 +19,9 @@ export const interviewsApi = {
       const interviewerId = user.recruiterId || user.userId;
       return interviewsApi.getInterviewsByInterviewer(interviewerId);
     } else {
-      // For applicants, we need to get interviews through their applications
-      // This would require a different endpoint or approach
-      throw new Error('Applicant interview retrieval not directly supported by current backend');
+      const applicantId = user.applicantId || user.userId;
+      const res = await apiClient.get(`/interviews/applicant/${applicantId}`);
+      return res.data?.data || res.data; // Returns List<InterviewResponse>
     }
   },
   
@@ -37,4 +37,5 @@ export const interviewsApi = {
     const res = await apiClient.patch(`/interviews/${id}`, updateInterviewRequest);
     return res.data?.data || res.data; // Returns InterviewResponse
   }
+
 };

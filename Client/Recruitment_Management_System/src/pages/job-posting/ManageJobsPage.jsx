@@ -44,10 +44,15 @@ const ManageJobsPage = () => {
       setSelectedJob(jobs.find((job) => job.id === jobId));
       setJobApplications(applications || []);
       setShowApplicationsModal(true);
+      
     } catch (error) {
       console.error("Failed to fetch applications:", error);
     }
   };
+
+   
+
+  
   const handleDelete = (id) => {
     setConfirmDeleteId(id);
   };
@@ -70,12 +75,17 @@ const ManageJobsPage = () => {
   };
 
   const filteredJobs = jobs.filter((job) => {
-    const matchesSearch =
-      job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      job.department?.toLowerCase().includes(searchTerm.toLowerCase());
+    const title = job?.title?.toLowerCase() || "";
+    const dept = job?.department?.toLowerCase() || "";
+    const term = searchTerm.toLowerCase();
+
+    const matchesSearch = title.includes(term) || dept.includes(term);
+
     const matchesFilter = filterStatus === "all" || job.status === filterStatus;
+
     return matchesSearch && matchesFilter;
   });
+
 
   return (
     <div className="manage-jobs-content">
@@ -92,10 +102,19 @@ const ManageJobsPage = () => {
         >
           <option value="all">All Status</option>
           <option value="ACTIVE">Active</option>
-          <option value="INACTIVE">Inactive</option>
+          <option value="PAUSED">Paused</option>
           <option value="CLOSED">Closed</option>
+          <option value="DRAFT">Draft</option>
         </select>
       </div>
+
+      {/* const statusOptions = [
+    {value: "DRAFT", label: "Draft" },
+    { value: "ACTIVE", label: "Active" },
+    { value: "PAUSED", label: "Inactive" },
+    {value: "CLOSED", label: "Filled" },
+    { value: "CANCELLED", label: "Closed" },
+  ]; */}
 
       {loading ? (
         <div className="loading-state">
@@ -121,6 +140,7 @@ const ManageJobsPage = () => {
               job={job}
               onEdit={() => handleEdit(job.id)}
               onViewApplications={() => handleViewApplications(job.id)}
+              applicationCount={job.applications?.length || 0}
               onDelete={() => handleDelete(job.id)}
               isRecruiter={true}
             />
@@ -165,8 +185,8 @@ const ManageJobsPage = () => {
                         </span>
                       </td>
                       <td>
-                        {app.appliedDate
-                          ? new Date(app.appliedDate).toLocaleDateString()
+                        {app.appliedAt
+                          ? new Date(app.appliedAt).toLocaleDateString()
                           : "N/A"}
                       </td>
                       <td>

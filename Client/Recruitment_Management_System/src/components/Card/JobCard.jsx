@@ -8,6 +8,7 @@ const JobCard = ({
   onEdit,
   onDelete,
   onViewApplications,
+  applicationCount,
   onSave,
   onUnsave,
   isSaved = false,
@@ -19,9 +20,9 @@ const JobCard = ({
     ? job.applications
     : job.applications?.content || [];
 
-  const applicationCount = Array.isArray(job.applications)
-    ? job.applications.length
-    : job.applications?.totalElements || 0;
+    
+  // const applicationCount = applications.length;
+
 
   const isClosed = job.status !== "ACTIVE";
   // For recruiters, don't show closed state since they can edit job status
@@ -60,13 +61,13 @@ const JobCard = ({
           </div>
         )}
 
-        {isRecruiter && (
+        {/* {isRecruiter && (
           <div className="job-applicants">
             <strong className="fw-semibold">
-              Active Applicants({applicationCount})
+              Active Applicants({applicationCount}):
             </strong>
 
-            {applications.length === 0 ? (
+            {applicationCount === 0 ? (
               <p className="no-applicants">No applications to review</p>
             ) : (
               <ul className="applicant-list">
@@ -78,7 +79,7 @@ const JobCard = ({
               </ul>
             )}
           </div>
-        )}
+        )} */}
       </div>
 
       {showActions && (

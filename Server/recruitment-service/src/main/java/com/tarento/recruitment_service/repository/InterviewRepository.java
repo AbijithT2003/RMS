@@ -21,4 +21,7 @@ public interface InterviewRepository extends JpaRepository<Interview, UUID> {
         @Param("interviewerId") UUID interviewerId,
         @Param("startDate") java.time.LocalDateTime startDate,
         @Param("endDate") java.time.LocalDateTime endDate);
+
+    @Query("SELECT i FROM Interview i WHERE i.application.applicant.id = :applicantId")
+    List<Interview> findByApplicantId(@Param("applicantId") UUID applicantId);
 }

@@ -271,7 +271,7 @@ const AuthPage = () => {
                     >
                       <i
                         className={`fas ${
-                          showPassword ? "fa-eye-slash" : "fa-eye"
+                          showPassword ? "fa-eye" : "fa-eye-slash"
                         }`}
                       ></i>
                     </button>
@@ -315,7 +315,7 @@ const AuthPage = () => {
           {/* SHOWCASE SECTION */}
           <div className="auth-showcase">
             <div className="showcase-content">
-              <h2 className="showcase-title">Explore Opportunities</h2>
+              <h1 className="showcase-title">Our Major Partners</h1>
               <p className="showcase-subtitle">
                 Connect with top companies and discover your next career move.
               </p>

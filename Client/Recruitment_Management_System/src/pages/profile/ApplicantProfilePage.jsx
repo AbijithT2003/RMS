@@ -25,7 +25,7 @@ const ApplicantProfilePage = () => {
             </div>
             <div className="profile-info">
               <h2>
-                {user.firstName} {user.lastName}
+                {user.FullName}
               </h2>
               <p className="profile-email">{user.email}</p>
             </div>
@@ -52,7 +52,7 @@ const ApplicantProfilePage = () => {
 
         <div className="profile-sections">
           <div className="section-card">
-            <div className="section-header">
+            {/* <div className="section-header">
               <h3>
                 <i className="fas fa-file-alt"></i>
                 Resume
@@ -61,7 +61,7 @@ const ApplicantProfilePage = () => {
                 <i className="fas fa-upload"></i>
                 Upload Resume
               </Button>
-            </div>
+            </div> */}
             <p className="section-description">
               Upload your resume to apply for jobs and showcase your experience
             </p>

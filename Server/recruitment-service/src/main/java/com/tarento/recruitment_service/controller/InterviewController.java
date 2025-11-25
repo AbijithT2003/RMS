@@ -14,6 +14,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @Validated
@@ -56,4 +59,13 @@ public class InterviewController {
         List<InterviewResponse> response = interviewService.getInterviewsByInterviewer(interviewerId);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
+
+    @GetMapping("/application/{applicantId}")
+    @Operation(summary = "Get interviews by applicant", description = "Retrieves all interviews for an applicant")
+    public ResponseEntity<ApiResponse<List<InterviewResponse>>> getInterviewsByApplicant(
+            @PathVariable UUID applicantId) {
+        List<InterviewResponse> response = interviewService.getInterviewsByApplicant(applicantId);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+    
 }

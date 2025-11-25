@@ -5,8 +5,8 @@ const StatsCard = ({
   icon,
   label,
   value,
-  trend,
-  trendDirection = "up",
+  // trend,
+  // trendDirection = "up",
   color = "primary",
   onClick,
 }) => {
@@ -23,7 +23,7 @@ const StatsCard = ({
         <p className="stats-card-label">{label}</p>
         <div className="stats-card-value-group">
           <h3 className="stats-card-value">{value}</h3>
-          {trend && (
+          {/* {trend && (
             <span className={`stats-card-trend trend-${trendDirection}`}>
               <i
                 className={`fas fa-arrow-${
@@ -32,7 +32,7 @@ const StatsCard = ({
               ></i>
               {trend}
             </span>
-          )}
+          )} */}
         </div>
       </div>
     </div>

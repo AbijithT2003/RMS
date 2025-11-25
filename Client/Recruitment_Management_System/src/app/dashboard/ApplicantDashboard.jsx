@@ -43,8 +43,8 @@ const ApplicantDashboard = () => {
 
   // Get recent applications for timeline
   const recentApplications = [...applications]
-    .sort((a, b) => new Date(b.appliedAt) - new Date(a.appliedAt))
-    .slice(0, 3);
+    .sort((b, a) => new Date(b.appliedAt) - new Date(a.appliedAt))
+    .slice(0, 4);
 
   const applicantNav = [
     {

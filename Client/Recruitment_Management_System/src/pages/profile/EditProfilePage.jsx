@@ -12,8 +12,7 @@ const EditProfilePage = () => {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   const [formData, setFormData] = useState({
-    firstName: user.firstName || "",
-    lastName: user.lastName || "",
+    firstName: user.fullName || "",
     email: user.email || "",
     phone: user.phone || "",
     location: user.location || "",
@@ -47,21 +46,12 @@ const EditProfilePage = () => {
     <PageLayout title="Edit Profile">
       <form onSubmit={handleSubmit} className="profile-form">
         <FormField
-          label="First Name"
+          label="Full Name"
           name="firstName"
-          value={formData.firstName}
+          value={formData.fullname}
           onChange={handleChange}
           required
         />
-
-        <FormField
-          label="Last Name"
-          name="lastName"
-          value={formData.lastName}
-          onChange={handleChange}
-          required
-        />
-
         <FormField
           label="Email"
           type="email"

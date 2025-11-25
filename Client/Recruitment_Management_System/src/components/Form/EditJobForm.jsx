@@ -40,9 +40,11 @@ const EditJobForm = ({ jobData, onSubmit, loading = false }) => {
   ];
 
   const statusOptions = [
+    { value: "DRAFT", label: "Draft" },
     { value: "ACTIVE", label: "Active" },
-    { value: "INACTIVE", label: "Inactive" },
-    { value: "CLOSED", label: "Closed" },
+    { value: "PAUSED", label: "Inactive" },
+    { value: "CLOSED", label: "Filled" },
+    { value: "CANCELLED", label: "Closed" },
   ];
 
   useEffect(() => {

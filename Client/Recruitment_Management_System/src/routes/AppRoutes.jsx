@@ -34,10 +34,6 @@ const AppRoutes = () => {
     <Routes>
       {/* ========== PUBLIC ROUTES ========== */}
       <Route path="/" element={<LandingPage />} />
-      <Route path="/auth" element={<AuthPage />} />
-      <Route path="/unauthorized" element={<UnauthorizedPage />} />
-
-      {/* ========== APPLICANT ROUTES ========== */}
       <Route
         path="/applicant-dashboard"
         element={
@@ -46,6 +42,11 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+      <Route path="/auth" element={<AuthPage />} />
+      <Route path="/unauthorized" element={<UnauthorizedPage />} />
+
+      {/* ========== APPLICANT ROUTES ========== */}
+
       <Route
         path="/applicant/jobs"
         element={

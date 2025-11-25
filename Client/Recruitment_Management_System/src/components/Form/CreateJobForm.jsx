@@ -42,10 +42,13 @@ const CreateJobForm = ({ onSubmit, loading = false, onSuccessNavigate }) => {
   ];
 
   const statusOptions = [
+    {value: "DRAFT", label: "Draft" },
     { value: "ACTIVE", label: "Active" },
-    { value: "INACTIVE", label: "Inactive" },
-    { value: "CLOSED", label: "Closed" },
+    { value: "PAUSED", label: "Inactive" },
+    {value: "CLOSED", label: "Filled" },
+    { value: "CANCELLED", label: "Closed" },
   ];
+  //[CANCELLED, CLOSED, PAUSED, DRAFT, ACTIVE]]
 
   const validateForm = () => {
     const newErrors = {};
